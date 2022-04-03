@@ -15,12 +15,14 @@ function Home() {
     const [chars, setChars] = useState<ICharacter>();
 
     const getChars = () => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_CHAR}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * 30}`)
+        axios.get<ICharacter>(`${BASE_URL}${GET_CHAR}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
             .then(res => {
                 setChars(res.data);
                 console.log(res.data);
             });
     };
+
+    const total = chars?.data.total;
 
     const showNext = () => {
         cnt ++;
@@ -30,6 +32,19 @@ function Home() {
     const showPrevious = () => {
         cnt --;
         getChars();
+    };
+
+    const showFirst = () => {
+        cnt = 0;
+        getChars();
+    };
+
+    const showLast = () => {
+        if(total) {
+            const lastIndex = total / LIMIT - 1;
+            cnt = lastIndex;
+            getChars();
+        };
     };
     
     useEffect(() => {
@@ -48,8 +63,16 @@ function Home() {
                     )
                 })
             }
-            <button onClick={showNext}>next</button>
-            <button onClick={showPrevious}>prev</button>
+            <button onClick={showFirst}>first</button>
+            <button 
+            onClick={showPrevious}
+            disabled={cnt === 0}
+            >prev</button>
+            <button 
+            onClick={showNext}
+            disabled={total ? cnt === total / LIMIT - 1 : false}
+            >next</button>
+            <button onClick={showLast}>last</button>
         </>
     )
 };
