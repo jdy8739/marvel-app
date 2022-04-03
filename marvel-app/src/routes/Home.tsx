@@ -46,6 +46,11 @@ function Home() {
             getChars();
         };
     };
+
+    const showCharsOfIndex = (idx: number) => {
+        cnt = idx;
+        getChars();
+    };
     
     useEffect(() => {
         getChars();
@@ -68,6 +73,22 @@ function Home() {
             onClick={showPrevious}
             disabled={cnt === 0}
             >prev</button>
+            {
+                [-2, -1, 0, 1, 2].map(idx => {
+                    return (
+                        <span key={idx}>
+                            {
+                                !total ? null :
+                                cnt + idx < 0 ? null :
+                                cnt + idx > total / LIMIT - 1 ? null :
+                                <button 
+                                onClick={() => showCharsOfIndex(cnt + idx)}
+                                >{ cnt + idx + 1 }</button>
+                            }
+                        </span>
+                    )
+                })
+            }
             <button 
             onClick={showNext}
             disabled={total ? cnt === total / LIMIT - 1 : false}
