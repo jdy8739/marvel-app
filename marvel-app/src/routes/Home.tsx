@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const TitleBox = styled.div`
@@ -13,6 +14,15 @@ const TitleBox = styled.div`
     }
     p {
         font-size: 12px;
+    }
+    animation: show 3s;
+    @keyframes show {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
     }
 `;
 
@@ -32,7 +42,7 @@ function Home() {
                 <h3>DICTIONARY</h3>
                 <br></br>
                 <br></br>
-                <p>mady by jdy8739</p>
+                <p>mady by Do Young Chung</p>
             </TitleBox>
         </div>
     )
