@@ -8,3 +8,5 @@ export const hash = 'a229262784e3a16bdc82f2bc9d49ec20';
 export const GET_CHAR = '/v1/public/characters?ts=1';
 
 export const GET_SEARCHED_CHAR = '/v1/public/characters?ts=1&nameStartsWith=';
+
+export const GET_SINGLE_CHAR = '/v1/public/characters';

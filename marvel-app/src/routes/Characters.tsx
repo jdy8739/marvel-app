@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_CHAR, GET_SEARCHED_CHAR, hash } from "../api";
 import { Highlighted, CharacterCard, CharacterContainer } from "../styled";
@@ -19,11 +19,14 @@ function Characters() {
         axios.get<ICharacter>(`${BASE_URL}${GET_CHAR}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
             .then(res => {
                 setChars(res.data);
-                console.log(res.data);
             });
     };
 
     const total = chars?.data.total;
+
+    const location = useLocation();
+
+    const startWith = new URLSearchParams(location.search).get('startWith'); 
 
     const showNext = () => {
         cnt ++;
@@ -54,7 +57,7 @@ function Characters() {
     };
     
     useEffect(() => {
-        getChars();
+        fetchCharacters();
     }, []);
 
     const [searchedChar, setSearchedChar] = useState('');
@@ -65,30 +68,27 @@ function Characters() {
 
     const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        nav('/characters?startWith=' + searchedChar);
         getSearchedChars();
-        setIsSearched(true);
         cnt = 0;
     };
 
     const getSearchedChars = () => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_SEARCHED_CHAR}${searchedChar}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
+        axios.get<ICharacter>(`${BASE_URL}${GET_SEARCHED_CHAR}${searchedChar || startWith}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
             .then(res => {
                 setChars(res.data);
-                console.log(res.data);
             });
     };
 
-    const [isSearched, setIsSearched] = useState(false);
-
     const fetchCharacters = () => {
-        if(isSearched) getSearchedChars();
+        if(startWith) getSearchedChars();
         else getChars();
-    };
+    };           
 
     const resetSearch = () => {
         setSearchedChar('');
-        setIsSearched(false);
         getChars();
+        nav('/characters');
         cnt = 0;
     };
 
@@ -97,10 +97,10 @@ function Characters() {
     return (
         <>  
             {
-                !isSearched ? null :
+                !startWith ? null :
                 <h1 style={{
                     textAlign: 'center'
-                }}>Results for "<Highlighted>{ searchedChar }</Highlighted>"</h1>
+                }}>Results for "<Highlighted>{ startWith }</Highlighted>"</h1>
             }
             <CharacterContainer>
                 {
@@ -108,7 +108,7 @@ function Characters() {
                         return (
                             <CharacterCard 
                             key={char.id}
-                            onClick={() => nav(`/characters/${char.id}`)}
+                            onClick={() => nav(`/characters/detail/${char.id}`)}
                             >
                                 <h1>{ char.name }</h1>
                                 <img src={`${char.thumbnail.path}/portrait_medium.jpg`} />
