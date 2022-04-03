@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_CHAR, GET_SEARCHED_CHAR, hash } from "../api";
-import { Highlighted, CharacterCard, CharacterContainer } from "../styled";
+import CharacterCard from "../components/CharacterCard";
+import { Highlighted, CharacterContainer, Btn, Input } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
 
@@ -94,6 +95,8 @@ function Characters() {
 
     const nav = useNavigate();
 
+    const [isLoading, setIsLoading] = useState(false);
+
     return (
         <>  
             {
@@ -102,29 +105,63 @@ function Characters() {
                     textAlign: 'center'
                 }}>Results for "<Highlighted>{ startWith }</Highlighted>"</h1>
             }
-            <CharacterContainer>
-                {
-                    chars?.data.results.map(char => {
-                        return (
-                            <CharacterCard 
-                            key={char.id}
-                            onClick={() => nav(`/characters/detail/${char.id}`)}
-                            >
-                                <h1>{ char.name }</h1>
-                                <img src={`${char.thumbnail.path}/portrait_medium.jpg`} />
-                            </CharacterCard>
-                        )
-                    })
-                }
-            </CharacterContainer>
+            <div
+            style={{
+                textAlign: 'center'
+            }}
+            >
+                <form
+                style={{
+                    display: 'inline-block'
+                }}
+                onSubmit={handleSearchSubmit}
+                >
+                    <label>
+                        <span>search the characters start with</span>
+                        &ensp;
+                        <Input 
+                        onChange={handleSearchChange} 
+                        value={searchedChar}
+                        required
+                        />
+                    </label>
+                </form>
+                &emsp;
+                <Btn onClick={resetSearch}>reset</Btn>
+            </div>
+            <br></br>
+            {
+                isLoading ? <p>loading... please wait.</p> : 
+                <CharacterContainer>
+                    {
+                        chars?.data.results.length !== 0 ? 
+                        <>
+                            {
+                                chars?.data.results.map(char => {
+                                    return (
+                                        <span
+                                        key={char.id}
+                                        onClick={() => nav(`/characters/detail/${char.id}`)}
+                                        >
+                                            <CharacterCard char={char} />
+                                        </span>
+                                    )
+                                })
+                            }
+                        </> : <p>cannot find any results. :(</p>
+                    }
+                </CharacterContainer>
+            }
+            <br></br>
+            <br></br>
             <div style={{
                 textAlign: 'center'
             }}>
-                <button onClick={showFirst}>first</button>
-                <button 
+                <Btn onClick={showFirst}>first</Btn>
+                <Btn 
                 onClick={showPrevious}
                 disabled={cnt === 0}
-                >prev</button>
+                >prev</Btn>
                 {
                     [-3, -2, -1, 0, 1, 2, 3].map(idx => {
                         return (
@@ -133,36 +170,26 @@ function Characters() {
                                     !total ? null :
                                     cnt + idx < 0 ? null :
                                     cnt + idx > Math.floor(total / LIMIT) ? null :
-                                    <button 
+                                    <Btn 
                                     onClick={() => showCharsOfIndex(cnt + idx)}
+                                    clicked={ cnt === Math.floor(cnt + idx) }
                                     >
                                         { 
                                             cnt === Math.floor(cnt + idx) ? 
                                             <Highlighted>{ Math.floor(cnt + idx) + 1}</Highlighted> :
                                             <>{ Math.floor(cnt + idx) + 1}</>
                                         }
-                                    </button>
+                                    </Btn>
                                 }
                             </span>
                         )
                     })
                 }
-                <button 
+                <Btn 
                 onClick={showNext}
                 disabled={total ? cnt === Math.floor(total / LIMIT) : false}
-                >next</button>
-                <button onClick={showLast}>last</button>
-                <form onSubmit={handleSearchSubmit}>
-                    <label>
-                        <span>Search the characters start with</span>
-                        <input 
-                        onChange={handleSearchChange} 
-                        value={searchedChar}
-                        required
-                        />
-                    </label>
-                </form>
-                <button onClick={resetSearch}>reset</button>
+                >next</Btn>
+                <Btn onClick={showLast}>last</Btn>
             </div>
         </>
     )
