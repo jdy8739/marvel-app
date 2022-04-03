@@ -1,9 +1,7 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { apikey, BASE_URL, GET_CHAR, hash } from "../api";
+import React, { useEffect, useState } from "react";
+import { apikey, BASE_URL, GET_CHAR, GET_SEARCHED_CHAR, hash } from "../api";
 import { ICharacter } from "../types_store/CharatersType";
-
-
 
 
 let cnt = 0;
@@ -26,35 +24,69 @@ function Home() {
 
     const showNext = () => {
         cnt ++;
-        getChars();
+        fetchCharacters();
     };
 
     const showPrevious = () => {
         cnt --;
-        getChars();
+        fetchCharacters();
     };
 
     const showFirst = () => {
         cnt = 0;
-        getChars();
+        fetchCharacters();
     };
 
     const showLast = () => {
         if(total) {
-            const lastIndex = total / LIMIT - 1;
+            const lastIndex = Math.floor(total / LIMIT);
             cnt = lastIndex;
-            getChars();
+            fetchCharacters();
         };
     };
 
     const showCharsOfIndex = (idx: number) => {
         cnt = idx;
-        getChars();
+        fetchCharacters();
     };
     
     useEffect(() => {
         getChars();
     }, []);
+
+    const [searchedChar, setSearchedChar] = useState('');
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchedChar(e.currentTarget.value);
+    };
+
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        getSearchedChars();
+        setIsSearched(true);
+        cnt = 0;
+    };
+
+    const getSearchedChars = () => {
+        axios.get<ICharacter>(`${BASE_URL}${GET_SEARCHED_CHAR}${searchedChar}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
+            .then(res => {
+                setChars(res.data);
+                console.log(res.data);
+            });
+    };
+
+    const [isSearched, setIsSearched] = useState(false);
+
+    const fetchCharacters = () => {
+        if(isSearched) getSearchedChars();
+        else getChars();
+    };
+
+    const resetSearch = () => {
+        setSearchedChar('');
+        setIsSearched(false);
+        getChars();
+    };
 
     return (
         <>  
@@ -74,16 +106,16 @@ function Home() {
             disabled={cnt === 0}
             >prev</button>
             {
-                [-2, -1, 0, 1, 2].map(idx => {
+                [-3, -2, -1, 0, 1, 2, 3].map(idx => {
                     return (
                         <span key={idx}>
                             {
                                 !total ? null :
                                 cnt + idx < 0 ? null :
-                                cnt + idx > total / LIMIT - 1 ? null :
+                                cnt + idx > Math.floor(total / LIMIT) ? null :
                                 <button 
                                 onClick={() => showCharsOfIndex(cnt + idx)}
-                                >{ cnt + idx + 1 }</button>
+                                >{ Math.floor(cnt + idx) + 1 }</button>
                             }
                         </span>
                     )
@@ -91,9 +123,20 @@ function Home() {
             }
             <button 
             onClick={showNext}
-            disabled={total ? cnt === total / LIMIT - 1 : false}
+            disabled={total ? cnt === Math.floor(total / LIMIT) : false}
             >next</button>
             <button onClick={showLast}>last</button>
+            <form onSubmit={handleSearchSubmit}>
+                <label>
+                    <span>Search the characters start with</span>
+                    <input 
+                    onChange={handleSearchChange} 
+                    value={searchedChar}
+                    required
+                    />
+                </label>
+            </form>
+            <button onClick={resetSearch}>reset</button>
         </>
     )
 };
