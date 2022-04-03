@@ -1,30 +1,36 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { apikey, BASE_URL, GET_CHAR, hash } from "../api";
 import { ICharacter } from "../types_store/CharatersType";
 
-const BASE_URL = 'http://gateway.marvel.com';
 
-const GET_CHAR = '/v1/public/characters?ts=1'
 
-const apikey = 'c985e750a10bc29a900a1736bc4fc93e';
-
-const hash = 'a229262784e3a16bdc82f2bc9d49ec20';
 
 let cnt = 0;
+
+const LIMIT = 30;
 
 function Home() {
 
     const [chars, setChars] = useState<ICharacter>();
 
     const getChars = () => {
-        alert(cnt);
-        axios.get<ICharacter>(BASE_URL + GET_CHAR + '&apikey=' + apikey + '&hash=' + hash + '&limit=30' + `&offset=${cnt * 30}`)
+        axios.get<ICharacter>(`${BASE_URL}${GET_CHAR}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * 30}`)
             .then(res => {
                 setChars(res.data);
                 console.log(res.data);
-                cnt ++;
             });
-    }
+    };
+
+    const showNext = () => {
+        cnt ++;
+        getChars();
+    };
+
+    const showPrevious = () => {
+        cnt --;
+        getChars();
+    };
     
     useEffect(() => {
         getChars();
@@ -32,7 +38,6 @@ function Home() {
 
     return (
         <>  
-            <button onClick={getChars}>show more</button>
             {
                 chars?.data.results.map(char => {
                     return (
@@ -43,6 +48,8 @@ function Home() {
                     )
                 })
             }
+            <button onClick={showNext}>next</button>
+            <button onClick={showPrevious}>prev</button>
         </>
     )
 };
