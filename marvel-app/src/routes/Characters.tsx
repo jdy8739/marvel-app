@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_CHAR, GET_SEARCHED_CHAR, hash } from "../api";
-import { CharacterCard, CharacterContainer } from "../styled";
+import { BtnOnNowIndex, CharacterCard, CharacterContainer } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
 
@@ -88,6 +88,7 @@ function Characters() {
         setSearchedChar('');
         setIsSearched(false);
         getChars();
+        cnt = 0;
     };
 
     return (
@@ -119,7 +120,13 @@ function Characters() {
                                 cnt + idx > Math.floor(total / LIMIT) ? null :
                                 <button 
                                 onClick={() => showCharsOfIndex(cnt + idx)}
-                                >{ Math.floor(cnt + idx) + 1 }</button>
+                                >
+                                    { 
+                                        cnt === Math.floor(cnt + idx) ? 
+                                        <BtnOnNowIndex>{ Math.floor(cnt + idx) + 1}</BtnOnNowIndex> :
+                                        <>{ Math.floor(cnt + idx) + 1}</>
+                                    }
+                                </button>
                             }
                         </span>
                     )
