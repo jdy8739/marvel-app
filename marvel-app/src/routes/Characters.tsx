@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_CHAR, GET_SEARCHED_CHAR, hash } from "../api";
 import CharacterCard from "../components/CharacterCard";
-import { Highlighted, CharacterContainer, Btn, Input } from "../styled";
+import { Highlighted, CharacterContainer, Btn, Input, Blank } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
 
@@ -70,8 +70,8 @@ function Characters() {
     const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         nav('/characters?startWith=' + searchedChar);
-        getSearchedChars();
         cnt = 0;
+        getSearchedChars();
     };
 
     const getSearchedChars = () => {
@@ -87,18 +87,17 @@ function Characters() {
     };           
 
     const resetSearch = () => {
-        setSearchedChar('');
-        getChars();
         nav('/characters');
+        setSearchedChar('');
         cnt = 0;
+        getChars();
     };
 
     const nav = useNavigate();
 
-    const [isLoading, setIsLoading] = useState(false);
-
     return (
         <>  
+            <Blank />
             {
                 !startWith ? null :
                 <h1 style={{
@@ -130,28 +129,25 @@ function Characters() {
                 <Btn onClick={resetSearch}>reset</Btn>
             </div>
             <br></br>
-            {
-                isLoading ? <p>loading... please wait.</p> : 
-                <CharacterContainer>
-                    {
-                        chars?.data.results.length !== 0 ? 
-                        <>
-                            {
-                                chars?.data.results.map(char => {
-                                    return (
-                                        <span
-                                        key={char.id}
-                                        onClick={() => nav(`/characters/detail/${char.id}`)}
-                                        >
-                                            <CharacterCard char={char} />
-                                        </span>
-                                    )
-                                })
-                            }
-                        </> : <p>cannot find any results. :(</p>
-                    }
-                </CharacterContainer>
-            }
+            <CharacterContainer>
+                {
+                    chars?.data.results.length !== 0 ? 
+                    <>
+                        {
+                            chars?.data.results.map(char => {
+                                return (
+                                    <span
+                                    key={char.id}
+                                    onClick={() => nav(`/characters/detail/${char.id}`)}
+                                    >
+                                        <CharacterCard char={char} />
+                                    </span>
+                                )
+                            })
+                        }
+                    </> : <p>cannot find any results. :(</p>
+                }
+            </CharacterContainer>
             <br></br>
             <br></br>
             <div style={{
@@ -174,7 +170,7 @@ function Characters() {
                                     onClick={() => showCharsOfIndex(cnt + idx)}
                                     clicked={ cnt === Math.floor(cnt + idx) }
                                     >
-                                        { 
+                                        {
                                             cnt === Math.floor(cnt + idx) ? 
                                             <Highlighted>{ Math.floor(cnt + idx) + 1}</Highlighted> :
                                             <>{ Math.floor(cnt + idx) + 1}</>

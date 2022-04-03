@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useMatch } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_SINGLE_CHAR, hash } from "../api";
+import { Blank } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
 const CharName = styled.h1<{ length: number }>`
@@ -50,10 +51,11 @@ function CharactersDetail() {
 
     useEffect(() => {
         fetchSingleCharacter();
-    }, [])
+    }, []);
 
     return (
         <>  
+            <Blank />
             <Portrait 
             path={`${char?.data.results[0].thumbnail.path}/portrait_uncanny.jpg`}
             >

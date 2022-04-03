@@ -63,3 +63,7 @@ export const Input = styled.input`
     color: white;
     padding: 4.2px;
 `;
+
+export const Blank = styled.div`
+    height: 150px;
+`;
