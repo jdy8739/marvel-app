@@ -4,13 +4,42 @@ import React, { useEffect, useState } from "react";
 import { useMatch } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_COMICS_CONTAINING_CHAR, hash } from "../api";
-import { Btn, ComicsCard } from "../styled";
+import { Btn, ComicsCard, Input } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
 const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    max-width: 1200px;
+    min-width: 600px;
+    margin: auto;
+`;
+
+const LeftArrow = styled.img`
+    position: absolute;
+    left: 225px;
+    transform: rotateY(180deg);
+    width: 40px;
+    height: 50px;
+    cursor: pointer;
+    opacity: 0.3;
+    &:hover {
+        opacity: 0.7;
+    }
+`;
+
+const RightArrow = styled.img`
+    position: absolute;
+    right: 225px;
+    width: 40px;
+    height: 50px;
+    cursor: pointer;
+    opacity: 0.3;
+    &:hover {
+        opacity: 0.7;
+    }
 `;
 
 function CharacterComics() {
@@ -161,31 +190,37 @@ function CharacterComics() {
                                         })
                                     }
                                 </AnimatePresence>
+                                <LeftArrow
+                                src={require('../images/arrow.png')}
+                                onClick={showPrev} />
+                                <RightArrow 
+                                src={require('../images/arrow.png')}
+                                onClick={showNext} 
+                                />
                             </Wrapper>
-                            <br></br>
-                            <div style={{
-                                textAlign: 'center',
-                                marginBottom: '100px'
-                            }}>
-                                <Btn onClick={showPrev}>prev</Btn>
-                                <Btn onClick={showNext}>next</Btn>
-                                <p>find by date if there are no data you find above.</p>
-                                <form onSubmit={handleDateSubmit}>
-                                    <input 
-                                    type="date"
-                                    onChange={handleDateFrom}
-                                    />
-                                    &ensp;
-                                    <input 
-                                    type="date"
-                                    onChange={handleDateTo}
-                                    />
-                                    &ensp;
-                                    <button>search</button>
-                                </form>
-                            </div>
                         </>
                     }
+                    <div style={{
+                        textAlign: 'center',
+                        marginBottom: '100px'
+                    }}>
+                        <br></br>
+                        <br></br>
+                        <p>find by date if there are no data you find above.</p>
+                        <form onSubmit={handleDateSubmit}>
+                            <Input 
+                            type="date"
+                            onChange={handleDateFrom}
+                            />
+                            &ensp;
+                            <Input 
+                            type="date"
+                            onChange={handleDateTo}
+                            />
+                            &ensp;
+                            <Btn>search</Btn>
+                        </form>
+                    </div>
                 </>
             }
         </>

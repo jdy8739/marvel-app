@@ -92,8 +92,8 @@ export const Tab = styled.button`
 `;
 
 export const ComicsCard = styled(motion.div)<{ path: string }>`
-    width: 200px;
-    height: 325px;
+    width: 320px;
+    height: 480px;
     background-position: center center;
     background-size: cover;
     background-image: url(${ props => props.path });
