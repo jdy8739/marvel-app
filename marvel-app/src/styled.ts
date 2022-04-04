@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
 export const CharacterContainer = styled.div`
@@ -88,4 +89,13 @@ export const Tab = styled.button`
         background-color: white;
         color: #F0131E;
     }
+`;
+
+export const ComicsCard = styled(motion.div)<{ path: string }>`
+    width: 200px;
+    height: 325px;
+    background-position: center center;
+    background-size: cover;
+    background-image: url(${ props => props.path });
+    margin: auto;
 `;
