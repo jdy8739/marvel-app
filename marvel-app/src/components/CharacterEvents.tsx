@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
 import { Btn, Highlighted } from "../styled";
 import { IEvents } from "../types_store/EventsType";
+import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
 
 
 const EventCard = styled(motion.div)<{ path: string }>`
@@ -17,7 +18,7 @@ const EventCard = styled(motion.div)<{ path: string }>`
     margin: auto;
 `;
 
-function CharacterEvents() {
+function CharacterEvents({ id }: { id: string }) {
 
     const eventsMatch = useMatch('/characters/detail/:id/events');
 
@@ -25,7 +26,7 @@ function CharacterEvents() {
 
     const fetchEventsContainingCharacter = () => {
         axios.get(
-            `${BASE_URL}${GET_ON_CHAR}/${eventsMatch?.params.id}/events?ts=1&apikey=${apikey}&hash=${hash}&limit=12`
+            `${BASE_URL}${GET_ON_CHAR}/${ id }/events?ts=1&apikey=${apikey}&hash=${hash}&limit=12`
             )
             .then(res => {
                 setEvents(res.data);
@@ -100,50 +101,46 @@ function CharacterEvents() {
                         textAlign: 'center'
                     }}
                     >This events are the events which the character appears in.</p>
-                    <AnimatePresence
-                    custom={isBack}
-                    >
-                    {
-                        events?.data.results.map((event, i) => {
-                            return (
-                                <span key={i}>
-                                    {
-                                        visible === i ?
-                                        <>
-                                            <EventCard 
-                                            path={event.thumbnail.path + '/landscape_amazing.jpg'}
-                                            variants={SlideVariant}
-                                            initial="start"
-                                            animate="animate"
-                                            exit="leave"
-                                            custom={isBack}
-                                            key={event.id}
-                                            /> 
-                                            <p style={{
-                                                textAlign: 'center',
-                                            }}>title: &ensp;
-                                                <Highlighted>{ event.title }</Highlighted>
-                                            </p>
-                                        </>
-                                        : null
-                                    }
-                                </span>
-                            )
-                        })
-                    }
-                    </AnimatePresence>
-                    <br></br>
-                    <div style={{
-                        textAlign: 'center'
-                    }}>
-                        <Btn
-                        onClick={showPrev}
-                        >prev</Btn>
-                        &ensp;
-                        <Btn
-                        onClick={showNext}
-                        >next</Btn>
-                    </div>
+                    <Wrapper>
+                        <AnimatePresence
+                        custom={isBack}
+                        >
+                        {
+                            events?.data.results.map((event, i) => {
+                                return (
+                                    <span key={i}>
+                                        {
+                                            visible === i ?
+                                            <>
+                                                <EventCard 
+                                                path={event.thumbnail.path + '/landscape_amazing.jpg'}
+                                                variants={SlideVariant}
+                                                initial="start"
+                                                animate="animate"
+                                                exit="leave"
+                                                custom={isBack}
+                                                key={event.id}
+                                                /> 
+                                                <p style={{
+                                                    textAlign: 'center',
+                                                }}>title: &ensp;
+                                                    <Highlighted>{ event.title }</Highlighted>
+                                                </p>
+                                            </>
+                                            : null
+                                        }
+                                    </span>
+                                )
+                            })
+                        }
+                        </AnimatePresence>
+                        <LeftArrow
+                        src={require('../images/arrow.png')}
+                        onClick={showPrev} />
+                        <RightArrow 
+                        src={require('../images/arrow.png')}
+                        onClick={showNext} />
+                    </Wrapper>
                 </>
             }
             <div style={{

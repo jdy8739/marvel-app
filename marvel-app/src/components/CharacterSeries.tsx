@@ -1,5 +1,5 @@
 
-function CharacterSeries() {
+function CharacterSeries({ id }: { id: string }) {
     return (
         <>
             series

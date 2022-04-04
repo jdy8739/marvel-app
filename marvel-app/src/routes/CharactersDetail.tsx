@@ -129,14 +129,18 @@ function CharactersDetail() {
                         disabled={ Boolean(seriesMatch) }
                         >series</Tab>
                     </Tabs>
+                    <div style={{ height: '60px' }}></div>
                     {
-                        comicsMatch ? <CharacterComics /> : null
+                        comicsMatch ? 
+                        <CharacterComics id={ comicsMatch.params.id || '' }/> : null
                     }
                     {
-                        eventsMatch ? <CharacterEvents /> : null
+                        eventsMatch ? 
+                        <CharacterEvents id={ eventsMatch.params.id || '' }/> : null
                     }
                     {
-                        seriesMatch ? <CharacterSeries /> : null
+                        seriesMatch ? 
+                        <CharacterSeries id={ seriesMatch.params.id || '' }/> : null
                     }
                 </>
             }

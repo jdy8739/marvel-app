@@ -7,7 +7,7 @@ import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
 import { Btn, ComicsCard, Input } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
     margin: auto;
 `;
 
-const LeftArrow = styled.img`
+export const LeftArrow = styled.img`
     position: absolute;
     left: 225px;
     transform: rotateY(180deg);
@@ -30,7 +30,7 @@ const LeftArrow = styled.img`
     }
 `;
 
-const RightArrow = styled.img`
+export const RightArrow = styled.img`
     position: absolute;
     right: 225px;
     width: 40px;
@@ -42,9 +42,7 @@ const RightArrow = styled.img`
     }
 `;
 
-function CharacterComics() {
-
-    const comicsMatch = useMatch('/characters/detail/:id/comics');
+function CharacterComics({ id }: { id: string }) {
 
     const [comics, setComics] = useState<IComics>();
 
@@ -52,7 +50,7 @@ function CharacterComics() {
 
     const fetchComicsContainingCharacter = () => {
         axios.get(
-            `${BASE_URL}${GET_ON_CHAR}/${comicsMatch?.params.id}/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12`
+            `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12`
             )
             .then(res => {
                 setComics(res.data);
@@ -137,7 +135,7 @@ function CharacterComics() {
 
         setIsLoading(true);
         axios.get(
-            `${BASE_URL}${GET_ON_CHAR}/${comicsMatch?.params.id}/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12&dateRange=${dateFrom},${dateTo}`
+            `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12&dateRange=${dateFrom},${dateTo}`
             )
             .then(res => {
                 setComics(res.data);
