@@ -20,6 +20,17 @@ const CharName = styled.h1<{ length: number }>`
     transition: all 1s;
 `;
 
+export const ClickToGoBack = styled.p`
+    font-size: 15px;
+    text-align: center;
+    opacity: 0.3;
+    position: absolute;
+    top: -30px;
+    left: 0;
+    right: 0;
+    margin: auto;
+`;
+
 const Portrait = styled.div<{ path: string }>`
     background-image: linear-gradient(to top, #252525, transparent), url(${ props => props.path });
     width: 320px;
@@ -35,6 +46,9 @@ const Portrait = styled.div<{ path: string }>`
         ${CharName} {
             color: #F0131E;
             opacity: 1.0;
+        }
+        ${ClickToGoBack} {
+            opacity: 0.8;
         }
     }
 `;
@@ -82,10 +96,12 @@ function CharactersDetail() {
             <Blank />
             {
                 isLoading ? <p style={{ textAlign: 'center' }}>loading... please wait.</p> :
-                <>
+                <>  
                     <Portrait 
                     path={`${char?.data.results[0].thumbnail.path}/portrait_uncanny.jpg`}
+                    onClick={() => nav(-1)}
                     >
+                        <ClickToGoBack>click portrait to go back</ClickToGoBack>
                         <CharName
                         length={ char?.data.results[0].name.length || 0 }
                         >{ char?.data.results[0].name }</CharName>

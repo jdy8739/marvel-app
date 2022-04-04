@@ -21,6 +21,7 @@ export const CharName = styled.h1<{ length: number }>`
 `;
 
 export const CharacterCardForm = styled.div<{ path: string }>`
+    padding: 1px;
     width: 225px;
     height: 275px;
     border: 1px solid #F0131E;
