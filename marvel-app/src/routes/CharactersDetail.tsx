@@ -1,9 +1,12 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useMatch } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_SINGLE_CHAR, hash } from "../api";
-import { Blank } from "../styled";
+import CharacterComics from "../components/CharacterComics";
+import CharacterEvents from "../components/CharacterEvents";
+import CharacterSeries from "../components/CharacterSeries";
+import { Blank, Tab, Tabs } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
 const CharName = styled.h1<{ length: number }>`
@@ -38,40 +41,89 @@ const Portrait = styled.div<{ path: string }>`
 
 function CharactersDetail() {
 
+    const nav = useNavigate();
+
     const charMatch = useMatch('/characters/detail/:id');
+
+    const comicsMatch = useMatch('/characters/detail/:id/comics');
+
+    const eventsMatch = useMatch('/characters/detail/:id/events');
+
+    const seriesMatch = useMatch('/characters/detail/:id/series');
 
     const [char, setChar] = useState<ICharacter>();
 
-    const fetchSingleCharacter = () => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_SINGLE_CHAR}/${charMatch?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`)
+    const fetchSingleCharacter = (id: string) => {
+        axios.get<ICharacter>(`${BASE_URL}${GET_SINGLE_CHAR}/${id}?ts=1&apikey=${apikey}&hash=${hash}`)
             .then(res => {
                 setChar(res.data);
+                setIsLodaing(false);
             });
     };
 
+    const [isLoading, setIsLodaing] = useState(true);
+
     useEffect(() => {
-        fetchSingleCharacter();
+        fetchSingleCharacter(
+            charMatch?.params.id || 
+            comicsMatch?.params.id || 
+            eventsMatch?.params.id || 
+            seriesMatch?.params.id || ''
+        );
     }, []);
+
+    const showSubDetail = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const match = charMatch || comicsMatch || eventsMatch || seriesMatch;
+        nav(`/characters/detail/${ match?.params.id }/${e.currentTarget.innerText}`);
+    };
 
     return (
         <>  
             <Blank />
-            <Portrait 
-            path={`${char?.data.results[0].thumbnail.path}/portrait_uncanny.jpg`}
-            >
-                <CharName
-                length={ char?.data.results[0].name.length || 0 }
-                >{ char?.data.results[0].name }</CharName>
-            </Portrait>
-            <br></br>
-            <br></br>
-            <p
-            style={{
-                width: '40%',
-                textAlign: 'center',
-                margin: 'auto'
-            }}
-            >{ char?.data.results[0].description || 'No Description' }</p>
+            {
+                isLoading ? <p style={{ textAlign: 'center' }}>loading... please wait.</p> :
+                <>
+                    <Portrait 
+                    path={`${char?.data.results[0].thumbnail.path}/portrait_uncanny.jpg`}
+                    >
+                        <CharName
+                        length={ char?.data.results[0].name.length || 0 }
+                        >{ char?.data.results[0].name }</CharName>
+                    </Portrait>
+                    <br></br>
+                    <br></br>
+                    <p
+                    style={{
+                        width: '40%',
+                        textAlign: 'center',
+                        margin: 'auto'
+                    }}
+                    >{ char?.data.results[0].description || 'No Description' }</p>
+                    <Tabs>
+                        <Tab
+                        onClick={showSubDetail}
+                        disabled={ Boolean(comicsMatch) }
+                        >comics</Tab>
+                        <Tab
+                        onClick={showSubDetail}
+                        disabled={ Boolean(eventsMatch) }
+                        >events</Tab>
+                        <Tab
+                        onClick={showSubDetail}
+                        disabled={ Boolean(seriesMatch) }
+                        >series</Tab>
+                    </Tabs>
+                    {
+                        comicsMatch ? <CharacterComics /> : null
+                    }
+                    {
+                        eventsMatch ? <CharacterEvents /> : null
+                    }
+                    {
+                        seriesMatch ? <CharacterSeries /> : null
+                    }
+                </>
+            }
         </>
     )
 };

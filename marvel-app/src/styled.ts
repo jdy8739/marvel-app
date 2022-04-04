@@ -67,3 +67,24 @@ export const Input = styled.input`
 export const Blank = styled.div`
     height: 150px;
 `;
+
+export const Tabs = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+`;
+
+export const Tab = styled.button`
+    margin: 24px;
+    cursor: pointer;
+    border: 1px solid #F0131E;
+    border-radius: 8px;
+    background-color: transparent;
+    color: white;
+    padding: 8px 12px;
+    transition: all 1s;
+    &:hover {
+        background-color: white;
+        color: #F0131E;
+    }
+`;

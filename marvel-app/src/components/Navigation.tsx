@@ -1,21 +1,42 @@
+import { motion, useTransform, useViewportScroll } from "framer-motion";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const Navi = styled.div`
+const Navi = styled(motion.div)`
     width: 100vw;
     height: 75px;
-    background-color: #F0131E;
     margin-bottom: 100px;
     position: fixed;
     top: 0;
     z-index: 99;
     box-shadow: 12px 12px 12px 0px #00000033;
+    display: flex;
+    align-items: center;
+    transition: all 1s;
+`;
+
+const Tab = styled.p`
+    padding: 8px;
 `;
 
 function Navigation() {
+
+    const [isTop, setIsTop] = useState(true);
+
+    const { scrollY } = useViewportScroll();
+
+    const gradient = useTransform(
+        scrollY,
+        [0, 100],
+        ['transparent', '#F0131E']
+    );
+
     return (
         <>
-            <Navi>
-
+            <Navi style={{ backgroundColor: gradient }}>
+                <Link to={"/"}><Tab>Home</Tab></Link>
+                <Link to={"/characters"}><Tab>Characters</Tab></Link>
             </Navi>
         </>
     )

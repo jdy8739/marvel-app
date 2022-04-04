@@ -8,10 +8,10 @@ import Home from './routes/Home';
 function App() {
   return (
     <div className="App">
-      <Navigation />
       <BrowserRouter>
+      <Navigation />
         <Routes>
-          <Route path='/characters/detail/:id' element={ <CharactersDetail /> } />
+          <Route path='/characters/detail/:id/*' element={ <CharactersDetail /> } />
           <Route path='/characters/*' element={ <Characters /> } />
           <Route path="/*" element={ <Home /> } />
         </Routes>
