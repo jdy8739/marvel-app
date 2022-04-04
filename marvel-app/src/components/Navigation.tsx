@@ -14,6 +14,7 @@ const Navi = styled(motion.div)`
     display: flex;
     align-items: center;
     transition: all 1s;
+    border-bottom: 2px solid #F0131E;
 `;
 
 const Tab = styled.p`

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMatch } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_COMICS_CONTAINING_CHAR, hash } from "../api";
@@ -19,13 +19,15 @@ function CharacterComics() {
 
     const [comics, setComics] = useState<IComics>();
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const fetchComicsContainingCharacter = () => {
         axios.get(
             `${BASE_URL}${GET_COMICS_CONTAINING_CHAR}/${comicsMatch?.params.id}/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12`
             )
             .then(res => {
                 setComics(res.data);
-                console.log(res.data);
+                setIsLoading(false);
             });
     };
 
@@ -81,55 +83,111 @@ function CharacterComics() {
             transition: {
                 duration: 1
             }
-        }),
-    }
+        })
+    };
+
+    const [dateFrom, setDateFrom] = useState('');
+
+    const [dateTo, setDateTo] = useState('');
+
+    const handleDateFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDateFrom(e.currentTarget.value);
+    };
+
+    const handleDateTo = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDateTo(e.currentTarget.value);
+    };
+
+    const handleDateSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if(!dateFrom || dateFrom >= dateTo) {
+            alert('Please check the date. :(');
+            return;
+        };
+
+        setIsLoading(true);
+        axios.get(
+            `${BASE_URL}${GET_COMICS_CONTAINING_CHAR}/${comicsMatch?.params.id}/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12&dateRange=${dateFrom},${dateTo}`
+            )
+            .then(res => {
+                setComics(res.data);
+                console.log(res.data);
+                setIsLoading(false);
+            });
+    };
 
     return (
-        <>
-            <p
-            style={{
-                textAlign: 'center'
-            }}
-            >This character is contained in these comics.</p>
-            <Wrapper>
-                <AnimatePresence 
-                exitBeforeEnter
-                custom={isBack}
-                >
+        <>  
+            {
+                isLoading ? <p style={{ textAlign: 'center' }}>loading... please wait.</p> :
+                <>
                     {
-                        comics?.data.results.map((comic, i) => {
-                            return (
-                                visible === i ? 
-                                <span
-                                key={comic.id}
+                        comics?.data.results.length === 0 ? 
+                        <p style={{ textAlign: 'center' }}>cannot find any data :(</p> : 
+                        <>
+                            <p style={{
+                                textAlign: 'center'
+                            }}
+                            >This character is contained in these comics.</p>
+                            <Wrapper>
+                                <AnimatePresence 
+                                exitBeforeEnter
+                                custom={isBack}
                                 >
-                                    <ComicsCard
-                                    key={comic.id}
-                                    path={`${ comic.images[0].path }/portrait_incredible.jpg`}
-                                    variants={SlideVariant}
-                                    initial="start"
-                                    animate="animate"
-                                    exit="leave"
-                                    custom={isBack}
-                                    >
-                                    </ComicsCard>
-                                    <h4 style={{
-                                        textAlign: 'center'
-                                    }}>{ comic.title }</h4>
-                                </span>
-                                : null
-                            )
-                        })
+                                    {
+                                        comics?.data.results.map((comic, i) => {
+                                            return (
+                                                visible === i ? 
+                                                <span
+                                                key={comic.id}
+                                                >
+                                                    <ComicsCard
+                                                    key={comic.id}
+                                                    path={`${ comic.thumbnail.path }/portrait_incredible.jpg`}
+                                                    variants={SlideVariant}
+                                                    initial="start"
+                                                    animate="animate"
+                                                    exit="leave"
+                                                    custom={isBack}
+                                                    >
+                                                    </ComicsCard>
+                                                    <h4 style={{
+                                                        textAlign: 'center'
+                                                    }}>{ comic.title }</h4>
+                                                </span>
+                                                : null
+                                            )
+                                        })
+                                    }
+                                </AnimatePresence>
+                            </Wrapper>
+                            <br></br>
+                            <div style={{
+                                textAlign: 'center',
+                                marginBottom: '100px'
+                            }}>
+                                <Btn onClick={showPrev}>prev</Btn>
+                                <Btn onClick={showNext}>next</Btn>
+                                <p>find by date if there are no data you find above.</p>
+                                <form onSubmit={handleDateSubmit}>
+                                    <input 
+                                    type="date"
+                                    onChange={handleDateFrom}
+                                    />
+                                    &ensp;
+                                    <input 
+                                    type="date"
+                                    onChange={handleDateTo}
+                                    />
+                                    &ensp;
+                                    <button>search</button>
+                                </form>
+                            </div>
+                        </>
                     }
-                </AnimatePresence>
-            </Wrapper>
-            <br></br>
-            <div style={{
-                textAlign: 'center'
-            }}>
-                <Btn onClick={showPrev}>prev</Btn>
-                <Btn onClick={showNext}>next</Btn>
-            </div>
+                </>
+            }
         </>
     )
 };
