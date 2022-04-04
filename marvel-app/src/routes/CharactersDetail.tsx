@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_SINGLE_CHAR, hash } from "../api";
+import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
 import CharacterComics from "../components/CharacterComics";
 import CharacterEvents from "../components/CharacterEvents";
 import CharacterSeries from "../components/CharacterSeries";
@@ -68,7 +68,7 @@ function CharactersDetail() {
     const [char, setChar] = useState<ICharacter>();
 
     const fetchSingleCharacter = (id: string) => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_SINGLE_CHAR}/${id}?ts=1&apikey=${apikey}&hash=${hash}`)
+        axios.get<ICharacter>(`${BASE_URL}${GET_ON_CHAR}/${id}?ts=1&apikey=${apikey}&hash=${hash}`)
             .then(res => {
                 setChar(res.data);
                 setIsLodaing(false);

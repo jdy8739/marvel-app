@@ -3,7 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useMatch } from "react-router-dom";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_COMICS_CONTAINING_CHAR, hash } from "../api";
+import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
 import { Btn, ComicsCard, Input } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
@@ -52,7 +52,7 @@ function CharacterComics() {
 
     const fetchComicsContainingCharacter = () => {
         axios.get(
-            `${BASE_URL}${GET_COMICS_CONTAINING_CHAR}/${comicsMatch?.params.id}/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12`
+            `${BASE_URL}${GET_ON_CHAR}/${comicsMatch?.params.id}/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12`
             )
             .then(res => {
                 setComics(res.data);
@@ -137,7 +137,7 @@ function CharacterComics() {
 
         setIsLoading(true);
         axios.get(
-            `${BASE_URL}${GET_COMICS_CONTAINING_CHAR}/${comicsMatch?.params.id}/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12&dateRange=${dateFrom},${dateTo}`
+            `${BASE_URL}${GET_ON_CHAR}/${comicsMatch?.params.id}/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12&dateRange=${dateFrom},${dateTo}`
             )
             .then(res => {
                 setComics(res.data);
@@ -208,15 +208,21 @@ function CharacterComics() {
                         <br></br>
                         <p>find by date if there are no data you find above.</p>
                         <form onSubmit={handleDateSubmit}>
-                            <Input 
-                            type="date"
-                            onChange={handleDateFrom}
-                            />
+                            <label>
+                                <span>from </span>
+                                <Input 
+                                type="date"
+                                onChange={handleDateFrom}
+                                />
+                            </label>
                             &ensp;
-                            <Input 
-                            type="date"
-                            onChange={handleDateTo}
-                            />
+                            <label>
+                                <span>to </span>
+                                <Input 
+                                type="date"
+                                onChange={handleDateTo}
+                                />
+                            </label>
                             &ensp;
                             <Btn>search</Btn>
                         </form>
