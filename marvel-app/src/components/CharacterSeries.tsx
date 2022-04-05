@@ -79,6 +79,7 @@ function CharacterSeries({ id }: { id: string }) {
     };
 
     const fetchMore = () => {
+        if(checkCntBiggerThanTotal()) return;
         cnt ++;
         axios.get<ISeries>(
             `${BASE_URL}${GET_ON_CHAR}/${ id }/${SUBJECT}?ts=1&apikey=${apikey}&hash=${hash}&limit=12&offset=${(cnt - 1) * 12}`
@@ -94,6 +95,16 @@ function CharacterSeries({ id }: { id: string }) {
                     };
                 });
             });
+    };
+
+    const checkCntBiggerThanTotal = () :boolean => {
+        if(series?.data.total) {
+            if(cnt * 12 > series?.data.total) {
+                alert('No More to show!');
+                return true;
+            } else return false;
+        };
+        return false;
     };
 
     return (
