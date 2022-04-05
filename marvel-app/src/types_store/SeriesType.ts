@@ -75,7 +75,7 @@ export interface Next {
     name: string;
 }
 
-export interface Result {
+export interface SeriesResult {
     id: number;
     title: string;
     description: string;
@@ -101,7 +101,7 @@ export interface Data {
     limit: number;
     total: number;
     count: number;
-    results: Result[];
+    results: SeriesResult[];
 }
 
 export interface ISeries {

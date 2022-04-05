@@ -99,3 +99,24 @@ export const ComicsCard = styled(motion.div)<{ path: string }>`
     background-image: url(${ props => props.path });
     margin: auto;
 `;
+
+export const ModalBackground = styled.div`
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+`;
+
+export const Modal = styled(motion.div)`
+    width: 400px;
+    height: 400px;
+    background-color: #212121;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto auto;
+    border-radius: 12px;
+`;

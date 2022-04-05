@@ -12,7 +12,8 @@ export const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
     position: relative;
-    max-width: 1200px;
+    max-width: 750px;
+    min-width: 300px;
     margin: auto;
 `;
 
@@ -31,7 +32,7 @@ export const LeftArrow = styled.img`
 
 export const RightArrow = styled.img`
     position: absolute;
-    right: 225px;
+    right: 0;
     width: 40px;
     height: 50px;
     cursor: pointer;
