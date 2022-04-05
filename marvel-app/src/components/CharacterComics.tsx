@@ -13,13 +13,12 @@ export const Wrapper = styled.div`
     align-items: center;
     position: relative;
     max-width: 1200px;
-    min-width: 600px;
     margin: auto;
 `;
 
 export const LeftArrow = styled.img`
     position: absolute;
-    left: 225px;
+    left: 0;
     transform: rotateY(180deg);
     width: 40px;
     height: 50px;
