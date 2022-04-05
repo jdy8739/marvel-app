@@ -119,4 +119,13 @@ export const Modal = styled(motion.div)`
     right: 0;
     margin: auto auto;
     border-radius: 12px;
+    overflow: hidden;
+`;
+
+export const ModelImage = styled.div<{ path: string }>`
+    width: 100%;
+    height: 78%;
+    background-image: url(${ props => props.path });
+    background-position: center center;
+    background-size: cover;
 `;

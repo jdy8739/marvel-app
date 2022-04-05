@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Btn, Modal, ModalBackground } from "../styled";
+import { Btn, Modal, ModalBackground, ModelImage } from "../styled";
 import { ISeries, SeriesResult } from "../types_store/SeriesType";
 
 const SeriesElem = styled(motion.div)<{ path: string }>`
@@ -18,6 +18,7 @@ const SeriesElem = styled(motion.div)<{ path: string }>`
     &:hover {
         filter: grayscale(0);
         opacity: 1;
+        z-index: 98;
     }
     cursor: pointer;
     transition: all 0.3s;
@@ -27,7 +28,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: 38%;
+    width: 50%;
     margin: auto;
 `;
 
@@ -44,7 +45,7 @@ const modalVariant = {
     animate: {
         opacity: 1,
         transition: {
-            duration: 0.3
+            duration: 1.2
         }
     },
     exit: {
@@ -159,7 +160,6 @@ function CharacterSeries({ id }: { id: string }) {
                                 <AnimatePresence>
                                     <ModalBackground
                                     onClick={hideModal}
-                                    key={clickedSeries.id}
                                     variants={modalVariant}
                                     initial="initial"
                                     animate="animate"
@@ -170,7 +170,9 @@ function CharacterSeries({ id }: { id: string }) {
                                         onClick={preventBubbling}
                                         layoutId={clickedSeries.id + ''}
                                         >
-                                            
+                                            <ModelImage
+                                            path={clickedSeries.thumbnail.path + "/standard_fantastic.jpg"}
+                                            />
                                         </Modal>
                                     </ModalBackground>
                                 </AnimatePresence>
