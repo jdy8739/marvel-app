@@ -76,12 +76,12 @@ export const Tabs = styled.div`
     margin-top: 50px;
 `;
 
-export const Tab = styled.button`
+export const Tab = styled.button<{ clicked: boolean }>`
     margin: 24px;
     cursor: pointer;
     border: 1px solid #F0131E;
     border-radius: 8px;
-    background-color: transparent;
+    background-color: ${ props => props.clicked ? '#F0131E' : 'transparent' };
     color: white;
     padding: 8px 12px;
     transition: all 1s;

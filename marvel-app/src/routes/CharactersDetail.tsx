@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useMatch, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
+import { startWithAtom } from "../atoms";
 import CharacterComics from "../components/CharacterComics";
 import CharacterEvents from "../components/CharacterEvents";
 import CharacterSeries from "../components/CharacterSeries";
@@ -91,6 +93,13 @@ function CharactersDetail() {
         nav(`/characters/detail/${ match?.params.id }/${e.currentTarget.innerText}`);
     };
 
+    const startWith = useRecoilValue(startWithAtom);
+
+    const backToCharPage = () => {
+        if(startWith) nav(`/characters?startWith=${ startWith }`);
+        else nav('/characters');
+    };
+
     return (
         <>  
             <Blank />
@@ -99,7 +108,7 @@ function CharactersDetail() {
                 <>  
                     <Portrait 
                     path={`${char?.data.results[0].thumbnail.path}/portrait_uncanny.jpg`}
-                    onClick={() => nav(-1)}
+                    onClick={backToCharPage}
                     >
                         <ClickToGoBack>click portrait to go back</ClickToGoBack>
                         <CharName
@@ -119,14 +128,17 @@ function CharactersDetail() {
                         <Tab
                         onClick={showSubDetail}
                         disabled={ Boolean(comicsMatch) }
+                        clicked={ Boolean(comicsMatch) }
                         >comics</Tab>
                         <Tab
                         onClick={showSubDetail}
                         disabled={ Boolean(eventsMatch) }
+                        clicked={ Boolean(eventsMatch) }
                         >events</Tab>
                         <Tab
                         onClick={showSubDetail}
                         disabled={ Boolean(seriesMatch) }
+                        clicked={ Boolean(seriesMatch) }
                         >series</Tab>
                     </Tabs>
                     <div style={{ height: '60px' }}></div>

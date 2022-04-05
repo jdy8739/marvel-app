@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_CHAR, GET_SEARCHED_CHAR, hash } from "../api";
+import { startWithAtom } from "../atoms";
 import CharacterCard from "../components/CharacterCard";
 import { Highlighted, CharacterContainer, Btn, Input, Blank } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
@@ -61,7 +63,7 @@ function Characters() {
         fetchCharacters();
     }, []);
 
-    const [searchedChar, setSearchedChar] = useState('');
+    const [searchedChar, setSearchedChar] = useRecoilState(startWithAtom);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchedChar(e.currentTarget.value);

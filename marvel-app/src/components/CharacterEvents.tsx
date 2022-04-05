@@ -20,8 +20,6 @@ const EventCard = styled(motion.div)<{ path: string }>`
 
 function CharacterEvents({ id }: { id: string }) {
 
-    const eventsMatch = useMatch('/characters/detail/:id/events');
-
     const [events, setEvents] = useState<IEvents>();
 
     const fetchEventsContainingCharacter = () => {
