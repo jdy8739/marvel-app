@@ -38,10 +38,19 @@ const ShowMoreBtn = styled(Btn)`
 `;
 
 const modalVariant = {
+    initial: {
+        opacity: 0,
+    },
     animate: {
         opacity: 1,
         transition: {
             duration: 0.3
+        }
+    },
+    exit: {
+        opacity: 0,
+        transition: {
+            duration: 1
         }
     }
 };
@@ -52,10 +61,15 @@ function CharacterSeries({ id }: { id: string }) {
 
     const SUBJECT = 'series'
 
+    let onAniComplete = false;
+
     const [series, setSeries] = useState<ISeries>();
 
     useEffect(() => {
         fetchSeriesContainingCharacter();
+        return () => {
+            cnt = 1;
+        };
     }, []);
 
     const fetchSeriesContainingCharacter = () => {
@@ -73,12 +87,17 @@ function CharacterSeries({ id }: { id: string }) {
     const preventBubbling = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
 
     const showModal = (id: number) => {
+        onAniComplete = false;
         setClickedSeries(() => {
             return series?.data.results.find(seriesElem => seriesElem.id === id);
         });
     };
 
-    const fetchMore = () => {
+    const hideModal = () => {
+        if(onAniComplete) setClickedSeries(null)
+    };
+
+    const fetchMoreSeries = () => {
         if(checkCntBiggerThanTotal()) return;
         cnt ++;
         axios.get<ISeries>(
@@ -133,20 +152,25 @@ function CharacterSeries({ id }: { id: string }) {
                             </Wrapper>
                             <br></br>
                             <ShowMoreBtn
-                            onClick={fetchMore}
+                            onClick={fetchMoreSeries}
                             >show more</ShowMoreBtn>
                             {
                                 !clickedSeries ? null :
                                 <AnimatePresence>
                                     <ModalBackground
-                                    onClick={() => setClickedSeries(null)}
+                                    onClick={hideModal}
+                                    key={clickedSeries.id}
+                                    variants={modalVariant}
+                                    initial="initial"
+                                    animate="animate"
+                                    exit="exit"
+                                    onAnimationComplete={() => onAniComplete = true}
                                     >
                                         <Modal
                                         onClick={preventBubbling}
                                         layoutId={clickedSeries.id + ''}
-                           
                                         >
-                                            <p>{clickedSeries.title}</p>
+                                            
                                         </Modal>
                                     </ModalBackground>
                                 </AnimatePresence>

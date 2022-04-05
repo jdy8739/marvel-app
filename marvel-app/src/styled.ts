@@ -100,7 +100,7 @@ export const ComicsCard = styled(motion.div)<{ path: string }>`
     margin: auto;
 `;
 
-export const ModalBackground = styled.div`
+export const ModalBackground = styled(motion.div)`
     background-color: rgba(0, 0, 0, 0.5);
     width: 100vw;
     height: 100vh;
@@ -110,7 +110,7 @@ export const ModalBackground = styled.div`
 
 export const Modal = styled(motion.div)`
     width: 400px;
-    height: 400px;
+    height: 520px;
     background-color: #212121;
     position: absolute;
     top: 0;
