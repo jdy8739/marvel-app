@@ -19,6 +19,24 @@ const P = styled.p`
     text-align: center;
 `;
 
+const modalVariant = {
+    initial: {
+        opacity: 0,
+    },
+    animate: {
+        opacity: 1,
+        transition: {
+            duration: 0.3
+        }
+    },
+    exit: {
+        opacity: 0,
+        transition: {
+            duration: 1
+        }
+    }
+};
+
 let cnt = 0;
 
 const LIMIT = 12;
@@ -214,6 +232,10 @@ function Comics() {
                 <AnimatePresence>
                     <ModalBackground
                     onClick={hideDateModal}
+                    variants={modalVariant}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
                     >
                         <DateChooseModal
                         onClick={preventBubbling}

@@ -77,7 +77,8 @@ function Characters() {
     };
 
     const getSearchedChars = () => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_SEARCHED_CHAR}${searchedChar || startWith}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
+        axios.get<ICharacter>(`${BASE_URL}${GET_SEARCHED_CHAR}${
+            searchedChar || startWith}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
             .then(res => {
                 setChars(res.data);
             });

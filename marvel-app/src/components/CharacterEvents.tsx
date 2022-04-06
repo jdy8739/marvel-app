@@ -1,10 +1,9 @@
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useMatch } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Btn, Highlighted } from "../styled";
+import { Highlighted } from "../styled";
 import { IEvents } from "../types_store/EventsType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
 
@@ -28,6 +27,7 @@ function CharacterEvents({ id }: { id: string }) {
             )
             .then(res => {
                 setEvents(res.data);
+                console.log(res.data);
             });
     };
 
