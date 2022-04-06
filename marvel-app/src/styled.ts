@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
-export const CharacterContainer = styled.div`
+export const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
     text-align: center;
@@ -128,4 +128,27 @@ export const ModelImage = styled.div<{ path: string }>`
     background-image: url(${ props => props.path });
     background-position: center center;
     background-size: cover;
+`;
+
+export const ComicsFrameForm = styled.div<{ path: string }>`
+    background-image: linear-gradient(to top, black, transparent), url(${ props => props.path });
+    background-position: center center;
+    background-size: cover;
+    width: 216px;
+    height: 324px;
+    margin: 8px;
+    filter: grayscale(30%);
+    transition: all 0.3s;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 8px;
+    &:hover {
+        filter: grayscale(0%);
+        transform: scale(1.01);
+        border: 1px solid #F0131E;
+        ${CharName} {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+    }
+    position: relative;
 `;

@@ -6,7 +6,7 @@ function CharacterCard({ char }: { char: ICharacterResult }) {
     return (
         <>
             <CharacterCardForm
-            path={`${char.thumbnail.path}/portrait_medium.jpg`}
+            path={`${char.thumbnail.path}/portrait_xlarge.jpg`}
             >
                 <CharName 
                 length={ char.name.length }

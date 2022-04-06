@@ -95,7 +95,7 @@ function CharacterSeries({ id }: { id: string }) {
     };
 
     const hideModal = () => {
-        if(onAniComplete) setClickedSeries(null)
+        if(onAniComplete) setClickedSeries(null);
     };
 
     const fetchMoreSeries = () => {

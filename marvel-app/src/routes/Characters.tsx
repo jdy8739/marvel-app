@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { apikey, BASE_URL, GET_CHAR, GET_SEARCHED_CHAR, hash } from "../api";
 import { startWithAtom } from "../atoms";
 import CharacterCard from "../components/CharacterCard";
-import { Highlighted, CharacterContainer, Btn, Input, Blank } from "../styled";
+import { Highlighted, Container, Btn, Input, Blank } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
 
@@ -131,7 +131,7 @@ function Characters() {
                 <Btn onClick={resetSearch}>reset</Btn>
             </div>
             <br></br>
-            <CharacterContainer>
+            <Container>
                 {
                     chars?.data.results.length !== 0 ? 
                     <>
@@ -149,7 +149,7 @@ function Characters() {
                         }
                     </> : <p>cannot find any results. :(</p>
                 }
-            </CharacterContainer>
+            </Container>
             <br></br>
             <br></br>
             <div style={{
