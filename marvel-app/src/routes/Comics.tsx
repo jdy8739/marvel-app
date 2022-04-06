@@ -14,7 +14,7 @@ function Comics() {
     const [comics, setComics] = useState<IComics>();
 
     const fetchComics = function() {
-        axios.get<IComics>(`${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}`)
+        axios.get<IComics>(`${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}`)
             .then(res => {
                 setComics(res.data);
             });
@@ -97,6 +97,7 @@ function Comics() {
                 >first</Btn>
                 <Btn
                 onClick={fetchPrevious}
+                disabled={cnt === 0}
                 >prev</Btn>
                 {
                     [-3, -2, -1, 0, 1, 2, 3].map(idx => {
@@ -116,6 +117,7 @@ function Comics() {
                 }
                 <Btn
                 onClick={fetchNext}
+                disabled={cnt >= TOTAL / LIMIT - 1}
                 >next</Btn>
                 <Btn
                 onClick={fetchLast}
