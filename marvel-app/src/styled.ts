@@ -54,7 +54,7 @@ export const Btn = styled.button<{ clicked?: boolean }>`
     border: 1px solid ${ props => props.clicked ? 'white' : '#F0131E' };
     margin: 4px;
     background-color: ${ props => props.clicked ? 'white' : 'transparent' };;
-    color: white;
+    color: ${ props => props.clicked ? '#F0131E' : 'white' };
     padding: 4px 8px;
     cursor: pointer;
 `;
@@ -151,4 +151,13 @@ export const ComicsFrameForm = styled.div<{ path: string }>`
         }
     }
     position: relative;
+`;
+
+export const ComicPortrait = styled.div<{ path: string }>`
+    background-image: url(${ props => props.path });
+    background-position: center center;
+    background-size: cover;
+    width: 300px;
+    height: 450px;
+    margin: auto;
 `;

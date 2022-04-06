@@ -12,3 +12,5 @@ export const GET_SEARCHED_CHAR = '/v1/public/characters?ts=1&nameStartsWith=';
 export const GET_ON_CHAR = '/v1/public/characters';
 
 export const GET_COMICS = '/v1/public/comics?ts=1';
+
+export const GET_ON_COMICS = '/v1/public/comics';

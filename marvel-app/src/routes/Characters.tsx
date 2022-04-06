@@ -172,11 +172,7 @@ function Characters() {
                                     onClick={() => showCharsOfIndex(cnt + idx)}
                                     clicked={ cnt === Math.floor(cnt + idx) }
                                     >
-                                        {
-                                            cnt === Math.floor(cnt + idx) ? 
-                                            <Highlighted>{ Math.floor(cnt + idx) + 1}</Highlighted> :
-                                            <>{ Math.floor(cnt + idx) + 1}</>
-                                        }
+                                        { cnt + idx + 1 }
                                     </Btn>
                                 }
                             </span>
