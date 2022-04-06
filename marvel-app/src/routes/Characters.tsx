@@ -111,7 +111,7 @@ function Characters() {
                 style={{
                     textAlign: 'right',
                     width: '100%',
-                    marginBottom: '28px'
+                    marginBottom: '4px'
                 }}
                 >
                     <form
@@ -120,7 +120,6 @@ function Characters() {
                     }}
                     onSubmit={handleSearchSubmit}
                     >
-                        &ensp;
                         <Input 
                         onChange={handleSearchChange} 
                         value={searchedChar}
@@ -133,7 +132,12 @@ function Characters() {
                         &ensp;
                         <Btn>search</Btn>
                     </form>
-                    &ensp;
+                </div>
+                <div style={{ 
+                    width: '100%',
+                    textAlign: 'right',
+                    marginBottom: '28px'
+                }}>
                     <Btn onClick={resetSearch}>reset</Btn>
                 </div>
                 {

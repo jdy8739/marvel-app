@@ -31,17 +31,19 @@ function Comics() {
 
     const date = new URLSearchParams(location.search).get('dateRange')?.split(',', 2);
 
-    const formerDate = date ? date[0] : '';
+    let formerDate = date ? date[0] : '';
 
-    const latterDate = date ? date[1] : '';
+    let latterDate = date ? date[1] : '';
 
     const [startDate, setStartDate] = useState('');
 
     const [toDate, setToDate] = useState('');
 
-    const fetchComics = function() {
-        axios.get<IComics>(`${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}${
-            latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}`)
+    const fetchComics = function(pageNum: number = cnt) {
+        axios.get<IComics>(
+            `${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&offset=${pageNum * LIMIT}&limit=${LIMIT}${
+                latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}`
+            )
             .then(res => {
                 setComics(res.data);
             });
@@ -52,39 +54,29 @@ function Comics() {
 
     const showAnotherPage = (e: React.MouseEvent<HTMLButtonElement>) => {
         cnt = +e.currentTarget.innerText - 1;
-        fetchMoreComics(cnt);
+        fetchComics(cnt);
     };
 
     const fetchFirst = () => {
         cnt = 0;
-        fetchMoreComics(cnt);
+        fetchComics(cnt);
     };
 
     const fetchLast = () => {
         if(TOTAL) {
             cnt = Math.floor(TOTAL / LIMIT);
-            fetchMoreComics(cnt);
+            fetchComics(cnt);
         };
     };
 
     const fetchPrevious = () => {
         cnt --;
-        fetchMoreComics(cnt);
+        fetchComics(cnt);
     };
 
     const fetchNext = () => {
         cnt ++;
-        fetchMoreComics(cnt);
-    };
-
-    const fetchMoreComics = function(cnt: number) {
-        axios.get<IComics>(
-            `${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&offset=${cnt * LIMIT}&limit=${LIMIT}${
-                latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}`
-            )
-            .then(res => {
-                setComics(res.data);
-            });
+        fetchComics(cnt);
     };
 
     useEffect(() => {
@@ -118,10 +110,11 @@ function Comics() {
     const handleDateSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(!checkDateValid()) return;
-        cnt = 0;
         setIsDateModalShown(false);
         nav(`/comics?dateRange=${startDate},${toDate}`);
-        fetchMoreComics(cnt);
+        changeDateToChosenDate();
+        cnt = 0;
+        fetchComics(cnt);
     };
 
     const checkDateValid = () :boolean => {
@@ -131,6 +124,11 @@ function Comics() {
         } else return true;
     };
 
+    const changeDateToChosenDate = () => {
+        formerDate = startDate;
+        latterDate = toDate;
+    };
+
     return (
         <>
             <Blank />
@@ -138,7 +136,7 @@ function Comics() {
                 <div style={{
                     width: '100%',
                     textAlign: 'right',
-                    marginBottom: '5px'
+                    marginBottom: '4px'
                 }}> 
                     <form>
                         <Input 
