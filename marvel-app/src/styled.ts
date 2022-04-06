@@ -161,3 +161,16 @@ export const ComicPortrait = styled.div<{ path: string }>`
     height: 450px;
     margin: auto;
 `;
+
+export const DateChooseModal = styled.div`
+    background-color: #242424;
+    position: fixed;
+    width: 180px;
+    height: 250px;
+    border-radius: 12px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto auto;
+`;

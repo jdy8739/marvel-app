@@ -1,9 +1,23 @@
 import axios from "axios";
+import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { apikey, BASE_URL, GET_COMICS, hash } from "../api";
-import { Blank, Btn, CharName, ComicsFrameForm, Container, Input } from "../styled";
+import { Blank, Btn, CharName, ComicsFrameForm, Container, DateChooseModal, Input, ModalBackground } from "../styled";
 import { IComics } from "../types_store/ComicsType";
+
+const DateForm = styled.form`
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+`;
+
+const P = styled.p`
+    width: 100%;
+    text-align: center;
+`;
 
 let cnt = 0;
 
@@ -13,8 +27,21 @@ function Comics() {
 
     const [comics, setComics] = useState<IComics>();
 
+    const location = useLocation();
+
+    const date = new URLSearchParams(location.search).get('dateRange')?.split(',', 2);
+
+    const formerDate = date ? date[0] : '';
+
+    const latterDate = date ? date[1] : '';
+
+    const [startDate, setStartDate] = useState('');
+
+    const [toDate, setToDate] = useState('');
+
     const fetchComics = function() {
-        axios.get<IComics>(`${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}`)
+        axios.get<IComics>(`${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}${
+            latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}`)
             .then(res => {
                 setComics(res.data);
             });
@@ -51,7 +78,10 @@ function Comics() {
     };
 
     const fetchMoreComics = function(cnt: number) {
-        axios.get<IComics>(`${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&offset=${cnt * LIMIT}&limit=${LIMIT}`)
+        axios.get<IComics>(
+            `${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&offset=${cnt * LIMIT}&limit=${LIMIT}${
+                latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}`
+            )
             .then(res => {
                 setComics(res.data);
             });
@@ -65,6 +95,40 @@ function Comics() {
 
     const toComicsDetailPage = (id: number) => {
         nav(`/comics/detail/${id}`);
+    };
+
+    const [isDateModalShown, setIsDateModalShown] = useState(false);
+
+    const showDateModal = () => setIsDateModalShown(true);
+
+    const hideDateModal = () => setIsDateModalShown(false);
+
+    const preventBubbling = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+    };
+
+    const handleChangeStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setStartDate(e.currentTarget.value);
+    };
+
+    const handleChangeToDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setToDate(e.currentTarget.value);
+    };
+
+    const handleDateSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if(!checkDateValid()) return;
+        cnt = 0;
+        setIsDateModalShown(false);
+        nav(`/comics?dateRange=${startDate},${toDate}`);
+        fetchMoreComics(cnt);
+    };
+
+    const checkDateValid = () :boolean => {
+        if(!startDate || startDate >= toDate) {
+            alert('please check whether the date is valid.');
+            return false;
+        } else return true;
     };
 
     return (
@@ -93,7 +157,7 @@ function Comics() {
                     textAlign: 'right',
                     marginBottom: '28px'
                 }}>
-                    <Btn>search by date</Btn>
+                    <Btn onClick={showDateModal}>search by date</Btn>
                 </div>
                 {
                     comics?.data.results.map(comic => {
@@ -147,6 +211,36 @@ function Comics() {
                 onClick={fetchLast}
                 >last</Btn>
             </div>
+            {
+                !isDateModalShown ? null :
+                <AnimatePresence>
+                    <ModalBackground
+                    onClick={hideDateModal}
+                    >
+                        <DateChooseModal
+                        onClick={preventBubbling}
+                        style={{ display: 'flex', alignItems: 'center' }}
+                        >
+                            <DateForm
+                            onSubmit={handleDateSubmit}
+                            >
+                                <P>from</P>
+                                <Input type="date"
+                                onChange={handleChangeStartDate}
+                                value={startDate}
+                                />
+                                <P>to</P>
+                                <Input type="date"
+                                onChange={handleChangeToDate}
+                                value={toDate}
+                                />
+                                <P></P>
+                                <Btn>search</Btn>
+                            </DateForm>
+                        </DateChooseModal>
+                    </ModalBackground>
+                </AnimatePresence> 
+            }
         </>
     )
 };
