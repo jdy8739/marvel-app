@@ -106,32 +106,36 @@ function Characters() {
                     textAlign: 'center'
                 }}>Results for "<Highlighted>{ startWith }</Highlighted>"</h1>
             }
-            <div
-            style={{
-                textAlign: 'center'
-            }}
-            >
-                <form
+            <Container>
+                <div
                 style={{
-                    display: 'inline-block'
+                    textAlign: 'right',
+                    width: '100%',
+                    marginBottom: '28px'
                 }}
-                onSubmit={handleSearchSubmit}
                 >
-                    <label>
-                        <span>search the characters start with</span>
+                    <form
+                    style={{
+                        display: 'inline-block'
+                    }}
+                    onSubmit={handleSearchSubmit}
+                    >
                         &ensp;
                         <Input 
                         onChange={handleSearchChange} 
                         value={searchedChar}
                         required
+                        style={{
+                            width: '200px'
+                        }}
+                        placeholder="search the characters start with."
                         />
-                    </label>
-                </form>
-                &emsp;
-                <Btn onClick={resetSearch}>reset</Btn>
-            </div>
-            <br></br>
-            <Container>
+                        &ensp;
+                        <Btn>search</Btn>
+                    </form>
+                    &ensp;
+                    <Btn onClick={resetSearch}>reset</Btn>
+                </div>
                 {
                     chars?.data.results.length !== 0 ? 
                     <>

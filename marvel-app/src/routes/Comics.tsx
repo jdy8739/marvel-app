@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_COMICS, hash } from "../api";
-import { Blank, Btn, CharName, ComicsFrameForm, Container } from "../styled";
+import { Blank, Btn, CharName, ComicsFrameForm, Container, Input } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
 let cnt = 0;
@@ -71,6 +71,30 @@ function Comics() {
         <>
             <Blank />
             <Container>
+                <div style={{
+                    width: '100%',
+                    textAlign: 'right',
+                    marginBottom: '5px'
+                }}> 
+                    <form>
+                        <Input 
+                        placeholder="search title you look for."
+                        style={{
+                            width: '175px'
+                        }}
+                        required
+                        />
+                        &ensp;
+                        <Btn>search</Btn>
+                    </form>
+                </div>
+                <div style={{
+                    width: '100%',
+                    textAlign: 'right',
+                    marginBottom: '28px'
+                }}>
+                    <Btn>search by date</Btn>
+                </div>
                 {
                     comics?.data.results.map(comic => {
                         return (
