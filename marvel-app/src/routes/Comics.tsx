@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AnimatePresence } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_COMICS, hash } from "../api";
@@ -147,22 +147,40 @@ function Comics() {
         latterDate = toDate;
     };
 
+    const searchInput = useRef<HTMLInputElement>(null);
+
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        axios.get<IComics>(
+            `${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&title=${searchInput.current?.value}`
+            )
+            .then(res => {
+                setComics(res.data);
+            });
+    };
+
     return (
         <>
             <Blank />
+            {
+                
+            }
             <Container>
                 <div style={{
                     width: '100%',
                     textAlign: 'right',
                     marginBottom: '4px'
                 }}> 
-                    <form>
+                    <form
+                    onSubmit={handleSearchSubmit}
+                    >
                         <Input 
                         placeholder="search title you look for."
                         style={{
                             width: '175px'
                         }}
                         required
+                        ref={searchInput}
                         />
                         &ensp;
                         <Btn>search</Btn>
@@ -176,19 +194,24 @@ function Comics() {
                     <Btn onClick={showDateModal}>search by date</Btn>
                 </div>
                 {
-                    comics?.data.results.map(comic => {
-                        return (
-                            <ComicsFrameForm
-                            key={comic.id}
-                            path={comic.thumbnail.path + '/portrait_incredible.jpg'}
-                            onClick={() => toComicsDetailPage(comic.id)}
-                            >
-                                <CharName 
-                                length={comic.title.length}
-                                >{ comic.title.length > 20 ? comic.title.slice(0, 20) + '...' : comic.title }</CharName>
-                            </ComicsFrameForm>
-                        )
-                    })
+                    comics?.data.results.length === 0 ? <p>Sorry. No data. :(</p> : 
+                    <>
+                        {
+                            comics?.data.results.map(comic => {
+                                return (
+                                    <ComicsFrameForm
+                                    key={comic.id}
+                                    path={comic.thumbnail.path + '/portrait_incredible.jpg'}
+                                    onClick={() => toComicsDetailPage(comic.id)}
+                                    >
+                                        <CharName 
+                                        length={comic.title.length}
+                                        >{ comic.title.length > 20 ? comic.title.slice(0, 20) + '...' : comic.title }</CharName>
+                                    </ComicsFrameForm>
+                                )
+                            })
+                        }
+                    </>
                 }
             </Container>
             <br></br>
