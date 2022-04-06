@@ -38,6 +38,7 @@ function Navigation() {
             <Navi style={{ backgroundColor: gradient }}>
                 <Link to={"/"}><Tab>Home</Tab></Link>
                 <Link to={"/characters"}><Tab>Characters</Tab></Link>
+                {/* <Link to={"/comics"}><Tab>Comics</Tab></Link> */}
             </Navi>
         </>
     )

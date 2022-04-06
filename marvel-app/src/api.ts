@@ -11,4 +11,4 @@ export const GET_SEARCHED_CHAR = '/v1/public/characters?ts=1&nameStartsWith=';
 
 export const GET_ON_CHAR = '/v1/public/characters';
 
-//https://gateway.marvel.com:443/v1/public/characters/1011334/comics?apikey=c985e750a10bc29a900a1736bc4fc93e
+export const GET_COMICS = '/v1/public/comics?ts=1';

@@ -4,6 +4,7 @@ import { RecoilRoot } from 'recoil';
 import Navigation from './components/Navigation';
 import Characters from './routes/Characters';
 import CharactersDetail from './routes/CharactersDetail';
+import Comics from './routes/Comics';
 import Home from './routes/Home';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path='/characters/detail/:id/*' element={ <CharactersDetail /> } />
             <Route path='/characters/*' element={ <Characters /> } />
+            <Route path='/comics/*' element={ <Comics /> } />
             <Route path="/*" element={ <Home /> } />
           </Routes>
         </BrowserRouter>
