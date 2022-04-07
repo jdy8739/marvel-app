@@ -76,7 +76,7 @@ export const Tabs = styled.div`
     margin-top: 50px;
 `;
 
-export const Tab = styled.button<{ clicked: boolean }>`
+export const Tab = styled.button<{ clicked?: boolean }>`
     margin: 24px;
     cursor: pointer;
     border: 1px solid #F0131E;
@@ -153,6 +153,17 @@ export const ComicsFrameForm = styled.div<{ path: string }>`
     position: relative;
 `;
 
+export const ClickToGoBack = styled.p`
+    font-size: 15px;
+    text-align: center;
+    opacity: 0.3;
+    position: absolute;
+    top: -30px;
+    left: 0;
+    right: 0;
+    margin: auto;
+`;
+
 export const ComicPortrait = styled.div<{ path: string }>`
     background-image: url(${ props => props.path });
     background-position: center center;
@@ -160,6 +171,18 @@ export const ComicPortrait = styled.div<{ path: string }>`
     width: 300px;
     height: 450px;
     margin: auto;
+    transition: all 1s;
+    &:hover {
+        transform: scale(1.02);
+        ${CharName} {
+            color: #F0131E;
+            opacity: 1.0;
+        }
+        ${ClickToGoBack} {
+            opacity: 0.8;
+            color: #F0131E;
+        }
+    }
 `;
 
 export const DateChooseModal = styled.div`

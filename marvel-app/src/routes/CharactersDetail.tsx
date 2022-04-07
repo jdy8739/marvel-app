@@ -8,7 +8,7 @@ import { startWithAtom } from "../atoms";
 import CharacterComics from "../components/CharacterComics";
 import CharacterEvents from "../components/CharacterEvents";
 import CharacterSeries from "../components/CharacterSeries";
-import { Blank, Tab, Tabs } from "../styled";
+import { Blank, ClickToGoBack, Tab, Tabs } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
 const CharName = styled.h1<{ length: number }>`
@@ -22,16 +22,6 @@ const CharName = styled.h1<{ length: number }>`
     transition: all 1s;
 `;
 
-export const ClickToGoBack = styled.p`
-    font-size: 15px;
-    text-align: center;
-    opacity: 0.3;
-    position: absolute;
-    top: -30px;
-    left: 0;
-    right: 0;
-    margin: auto;
-`;
 
 const Portrait = styled.div<{ path: string }>`
     background-image: linear-gradient(to top, #252525, transparent), url(${ props => props.path });
@@ -51,6 +41,7 @@ const Portrait = styled.div<{ path: string }>`
         }
         ${ClickToGoBack} {
             opacity: 0.8;
+            color: #F0131E;
         }
     }
 `;
