@@ -4,6 +4,7 @@ import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
 import ComicsCharacters from "../components/ComicsCharacters";
+import ComicsEvents from "../components/ComicsEvents";
 import { Blank, ClickToGoBack, ComicPortrait, Tab, Tabs } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
@@ -19,10 +20,14 @@ function ComicsDetail() {
 
     const comicsCharMatch = useMatch('/comics/detail/:id/characters');
 
+    const comicsEventMatch = useMatch('/comics/detail/:id/events');
+
+    const match = comicsMatch || comicsCharMatch || comicsEventMatch;
+
     const [comic, setComic] = useState<IComics>();
 
     const fetchComic = function() {
-        axios.get<IComics>(`${BASE_URL}${GET_ON_COMICS}/${comicsMatch?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`)
+        axios.get<IComics>(`${BASE_URL}${GET_ON_COMICS}/${match?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`)
             .then(res => {
                 setComic(res.data);
             });
@@ -78,12 +83,16 @@ function ComicsDetail() {
             <Tabs>
                 <Tab
                 clicked={Boolean(comicsCharMatch)}
-                onClick={() => nav(`/comics/detail/${comicsMatch?.params.id}/characters`)}
+                onClick={() => nav(`/comics/detail/${match?.params.id}/characters`)}
                 >character</Tab>
-                <Tab>events</Tab>
-                <Tab>stories</Tab>
+                <Tab
+                clicked={Boolean(comicsEventMatch)}
+                onClick={() => nav(`/comics/detail/${match?.params.id}/events`)}
+                >events</Tab>
             </Tabs>
-            { comicsCharMatch ? <ComicsCharacters /> : null }
+            <div style={{ height: '30px' }}></div>
+            { comicsCharMatch ? <ComicsCharacters id={match?.params.id ?? ''}/> : null }
+            { comicsEventMatch ? <ComicsEvents id={match?.params.id ?? ''}/> : null }
         </>
     )
 };

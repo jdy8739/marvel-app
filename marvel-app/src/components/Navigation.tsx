@@ -30,8 +30,6 @@ const Tab = styled.p`
 
 function Navigation() {
 
-    const [isTop, setIsTop] = useState(true);
-
     const { scrollY } = useViewportScroll();
 
     const gradient = useTransform(

@@ -211,3 +211,37 @@ export const BtnInARow = styled.div`
     text-align: right;
     margin-bottom: 4px;
 `;
+
+export const RoundPortraitName = styled.h5`
+    position: absolute;
+    bottom: -27px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    opacity: 0.2;
+    transition: all 0.3s;
+`;
+
+export const RoundPortrait = styled.div<{ path: string }>`
+    background-image: url(${ props => props.path });
+    width: 105px;
+    height: 105px;
+    background-position: center center;
+    background-size: cover;
+    border-radius: 50%;
+    border: 4.5px solid transparent;
+    margin: 16px;
+    transition: all 0.3s;
+    filter: grayscale(0.9);
+    cursor: pointer;
+    opacity: 0.7;
+    &:hover {
+        border: 4.5px solid #F0131E;
+        filter: grayscale(0.0);
+        opacity: 1.0;
+        ${RoundPortraitName} {
+            opacity: 1.0;
+        }
+    }
+    position: relative;
+`;

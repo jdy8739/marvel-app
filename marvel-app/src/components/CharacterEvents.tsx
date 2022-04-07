@@ -8,7 +8,7 @@ import { IEvents } from "../types_store/EventsType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
 
 
-const EventCard = styled(motion.div)<{ path: string }>`
+export const EventCard = styled(motion.div)<{ path: string }>`
     width: 320px;
     height: 230px;
     background-image: url(${ props => props.path });
@@ -110,7 +110,7 @@ function CharacterEvents({ id }: { id: string }) {
                                             visible === i ?
                                             <>
                                                 <EventCard 
-                                                path={event.thumbnail.path + '/landscape_amazing.jpg'}
+                                                path={event.thumbnail.path + '/landscape_xlarge.jpg'}
                                                 variants={SlideVariant}
                                                 initial="start"
                                                 animate="animate"
