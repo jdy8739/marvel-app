@@ -245,3 +245,44 @@ export const RoundPortrait = styled(motion.div)<{ path: string }>`
     }
     position: relative;
 `;
+
+export const CenterWord = styled.p`
+    position: absolute;
+    bottom: -75px;
+    left: 0;
+    right: 0;
+    margin: auto auto;
+    opacity: 0.0;
+    transition: all 1s;
+`;
+
+export const RoundModal = styled(motion.div)<{ path: string }>`
+    background-image: url(${ props => props.path });
+    background-position: center center;
+    background-size: cover;
+    border-radius: 50%;
+    width: 300px;
+    height: 300px;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto auto;
+    position: absolute;
+    border: 3px solid #F0131E;
+    cursor: pointer;
+    &:hover {
+        filter: grayscale(0.9);
+        ${CenterWord} {
+        opacity: 1;
+    }
+    }
+`;
+
+export const CharTitle = styled.h2`
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    margin: auto;
+`;

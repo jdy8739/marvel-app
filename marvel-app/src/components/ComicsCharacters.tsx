@@ -2,7 +2,7 @@ import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
-import { Container, Modal, ModalBackground, RoundPortrait, RoundPortraitName } from "../styled";
+import { CharTitle, CenterWord, Container, Modal, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../styled";
 import { ICharacterResult, ICharacter } from "../types_store/CharatersType";
 
 type TypeCharResult = ICharacterResult | undefined;
@@ -65,7 +65,13 @@ function ComicsCharacters({ id }: { id: string }) {
                         <ModalBackground
                         onClick={hideModal}
                         >
-                            
+                            <RoundModal 
+                            path={clickedChar.thumbnail.path + '/standard_fantastic.jpg'}
+                            layoutId={clickedChar.id + ''}
+                            >   
+                                <CenterWord>click to see more</CenterWord>
+                                <CharTitle>{ clickedChar.name }</CharTitle>
+                            </RoundModal>
                         </ModalBackground>
                     </AnimatePresence>
                 }
