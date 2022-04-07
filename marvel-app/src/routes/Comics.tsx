@@ -103,7 +103,7 @@ function Comics() {
 
     useEffect(() => {
         fetchComics();
-    }, []);
+    }, [title, formerDate, latterDate]);
 
     const nav = useNavigate();
 

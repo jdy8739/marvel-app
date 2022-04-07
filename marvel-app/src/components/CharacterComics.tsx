@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import { useMatch } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
 import { Btn, ComicsCard, Input } from "../styled";
@@ -144,6 +144,8 @@ function CharacterComics({ id }: { id: string }) {
             });
     };
 
+    const nav = useNavigate();
+
     return (
         <>  
             {
@@ -177,6 +179,7 @@ function CharacterComics({ id }: { id: string }) {
                                                     animate="animate"
                                                     exit="leave"
                                                     custom={isBack}
+                                                    onClick={() => nav('/comics/detail/' + comic.id)}
                                                     >
                                                     </ComicsCard>
                                                     <h4 style={{

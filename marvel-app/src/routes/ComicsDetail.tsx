@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
+import ComicsCharacters from "../components/ComicsCharacters";
 import { Blank, ClickToGoBack, ComicPortrait, Tab, Tabs } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
@@ -15,6 +16,8 @@ const Container = styled.div`
 function ComicsDetail() {
 
     const comicsMatch = useMatch('/comics/detail/:id');
+
+    const comicsCharMatch = useMatch('/comics/detail/:id/characters');
 
     const [comic, setComic] = useState<IComics>();
 
@@ -73,10 +76,14 @@ function ComicsDetail() {
                 </div>
             </Container>
             <Tabs>
-                <Tab>character</Tab>
+                <Tab
+                clicked={Boolean(comicsCharMatch)}
+                onClick={() => nav(`/comics/detail/${comicsMatch?.params.id}/characters`)}
+                >character</Tab>
                 <Tab>events</Tab>
                 <Tab>stories</Tab>
             </Tabs>
+            { comicsCharMatch ? <ComicsCharacters /> : null }
         </>
     )
 };

@@ -29,7 +29,7 @@ function Characters() {
 
     const location = useLocation();
 
-    const startWith = new URLSearchParams(location.search).get('startWith'); 
+    let startWith = new URLSearchParams(location.search).get('startWith'); 
 
     const showNext = () => {
         cnt ++;
@@ -61,7 +61,7 @@ function Characters() {
     
     useEffect(() => {
         fetchCharacters();
-    }, []);
+    }, [startWith]);
 
     const [searchedChar, setSearchedChar] = useRecoilState(startWithAtom);
 
@@ -78,7 +78,7 @@ function Characters() {
 
     const getSearchedChars = () => {
         axios.get<ICharacter>(`${BASE_URL}${GET_SEARCHED_CHAR}${
-            searchedChar || startWith}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
+            startWith || searchedChar}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
             .then(res => {
                 setChars(res.data);
             });

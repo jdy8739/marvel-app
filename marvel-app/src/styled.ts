@@ -98,6 +98,12 @@ export const ComicsCard = styled(motion.div)<{ path: string }>`
     background-size: cover;
     background-image: url(${ props => props.path });
     margin: auto;
+    cursor: pointer;
+    border: 1px solid transparent;
+    cursor: pointer;
+    &:hover {
+        border: 1px solid #F0131E;
+    }
 `;
 
 export const ModalBackground = styled(motion.div)`
