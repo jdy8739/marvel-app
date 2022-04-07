@@ -1,8 +1,11 @@
 import axios from "axios";
+import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
-import { Container, RoundPortrait, RoundPortraitName } from "../styled";
-import { ICharacter } from "../types_store/CharatersType";
+import { Container, Modal, ModalBackground, RoundPortrait, RoundPortraitName } from "../styled";
+import { ICharacterResult, ICharacter } from "../types_store/CharatersType";
+
+type TypeCharResult = ICharacterResult | undefined;
 
 function ComicsCharacters({ id }: { id: string }) {
 
@@ -19,6 +22,20 @@ function ComicsCharacters({ id }: { id: string }) {
         fetchCharactersInThisComic();
     }, []);
 
+    const [clickedChar, setClickedChar] = useState<TypeCharResult>(undefined);
+
+    const showModal = (id: number) => {
+        setClickedChar(findTargetChar(id));
+    };
+
+    const hideModal = () => {
+        setClickedChar(undefined);
+    };
+
+    const findTargetChar = (id: number) :TypeCharResult => {
+        return chars?.data.results.find(char => char.id == id);
+    };
+
     return (
         <>
             <Container>
@@ -29,9 +46,11 @@ function ComicsCharacters({ id }: { id: string }) {
                         {
                             chars?.data.results.map(char => {
                                 return (
-                                    <RoundPortrait 
+                                    <RoundPortrait
+                                    layoutId={char.id + ''}
                                     key={char.id}
                                     path={char.thumbnail.path + "/standard_xlarge.jpg"}
+                                    onClick={() => showModal(char.id)}
                                     >
                                         <RoundPortraitName>{ char.name.split('(', 2)[0] }</RoundPortraitName>
                                     </RoundPortrait>
@@ -39,6 +58,16 @@ function ComicsCharacters({ id }: { id: string }) {
                             })
                         }
                     </>
+                }
+                {
+                    !clickedChar ? null :
+                    <AnimatePresence>
+                        <ModalBackground
+                        onClick={hideModal}
+                        >
+                            
+                        </ModalBackground>
+                    </AnimatePresence>
                 }
             </Container>
         </>

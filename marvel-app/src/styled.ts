@@ -222,7 +222,7 @@ export const RoundPortraitName = styled.h5`
     transition: all 0.3s;
 `;
 
-export const RoundPortrait = styled.div<{ path: string }>`
+export const RoundPortrait = styled(motion.div)<{ path: string }>`
     background-image: url(${ props => props.path });
     width: 105px;
     height: 105px;
