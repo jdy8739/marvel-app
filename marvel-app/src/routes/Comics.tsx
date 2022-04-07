@@ -2,8 +2,10 @@ import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_COMICS, hash } from "../api";
+import { comicsTitle, searchedFormerDate, searchedLatterDate } from "../atoms";
 import { Blank, Btn, BtnInARow, CharName, ComicsFrameForm, Container, DateChooseModal, Highlighted, Input, ModalBackground } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
@@ -55,9 +57,11 @@ function Comics() {
 
     let title = new URLSearchParams(location.search).get('title');
 
-    const [startDate, setStartDate] = useState('');
+    const [startDate, setStartDate] = useRecoilState(searchedFormerDate);
 
-    const [toDate, setToDate] = useState('');
+    const [toDate, setToDate] = useRecoilState(searchedLatterDate);
+
+    const [searchedComicsTitle, setSearchedComicsTitle] = useRecoilState(comicsTitle);
 
     const fetchComics = function(pageNum: number = cnt) {
         axios.get<IComics>(
@@ -156,6 +160,7 @@ function Comics() {
     const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         cnt = 0;
+        setSearchedComicsTitle(searchInput.current?.value || '');
         nav(`/comics?title=${searchInput.current?.value}${
             latterDate ? `&dateRange=${formerDate},${latterDate}` : ''
         }`);
@@ -166,9 +171,9 @@ function Comics() {
     const resetAllCondition = () => {
         cnt = 0;
         nav('/comics');
-        formerDate = '';
-        latterDate = '';
-        title = '';
+        setStartDate('');
+        setToDate('');
+        setSearchedComicsTitle('');
         fetchComics();
     };
 

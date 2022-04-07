@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
+import { comicsTitle, searchedFormerDate, searchedLatterDate } from "../atoms";
 import ComicsCharacters from "../components/ComicsCharacters";
 import ComicsEvents from "../components/ComicsEvents";
 import { Blank, ClickToGoBack, ComicPortrait, Tab, Tabs } from "../styled";
@@ -37,14 +39,28 @@ function ComicsDetail() {
         fetchComic();
     }, []);
 
+    const title = useRecoilValue(comicsTitle);
+
+    const formerDate = useRecoilValue(searchedFormerDate);
+
+    const latterDate = useRecoilValue(searchedLatterDate);
+
     const nav = useNavigate();
+
+    const backToComicsPage = function() {
+        if(title || formerDate || latterDate) {
+            nav(`/comics?${title ? `&title=${title}` : ''}${
+                formerDate || latterDate ? `&dateRange=${formerDate},${latterDate}` : ''
+            }`);
+        } else nav('/comics');
+    };
 
     return (
         <>
             <Blank />
             <ComicPortrait
             path={comic?.data.results[0].thumbnail.path + '/portrait_uncanny.jpg'}
-            onClick={() => nav(-1)}
+            onClick={backToComicsPage}
             >
                 <ClickToGoBack>click portrait to go back</ClickToGoBack>
             </ComicPortrait>
