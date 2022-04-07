@@ -7,6 +7,8 @@ export const Container = styled.div`
     text-align: center;
     justify-content: center;
     width: 80%;
+    min-width: 385px;
+    max-width: 1450px;
     margin: auto;
 `;
 

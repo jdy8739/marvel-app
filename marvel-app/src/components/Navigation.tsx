@@ -11,14 +11,21 @@ const Navi = styled(motion.div)`
     top: 0;
     z-index: 99;
     box-shadow: 12px 12px 12px 0px #00000033;
-    display: flex;
-    align-items: center;
     transition: all 1s;
     border-bottom: 2px solid #F0131E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const InnerNav = styled.div`
+    width: 80%;
+    max-width: 1450px;
+    display: flex;
 `;
 
 const Tab = styled.p`
-    padding: 8px;
+    padding: 15px;
 `;
 
 function Navigation() {
@@ -36,9 +43,11 @@ function Navigation() {
     return (
         <>
             <Navi style={{ backgroundColor: gradient }}>
-                <Link to={"/"}><Tab>Home</Tab></Link>
-                <Link to={"/characters"}><Tab>Characters</Tab></Link>
-                <Link to={"/comics"}><Tab>Comics</Tab></Link>
+                <InnerNav>
+                    <Link to={"/"}><Tab>Home</Tab></Link>
+                    <Link to={"/characters"}><Tab>Characters</Tab></Link>
+                    <Link to={"/comics"}><Tab>Comics</Tab></Link>
+                </InnerNav>
             </Navi>
         </>
     )
