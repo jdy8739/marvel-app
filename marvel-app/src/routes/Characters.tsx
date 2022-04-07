@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { apikey, BASE_URL, GET_CHAR, GET_SEARCHED_CHAR, hash } from "../api";
 import { startWithAtom } from "../atoms";
 import CharacterCard from "../components/CharacterCard";
-import { Highlighted, Container, Btn, Input, Blank } from "../styled";
+import { Highlighted, Container, Btn, Input, Blank, BtnInARow } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
 
@@ -108,13 +108,7 @@ function Characters() {
                 }}>Results for "<Highlighted>{ startWith }</Highlighted>"</h1>
             }
             <Container>
-                <div
-                style={{
-                    textAlign: 'right',
-                    width: '100%',
-                    marginBottom: '4px'
-                }}
-                >
+                <BtnInARow>
                     <form
                     style={{
                         display: 'inline-block'
@@ -133,14 +127,10 @@ function Characters() {
                         &ensp;
                         <Btn>search</Btn>
                     </form>
-                </div>
-                <div style={{ 
-                    width: '100%',
-                    textAlign: 'right',
-                    marginBottom: '28px'
-                }}>
+                </BtnInARow>
+                <BtnInARow style={{ marginBottom: '28px' }}>
                     <Btn onClick={resetSearch}>reset</Btn>
-                </div>
+                </BtnInARow>
                 {
                     chars?.data.results.length !== 0 ? 
                     <>

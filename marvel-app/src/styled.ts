@@ -174,3 +174,9 @@ export const DateChooseModal = styled.div`
     bottom: 0;
     margin: auto auto;
 `;
+
+export const BtnInARow = styled.div`
+    width: 100%;
+    text-align: right;
+    margin-bottom: 4px;
+`;

@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_COMICS, hash } from "../api";
-import { Blank, Btn, CharName, ComicsFrameForm, Container, DateChooseModal, Input, ModalBackground } from "../styled";
+import { Blank, Btn, BtnInARow, CharName, ComicsFrameForm, Container, DateChooseModal, Highlighted, Input, ModalBackground } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
 const DateForm = styled.form`
@@ -53,6 +53,8 @@ function Comics() {
 
     let latterDate = date ? date[1] : '';
 
+    let title = new URLSearchParams(location.search).get('title');
+
     const [startDate, setStartDate] = useState('');
 
     const [toDate, setToDate] = useState('');
@@ -60,7 +62,9 @@ function Comics() {
     const fetchComics = function(pageNum: number = cnt) {
         axios.get<IComics>(
             `${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&offset=${pageNum * LIMIT}&limit=${LIMIT}${
-                latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}`
+                latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
+                title ? `&title=${title}` : ''
+                }`
             )
             .then(res => {
                 setComics(res.data);
@@ -129,7 +133,7 @@ function Comics() {
         e.preventDefault();
         if(!checkDateValid()) return;
         setIsDateModalShown(false);
-        nav(`/comics?dateRange=${startDate},${toDate}`);
+        nav(`/comics?dateRange=${startDate},${toDate}${title ? `&title=${title}` : ''}`);
         changeDateToChosenDate();
         cnt = 0;
         fetchComics(cnt);
@@ -151,26 +155,34 @@ function Comics() {
 
     const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        axios.get<IComics>(
-            `${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&title=${searchInput.current?.value}`
-            )
-            .then(res => {
-                setComics(res.data);
-            });
+        cnt = 0;
+        nav(`/comics?title=${searchInput.current?.value}${
+            latterDate ? `&dateRange=${formerDate},${latterDate}` : ''
+        }`);
+        title = searchInput.current?.value || '';
+        fetchComics();
+    };
+
+    const resetAllCondition = () => {
+        cnt = 0;
+        nav('/comics');
+        formerDate = '';
+        latterDate = '';
+        title = '';
+        fetchComics();
     };
 
     return (
         <>
             <Blank />
             {
-                
+                !title ? null :
+                <h1 style={{
+                    textAlign: 'center'
+                }}>Results for "<Highlighted>{ title }</Highlighted>"</h1>
             }
             <Container>
-                <div style={{
-                    width: '100%',
-                    textAlign: 'right',
-                    marginBottom: '4px'
-                }}> 
+                <BtnInARow> 
                     <form
                     onSubmit={handleSearchSubmit}
                     >
@@ -185,14 +197,13 @@ function Comics() {
                         &ensp;
                         <Btn>search</Btn>
                     </form>
-                </div>
-                <div style={{
-                    width: '100%',
-                    textAlign: 'right',
-                    marginBottom: '28px'
-                }}>
+                </BtnInARow>
+                <BtnInARow>
                     <Btn onClick={showDateModal}>search by date</Btn>
-                </div>
+                </BtnInARow>
+                <BtnInARow style={{ marginBottom: '28px' }}>
+                    <Btn onClick={resetAllCondition}>reset</Btn>
+                </BtnInARow>
                 {
                     comics?.data.results.length === 0 ? <p>Sorry. No data. :(</p> : 
                     <>
