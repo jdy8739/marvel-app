@@ -39,7 +39,7 @@ function Series() {
 
     const nowPage: string = new URLSearchParams(location.search).get('page') || BASE_STR;
 
-    let titleStartsWith: string = new URLSearchParams(location.search).get('title') || '';
+    const titleStartsWith: string = new URLSearchParams(location.search).get('title') || '';
 
     //const [seriesPageIdx, setSeriesPageIdx] = useState(1);
     
@@ -48,7 +48,7 @@ function Series() {
             (+nowPage - 1) * LIMIT}&limit=${LIMIT}${
                 titleStartsWith ? `&titleStartsWith=${titleStartsWith}` : ''
             }
-        }`)
+            `)
             .then(res => {
                 setSeries(res.data);
                 console.log(res.data);
@@ -68,16 +68,22 @@ function Series() {
     const nav = useNavigate();
 
     const showPrevious = () => {
-        nav('/series?page=' + (+nowPage - 1));
+        nav('/series?page=' + (+nowPage - 1) + `${
+            titleStartsWith ? `&title=${titleStartsWith}` : ''
+        }`);
     };
 
     const showNext = () => {
         //setSeriesPageIdx(idx => idx + 1);
-        nav('/series?page=' + (+nowPage + 1));
+        nav('/series?page=' + (+nowPage + 1) + `${
+            titleStartsWith ? `&title=${titleStartsWith}` : ''
+        }`);
     };
 
     const showSeriesOfThisIndex = (e: React.MouseEvent<HTMLButtonElement>) => {
-        nav('/series?page=' + e.currentTarget.innerText);
+        nav('/series?page=' + e.currentTarget.innerText + `${
+            titleStartsWith ? `&title=${titleStartsWith}` : ''
+        }`);
     };
 
     const showFirst = () => {
@@ -85,16 +91,16 @@ function Series() {
     };
 
     const showLast = () => {
-        nav('/series?page=' + (Math.floor(TOTAL / LIMIT) + 1));
+        nav('/series?page=' + (Math.floor(TOTAL / LIMIT) + 1) + `${
+            titleStartsWith ? `&title=${titleStartsWith}` : ''
+        }`);
     };
 
     const titleRef = useRef<HTMLInputElement>(null);
 
     const handleSubmitTitleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const title = titleRef.current?.value;
-        titleStartsWith = title || '';
-        nav(`/series?title=${title}`);
+        nav(`/series?title=${titleRef.current?.value}`);
     };
 
     return (
