@@ -27,7 +27,6 @@ function CharacterEvents({ id }: { id: string }) {
             )
             .then(res => {
                 setEvents(res.data);
-                console.log(res.data);
             });
     };
 
