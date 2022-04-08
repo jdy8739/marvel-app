@@ -27,7 +27,7 @@ export const CharacterCardForm = styled.div<{ path: string }>`
     padding: 1px;
     width: 225px;
     height: 275px;
-    border: 1px solid #F0131E;
+    border: 1px solid transparent;
     border-radius: 8px;
     margin: 8px 12px;
     cursor: pointer;
@@ -39,6 +39,7 @@ export const CharacterCardForm = styled.div<{ path: string }>`
     &:hover {
         filter: grayscale(0%);
         transform: scale(1.01);
+        border: 1px solid #F0131E;
         ${CharName} {
             opacity: 0;
             transform: translateY(8px);

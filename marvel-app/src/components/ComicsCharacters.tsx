@@ -33,7 +33,7 @@ function ComicsCharacters({ id }: { id: string }) {
     };
 
     const findTargetChar = (id: number) :TypeCharResult => {
-        return chars?.data.results.find(char => char.id == id);
+        return chars?.data.results.find(char => char.id === id);
     };
 
     return (
@@ -59,22 +59,22 @@ function ComicsCharacters({ id }: { id: string }) {
                         }
                     </>
                 }
-                {
-                    !clickedChar ? null :
-                    <AnimatePresence>
-                        <ModalBackground
-                        onClick={hideModal}
-                        >
-                            <RoundModal 
-                            path={clickedChar.thumbnail.path + '/standard_fantastic.jpg'}
-                            layoutId={clickedChar.id + ''}
-                            >   
-                                <CenterWord>click to see more</CenterWord>
-                                <CharTitle>{ clickedChar.name }</CharTitle>
-                            </RoundModal>
+                <AnimatePresence>
+                    {
+                        !clickedChar ? null :
+                            <ModalBackground
+                            onClick={hideModal}
+                            >
+                                <RoundModal 
+                                path={clickedChar.thumbnail.path + '/standard_fantastic.jpg'}
+                                layoutId={clickedChar.id + ''}
+                                >   
+                                    <CenterWord>click to see more</CenterWord>
+                                    <CharTitle>{ clickedChar.name }</CharTitle>
+                                </RoundModal>
                         </ModalBackground>
-                    </AnimatePresence>
-                }
+                    }
+                </AnimatePresence>
             </Container>
         </>
     )

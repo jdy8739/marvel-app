@@ -155,28 +155,28 @@ function CharacterSeries({ id }: { id: string }) {
                             <ShowMoreBtn
                             onClick={fetchMoreSeries}
                             >show more</ShowMoreBtn>
-                            {
-                                !clickedSeries ? null :
-                                <AnimatePresence>
-                                    <ModalBackground
-                                    onClick={hideModal}
-                                    variants={modalVariant}
-                                    initial="initial"
-                                    animate="animate"
-                                    exit="exit"
-                                    onAnimationComplete={() => onAniComplete = true}
-                                    >
-                                        <Modal
-                                        onClick={preventBubbling}
-                                        layoutId={clickedSeries.id + ''}
+                            <AnimatePresence>
+                                {
+                                    !clickedSeries ? null :
+                                        <ModalBackground
+                                        onClick={hideModal}
+                                        variants={modalVariant}
+                                        initial="initial"
+                                        animate="animate"
+                                        exit="exit"
+                                        onAnimationComplete={() => onAniComplete = true}
                                         >
-                                            <ModelImage
-                                            path={clickedSeries.thumbnail.path + "/standard_fantastic.jpg"}
-                                            />
-                                        </Modal>
-                                    </ModalBackground>
-                                </AnimatePresence>
-                            }
+                                            <Modal
+                                            onClick={preventBubbling}
+                                            layoutId={clickedSeries.id + ''}
+                                            >
+                                                <ModelImage
+                                                path={clickedSeries.thumbnail.path + "/standard_fantastic.jpg"}
+                                                />
+                                            </Modal>
+                                        </ModalBackground>
+                                }
+                            </AnimatePresence>
                         </>
                     }
                 </>
