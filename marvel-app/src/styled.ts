@@ -24,12 +24,11 @@ export const CharName = styled.h1<{ length: number }>`
 `;
 
 export const CharacterCardForm = styled.div<{ path: string }>`
-    padding: 1px;
     width: 225px;
     height: 275px;
-    border: 1px solid transparent;
+    border: 1px solid black;
     border-radius: 8px;
-    margin: 8px 12px;
+    margin: 8px;
     cursor: pointer;
     background-position: center center;
     background-size: cover;
@@ -223,7 +222,7 @@ export const RoundPortraitName = styled.h5`
     transition: all 0.3s;
 `;
 
-export const RoundPortrait = styled(motion.div)<{ path: string }>`
+export const RoundPortrait = styled(motion.div)<{ path?: string }>`
     background-image: url(${ props => props.path });
     width: 105px;
     height: 105px;

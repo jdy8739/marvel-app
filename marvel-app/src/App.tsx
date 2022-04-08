@@ -7,6 +7,7 @@ import CharactersDetail from './routes/CharactersDetail';
 import Comics from './routes/Comics';
 import ComicsDetail from './routes/ComicsDetail';
 import Home from './routes/Home';
+import Series from './routes/Series';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path='/characters/*' element={ <Characters /> } />
             <Route path='/comics/detail/:id/*' element={ <ComicsDetail /> } />
             <Route path='/comics/*' element={ <Comics /> } />
+            <Route path='/series/*' element={ <Series /> } />
             <Route path="/*" element={ <Home /> } />
           </Routes>
         </BrowserRouter>

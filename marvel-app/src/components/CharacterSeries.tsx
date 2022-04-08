@@ -6,7 +6,7 @@ import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
 import { Btn, Modal, ModalBackground, ModelImage } from "../styled";
 import { ISeries, SeriesResult } from "../types_store/SeriesType";
 
-const SeriesElem = styled(motion.div)<{ path: string }>`
+const SeriesElem = styled(motion.div)<{ path?: string }>`
     background-image: url(${ props => props.path });
     width: 180px;
     height: 180px;
@@ -140,13 +140,20 @@ function CharacterSeries({ id }: { id: string }) {
                                 {
                                     series?.data.results.map(seriesElem => {
                                         return (
-                                            <SeriesElem 
+                                            <span
                                             key={seriesElem.id}
-                                            path={seriesElem.thumbnail.path + "/standard_amazing.jpg"}
-                                            onClick={() => showModal(seriesElem.id)}
-                                            layoutId={seriesElem.id + ''}
                                             >
-                                            </SeriesElem>
+                                                {
+                                                    clickedSeries?.id === seriesElem.id ? 
+                                                    <SeriesElem /> :
+                                                    <SeriesElem
+                                                    path={seriesElem.thumbnail.path + "/standard_amazing.jpg"}
+                                                    onClick={() => showModal(seriesElem.id)}
+                                                    layoutId={seriesElem.id + ''}
+                                                    >
+                                                    </SeriesElem>
+                                                }
+                                            </span>
                                         )
                                     })
                                 }

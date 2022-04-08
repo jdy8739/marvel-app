@@ -14,3 +14,5 @@ export const GET_ON_CHAR = '/v1/public/characters';
 export const GET_COMICS = '/v1/public/comics?ts=1';
 
 export const GET_ON_COMICS = '/v1/public/comics';
+
+export const GET_SERIES = '/v1/public/series';

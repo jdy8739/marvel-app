@@ -49,14 +49,20 @@ function ComicsCharacters({ id }: { id: string }) {
                         {
                             chars?.data.results.map(char => {
                                 return (
-                                    <RoundPortrait
-                                    layoutId={char.id + ''}
-                                    key={char.id}
-                                    path={char.thumbnail.path + "/standard_xlarge.jpg"}
-                                    onClick={() => showModal(char.id)}
-                                    >
-                                        <RoundPortraitName>{ char.name.split('(', 2)[0] }</RoundPortraitName>
-                                    </RoundPortrait>
+                                    <span 
+                                    key={char.id}>
+                                        {
+                                            clickedChar?.id === char.id ? 
+                                            <RoundPortrait /> :
+                                            <RoundPortrait
+                                            layoutId={char.id + ''}
+                                            path={char.thumbnail.path + "/standard_xlarge.jpg"}
+                                            onClick={() => showModal(char.id)}
+                                            >
+                                                <RoundPortraitName>{ char.name.split('(', 2)[0] }</RoundPortraitName>
+                                            </RoundPortrait>
+                                        }
+                                    </span>
                                 )
                             })
                         }

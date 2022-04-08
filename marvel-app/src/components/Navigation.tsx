@@ -45,6 +45,7 @@ function Navigation() {
                     <Link to={"/"}><Tab>Home</Tab></Link>
                     <Link to={"/characters"}><Tab>Characters</Tab></Link>
                     <Link to={"/comics"}><Tab>Comics</Tab></Link>
+                    <Link to={"/series"}><Tab>Series</Tab></Link>
                 </InnerNav>
             </Navi>
         </>
