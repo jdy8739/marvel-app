@@ -37,17 +37,22 @@ function Series() {
 
     const location = useLocation();
 
-    const nowPage: string = new URLSearchParams(location.search).get('page') || BASE_STR;
+    const paramsSearcher = new URLSearchParams(location.search);
 
-    const titleStartsWith: string = new URLSearchParams(location.search).get('title') || '';
+    const nowPage: string = paramsSearcher.get('page') || BASE_STR;
+
+    const titleStartsWith: string = paramsSearcher.get('title') || '';
+
+    const startYear: string = paramsSearcher.get('year') || '';
 
     //const [seriesPageIdx, setSeriesPageIdx] = useState(1);
     
     const fetchSeries = function() {
         axios.get<ISeries>(`${BASE_URL}${GET_SERIES}?ts=1&apikey=${apikey}&hash=${hash}&offset=${
             (+nowPage - 1) * LIMIT}&limit=${LIMIT}${
-                titleStartsWith ? `&titleStartsWith=${titleStartsWith}` : ''
-            }
+                titleStartsWith ? `&titleStartsWith=${titleStartsWith}` : ''}${
+                startYear ? `&startYear=${startYear}` : ''
+                }
             `)
             .then(res => {
                 setSeries(res.data);
@@ -63,7 +68,7 @@ function Series() {
 
     useEffect(() => {
         fetchSeries();
-    }, [nowPage, titleStartsWith]);
+    }, [nowPage, titleStartsWith, startYear]);
 
     const nav = useNavigate();
 
@@ -98,9 +103,20 @@ function Series() {
 
     const titleRef = useRef<HTMLInputElement>(null);
 
+    const yearRef = useRef<HTMLInputElement>(null);
+
     const handleSubmitTitleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        nav(`/series?title=${titleRef.current?.value}`);
+        nav(`/series?title=${titleRef.current?.value}${
+            startYear ? `&year=${startYear}` : ''
+        }`);
+    };
+
+    const handleSubmitYearSearch = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        nav(`/series?year=${yearRef.current?.value}${
+            titleStartsWith ? `&title=${titleStartsWith}` : ''
+        }`);
     };
 
     return (
@@ -124,7 +140,9 @@ function Series() {
                     </form>
                 </BtnInARow>
                 <BtnInARow>
-                    <form>
+                    <form
+                    onSubmit={handleSubmitYearSearch}
+                    >
                         <Input 
                         type="number"
                         min="1940"
@@ -132,6 +150,7 @@ function Series() {
                         style={{ width: '125px' }}
                         required
                         placeholder="year of the series"
+                        ref={yearRef}
                         />
                         &ensp;
                         <Btn>search</Btn>
