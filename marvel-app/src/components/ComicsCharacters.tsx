@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
 import { CharTitle, CenterWord, Container, Modal, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../styled";
 import { ICharacterResult, ICharacter } from "../types_store/CharatersType";
@@ -36,6 +37,8 @@ function ComicsCharacters({ id }: { id: string }) {
         return chars?.data.results.find(char => char.id === id);
     };
 
+    const nav = useNavigate();
+
     return (
         <>
             <Container>
@@ -68,6 +71,7 @@ function ComicsCharacters({ id }: { id: string }) {
                                 <RoundModal 
                                 path={clickedChar.thumbnail.path + '/standard_fantastic.jpg'}
                                 layoutId={clickedChar.id + ''}
+                                onClick={() => nav('/characters/detail/' + clickedChar.id)}
                                 >   
                                     <CenterWord>click to see more</CenterWord>
                                     <CharTitle>{ clickedChar.name }</CharTitle>
