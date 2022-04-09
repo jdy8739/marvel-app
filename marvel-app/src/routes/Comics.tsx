@@ -39,7 +39,7 @@ const modalVariant = {
     }
 };
 
-let cnt = 0;
+const BASE_STR = '1';
 
 const LIMIT = 12;
 
@@ -49,13 +49,17 @@ function Comics() {
 
     const location = useLocation();
 
-    const date = new URLSearchParams(location.search).get('dateRange')?.split(',', 2);
+    const paramsSearcher = new URLSearchParams(location.search);
+
+    const nowPage: string = paramsSearcher.get('page') || BASE_STR;
+
+    const date: string[] = paramsSearcher.get('dateRange')?.split(',', 2) || ['', ''];
 
     let formerDate = date ? date[0] : '';
 
     let latterDate = date ? date[1] : '';
 
-    let title = new URLSearchParams(location.search).get('title');
+    let title = paramsSearcher.get('title');
 
     const [startDate, setStartDate] = useRecoilState(searchedFormerDate);
 
@@ -63,9 +67,9 @@ function Comics() {
 
     const [searchedComicsTitle, setSearchedComicsTitle] = useRecoilState(comicsTitle);
 
-    const fetchComics = function(pageNum: number = cnt) {
+    const fetchComics = function() {
         axios.get<IComics>(
-            `${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&offset=${pageNum * LIMIT}&limit=${LIMIT}${
+            `${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&offset=${(+nowPage - 1)* LIMIT}&limit=${LIMIT}${
                 latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
                 title ? `&title=${title}` : ''
                 }`
@@ -76,38 +80,47 @@ function Comics() {
     };
 
     let TOTAL = 0;
+    
     if(comics?.data.total) TOTAL = comics.data.total;
 
     const showAnotherPage = (e: React.MouseEvent<HTMLButtonElement>) => {
-        cnt = +e.currentTarget.innerText - 1;
-        fetchComics(cnt);
+        nav('/comics?page=' + e.currentTarget.innerText + `${
+            formerDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
+            title ? `&title=${title}` : ''   
+            }`);
     };
 
     const fetchFirst = () => {
-        cnt = 0;
-        fetchComics(cnt);
+        nav('/comics?page=0' + `${
+            formerDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
+            title ? `&title=${title}` : ''   
+            }`);
     };
 
     const fetchLast = () => {
-        if(TOTAL) {
-            cnt = Math.floor(TOTAL / LIMIT);
-            fetchComics(cnt);
-        };
+        nav('/comics?page=' + (Math.floor(TOTAL / LIMIT) + 1) + `${
+            formerDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
+            title ? `&title=${title}` : ''   
+            }`);
     };
 
     const fetchPrevious = () => {
-        cnt --;
-        fetchComics(cnt);
+        nav('/comics?page=' + (+nowPage - 1) + `${
+            formerDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
+            title ? `&title=${title}` : ''   
+            }`);
     };
 
     const fetchNext = () => {
-        cnt ++;
-        fetchComics(cnt);
+        nav('/comics?page=' + (+nowPage + 1) + `${
+            formerDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
+            title ? `&title=${title}` : ''   
+            }`);
     };
 
     useEffect(() => {
         fetchComics();
-    }, [title, formerDate, latterDate]);
+    }, [title, formerDate, latterDate, nowPage]);
 
     const nav = useNavigate();
 
@@ -139,8 +152,8 @@ function Comics() {
         setIsDateModalShown(false);
         nav(`/comics?dateRange=${startDate},${toDate}${title ? `&title=${title}` : ''}`);
         changeDateToChosenDate();
-        cnt = 0;
-        fetchComics(cnt);
+        // cnt = 0;
+        // fetchComics(cnt);
     };
 
     const checkDateValid = () :boolean => {
@@ -159,7 +172,7 @@ function Comics() {
 
     const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        cnt = 0;
+        //cnt = 0;
         setSearchedComicsTitle(searchInput.current?.value || '');
         nav(`/comics?title=${searchInput.current?.value}${
             latterDate ? `&dateRange=${formerDate},${latterDate}` : ''
@@ -169,7 +182,7 @@ function Comics() {
     };
 
     const resetAllCondition = () => {
-        cnt = 0;
+        //cnt = 0;
         nav('/comics');
         setStartDate('');
         setToDate('');
@@ -240,19 +253,19 @@ function Comics() {
                 >first</Btn>
                 <Btn
                 onClick={fetchPrevious}
-                disabled={cnt === 0}
+                disabled={+nowPage === 0}
                 >prev</Btn>
                 {
                     [-3, -2, -1, 0, 1, 2, 3].map(idx => {
                         return (
                             <span key={idx}>
                                 {
-                                    cnt + idx + 1 < 1 ||
-                                    cnt + idx > Math.floor(TOTAL / LIMIT) ? null :
+                                    +nowPage + idx + 1 < 1 ||
+                                    +nowPage + idx > Math.floor(TOTAL / LIMIT) ? null :
                                     <Btn
                                     onClick={showAnotherPage}
-                                    clicked={cnt === Math.floor(cnt + idx)}
-                                    >{ cnt + idx + 1 }</Btn>
+                                    clicked={+nowPage === Math.floor(+nowPage + idx)}
+                                    >{ +nowPage + idx + 1 }</Btn>
                                 }
                             </span>
                         )
@@ -260,7 +273,7 @@ function Comics() {
                 }
                 <Btn
                 onClick={fetchNext}
-                disabled={cnt >= TOTAL / LIMIT - 1}
+                disabled={+nowPage >= TOTAL / LIMIT - 1}
                 >next</Btn>
                 <Btn
                 onClick={fetchLast}

@@ -56,7 +56,6 @@ function Series() {
             `)
             .then(res => {
                 setSeries(res.data);
-                console.log(res.data);
             });
     };
 
@@ -74,31 +73,37 @@ function Series() {
 
     const showPrevious = () => {
         nav('/series?page=' + (+nowPage - 1) + `${
-            titleStartsWith ? `&title=${titleStartsWith}` : ''
-        }`);
+            titleStartsWith ? `&title=${titleStartsWith}` : ''}${
+            startYear ? `&year=${startYear}` : ''
+            }`);
     };
 
     const showNext = () => {
         //setSeriesPageIdx(idx => idx + 1);
         nav('/series?page=' + (+nowPage + 1) + `${
-            titleStartsWith ? `&title=${titleStartsWith}` : ''
-        }`);
+            titleStartsWith ? `&title=${titleStartsWith}` : ''}${
+            startYear ? `&year=${startYear}` : ''   
+            }`);
     };
 
     const showSeriesOfThisIndex = (e: React.MouseEvent<HTMLButtonElement>) => {
         nav('/series?page=' + e.currentTarget.innerText + `${
-            titleStartsWith ? `&title=${titleStartsWith}` : ''
-        }`);
+            titleStartsWith ? `&title=${titleStartsWith}` : ''}${
+            startYear ? `&year=${startYear}` : ''
+            }`);
     };
 
     const showFirst = () => {
-        nav('/series');
+        nav('/series?page=1' + `${titleStartsWith ? `&title=${titleStartsWith}` : ''}${
+            startYear ? `&year=${startYear}` : ''
+            }`);
     };
 
     const showLast = () => {
         nav('/series?page=' + (Math.floor(TOTAL / LIMIT) + 1) + `${
-            titleStartsWith ? `&title=${titleStartsWith}` : ''
-        }`);
+            titleStartsWith ? `&title=${titleStartsWith}` : ''}${
+            startYear ? `&year=${startYear}` : ''
+            }`);
     };
 
     const titleRef = useRef<HTMLInputElement>(null);
@@ -118,6 +123,8 @@ function Series() {
             titleStartsWith ? `&title=${titleStartsWith}` : ''
         }`);
     };
+
+    const resetAllCondition = () => nav('/series');
 
     return (
         <>
@@ -157,7 +164,7 @@ function Series() {
                     </form>
                 </BtnInARow>
                 <BtnInARow style={{ marginBottom: '28px' }}>
-                    <Btn>reset</Btn>
+                    <Btn onClick={resetAllCondition}>reset</Btn>
                 </BtnInARow>
                 {
                     series?.data.results.map(seriesElem => {
