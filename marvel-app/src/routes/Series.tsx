@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
-import { Blank, Btn, BtnInARow, CharName, Container, Input } from "../styled";
+import { Blank, Btn, BtnInARow, CharName, Container, Highlighted, Input } from "../styled";
 import { ISeries } from "../types_store/SeriesType";
 
 const SeriesFrame = styled.div<{ path: string }>`
@@ -44,8 +44,6 @@ function Series() {
     const titleStartsWith: string = paramsSearcher.get('title') || '';
 
     const startYear: string = paramsSearcher.get('year') || '';
-
-    //const [seriesPageIdx, setSeriesPageIdx] = useState(1);
     
     const fetchSeries = function() {
         axios.get<ISeries>(`${BASE_URL}${GET_SERIES}?ts=1&apikey=${apikey}&hash=${hash}&offset=${
@@ -59,8 +57,7 @@ function Series() {
             });
     };
 
-    let TOTAL: number;
-
+    let TOTAL: number = 0;
     if(series) {
         TOTAL = series?.data.total;
     };
@@ -79,7 +76,6 @@ function Series() {
     };
 
     const showNext = () => {
-        //setSeriesPageIdx(idx => idx + 1);
         nav('/series?page=' + (+nowPage + 1) + `${
             titleStartsWith ? `&title=${titleStartsWith}` : ''}${
             startYear ? `&year=${startYear}` : ''   
@@ -100,7 +96,7 @@ function Series() {
     };
 
     const showLast = () => {
-        nav('/series?page=' + (Math.floor(TOTAL / LIMIT) + 1) + `${
+        nav('/series?page=' + (Math.floor(TOTAL / LIMIT)) + `${
             titleStartsWith ? `&title=${titleStartsWith}` : ''}${
             startYear ? `&year=${startYear}` : ''
             }`);
@@ -129,6 +125,12 @@ function Series() {
     return (
         <>
             <Blank />
+            {
+                !titleStartsWith ? null :
+                <h1 style={{
+                    textAlign: 'center'
+                }}>Results for "<Highlighted>{ titleStartsWith }</Highlighted>"</h1>
+            }
             <Container>
                 <BtnInARow> 
                     <form
@@ -174,6 +176,7 @@ function Series() {
                             >
                                 <SeriesFrame
                                 path={seriesElem.thumbnail.path + '/standard_xlarge.jpg'}
+                                onClick={() => nav('/series/detail/' + seriesElem.id)}
                                 >
                                     <CharName
                                     length={seriesElem.title.length || 0}
@@ -200,6 +203,7 @@ function Series() {
                 >first</Btn>
                 <Btn
                 onClick={showPrevious}
+                disabled={+nowPage === 1}
                 >prev</Btn>
                 {
                     [-3, -2, -1, 0, 1, 2, 3].map(i => {
@@ -207,9 +211,10 @@ function Series() {
                             <span key={i}>
                                 {
                                     i + +nowPage <= 0 || 
-                                    i + +nowPage > Math.floor(TOTAL / LIMIT) + 1 ? null :
+                                    i + +nowPage > Math.floor(TOTAL / LIMIT) ? null :
                                     <Btn
                                     onClick={showSeriesOfThisIndex}
+                                    clicked={+nowPage === Math.floor(+nowPage + i)}
                                     >
                                         { +nowPage + i }
                                     </Btn>
@@ -220,6 +225,7 @@ function Series() {
                 }
                 <Btn
                 onClick={showNext}
+                disabled={+nowPage >= TOTAL / LIMIT - 1}
                 >next</Btn><Btn
                 onClick={showLast}
                 >last</Btn>
