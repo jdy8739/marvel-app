@@ -2,10 +2,10 @@ import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_COMICS, hash } from "../api";
-import { comicsTitle, searchedFormerDate, searchedLatterDate } from "../atoms";
+import { comicsSearchedTitleAtom, comicsSearchedDateAtom, comicsPageAtom } from "../atoms";
 import { Blank, Btn, BtnInARow, CharName, ComicsFrameForm, Container, DateChooseModal, Highlighted, Input, ModalBackground } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
@@ -61,11 +61,12 @@ function Comics() {
 
     let title = paramsSearcher.get('title');
 
-    const [startDate, setStartDate] = useRecoilState(searchedFormerDate);
+    const [[startDate, toDate], setDate] = useRecoilState(comicsSearchedDateAtom);
 
-    const [toDate, setToDate] = useRecoilState(searchedLatterDate);
+    const [searchedComicsTitle, setSearchedComicsTitle] = useRecoilState(comicsSearchedTitleAtom);
 
-    const [searchedComicsTitle, setSearchedComicsTitle] = useRecoilState(comicsTitle);
+    const setPage = useSetRecoilState(comicsPageAtom);
+    setPage(+nowPage);
 
     const fetchComics = function() {
         axios.get<IComics>(
@@ -80,7 +81,6 @@ function Comics() {
     };
 
     let TOTAL = 0;
-    
     if(comics?.data.total) TOTAL = comics.data.total;
 
     const showAnotherPage = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -139,11 +139,19 @@ function Comics() {
     };
 
     const handleChangeStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setStartDate(e.currentTarget.value);
+        setDate(date => {
+            const copied = [...date];
+            copied[0] = e.currentTarget.value;
+            return copied;
+        });
     };
 
     const handleChangeToDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setToDate(e.currentTarget.value);
+        setDate(date => {
+            const copied = [...date];
+            copied[1] = e.currentTarget.value;
+            return copied;
+        });
     };
 
     const handleDateSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -184,8 +192,7 @@ function Comics() {
     const resetAllCondition = () => {
         //cnt = 0;
         nav('/comics');
-        setStartDate('');
-        setToDate('');
+        setDate([]);
         setSearchedComicsTitle('');
         fetchComics();
     };
@@ -261,7 +268,7 @@ function Comics() {
                             <span key={idx}>
                                 {
                                     +nowPage + idx < 1 ||
-                                    +nowPage + idx > Math.floor(TOTAL / LIMIT) ? null :
+                                    +nowPage + idx > Math.floor(TOTAL / LIMIT) + 1 ? null :
                                     <Btn
                                     onClick={showAnotherPage}
                                     clicked={+nowPage === Math.floor(+nowPage + idx)}

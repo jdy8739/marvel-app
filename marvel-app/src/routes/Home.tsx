@@ -42,7 +42,7 @@ function Home() {
                 <h3>DICTIONARY</h3>
                 <br></br>
                 <br></br>
-                <p>mady by Do Young Chung</p>
+                <p>made by Do Young Chung</p>
             </TitleBox>
         </div>
     )

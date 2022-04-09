@@ -4,7 +4,7 @@ import { useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
-import { comicsTitle, searchedFormerDate, searchedLatterDate } from "../atoms";
+import { comicsSearchedTitleAtom, comicsSearchedDateAtom, comicsPageAtom } from "../atoms";
 import ComicsCharacters from "../components/ComicsCharacters";
 import ComicsEvents from "../components/ComicsEvents";
 import { Blank, ClickToGoBack, ComicPortrait, Tab, Tabs } from "../styled";
@@ -39,19 +39,20 @@ function ComicsDetail() {
         fetchComic();
     }, []);
 
-    const title = useRecoilValue(comicsTitle);
+    const title = useRecoilValue(comicsSearchedTitleAtom);
 
-    const formerDate = useRecoilValue(searchedFormerDate);
+    const [formerDate, latterDate] = useRecoilValue(comicsSearchedDateAtom);
 
-    const latterDate = useRecoilValue(searchedLatterDate);
+    const page = useRecoilValue(comicsPageAtom);
 
     const nav = useNavigate();
 
     const backToComicsPage = function() {
         if(title || formerDate || latterDate) {
             nav(`/comics?${title ? `&title=${title}` : ''}${
-                formerDate || latterDate ? `&dateRange=${formerDate},${latterDate}` : ''
-            }`);
+                formerDate || latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
+                page ? `&page=${page}` : ''
+                }`);
         } else nav('/comics');
     };
 

@@ -1,21 +1,26 @@
 import { atom } from "recoil";
 
-export const startWithAtom = atom<string>({
-    key: 'startWithAtom',
+export const charStartsWithAtom = atom<string>({
+    key: 'charStartsWithAtom',
     default: ''
 });
 
-export const comicsTitle = atom<string>({
+export const charPageAtom = atom<number>({
+    key: 'charPageAtom',
+    default: 1
+});
+
+export const comicsSearchedTitleAtom = atom<string>({
     key: 'comicsTitle',
     default: ''
 });
 
-export const searchedFormerDate = atom<string>({
-    key: 'searchedformerDate',
-    default: ''
+export const comicsSearchedDateAtom = atom<string[]>({
+    key: 'comicsSearchedDate',
+    default: []
 });
 
-export const searchedLatterDate = atom<string>({
-    key: 'searchedLatterDate',
-    default: ''
+export const comicsPageAtom = atom<number>({
+    key: 'comicsPageAtom',
+    default: 1
 });

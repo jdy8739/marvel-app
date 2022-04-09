@@ -1,111 +1,107 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_CHAR, GET_SEARCHED_CHAR, hash } from "../api";
-import { startWithAtom } from "../atoms";
+import { apikey, BASE_URL, GET_CHAR, hash } from "../api";
+import { charPageAtom, charStartsWithAtom } from "../atoms";
 import CharacterCard from "../components/CharacterCard";
 import { Highlighted, Container, Btn, Input, Blank, BtnInARow } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
-
-let cnt = 0;
-
 const LIMIT = 30;
+
+const BASE_STR = '1';
 
 function Characters() {
 
     const [chars, setChars] = useState<ICharacter>();
 
-    const getChars = () => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_CHAR}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
+    const location = useLocation();
+
+    const paramsSearcher = new URLSearchParams(location.search);
+
+    let startsWith = paramsSearcher.get('nameStartsWith');
+
+    let nowPage = paramsSearcher.get('page') || BASE_STR;
+
+    const [charStartsWith, setCharStartsWith] = useRecoilState(charStartsWithAtom);
+
+    const setCharPage = useSetRecoilState(charPageAtom);
+
+    setCharPage(+nowPage);
+
+    const fetchCharacters = () => {
+        axios.get<ICharacter>(`${BASE_URL}${GET_CHAR}&apikey=${apikey}&hash=${hash}&offset=${
+            (+nowPage - 1) * LIMIT}&limit=${LIMIT}${
+            startsWith ? `&nameStartsWith=${startsWith}` : ''
+            }`)
             .then(res => {
                 setChars(res.data);
             });
     };
 
-    const total = chars?.data.total;
-
-    const location = useLocation();
-
-    let startWith = new URLSearchParams(location.search).get('startWith'); 
+    let TOTAL = 0;
+    if(chars?.data) {
+        TOTAL = chars?.data.total;
+    };
 
     const showNext = () => {
-        cnt ++;
-        fetchCharacters();
+        nav(`/characters?page=${+nowPage + 1}${
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
     };
 
     const showPrevious = () => {
-        cnt --;
-        fetchCharacters();
+        nav(`/characters?page=${+nowPage - 1}${
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
     };
 
     const showFirst = () => {
-        cnt = 0;
-        fetchCharacters();
+        nav(`/characters?page=1${
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
     };
 
     const showLast = () => {
-        if(total) {
-            const lastIndex = Math.floor(total / LIMIT);
-            cnt = lastIndex;
-            fetchCharacters();
-        };
+        nav(`/characters?page=${(Math.floor(TOTAL / LIMIT) + 1)}${
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
     };
 
     const showCharsOfIndex = (idx: number) => {
-        cnt = idx;
-        fetchCharacters();
+        nav(`/characters?page=${idx}${
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
     };
     
     useEffect(() => {
         fetchCharacters();
-    }, [startWith]);
+    }, [nowPage, startsWith]);
 
-    const [searchedChar, setSearchedChar] = useRecoilState(startWithAtom);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchedChar(e.currentTarget.value);
+        setCharStartsWith(e.currentTarget.value);
     };
 
     const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        nav('/characters?startWith=' + searchedChar);
-        cnt = 0;
-        getSearchedChars();
-    };
-
-    const getSearchedChars = () => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_SEARCHED_CHAR}${
-            startWith || searchedChar}&apikey=${apikey}&hash=${hash}&limit=${LIMIT}&offset=${cnt * LIMIT}`)
-            .then(res => {
-                setChars(res.data);
-            });
-    };
-
-    const fetchCharacters = () => {
-        if(startWith) getSearchedChars();
-        else getChars();
-    };           
+        setCharStartsWith(startsWithRef.current?.value || '');
+        nav(`/characters?nameStartsWith=${charStartsWith}`);
+    };  
 
     const resetSearch = () => {
         nav('/characters');
-        setSearchedChar('');
-        cnt = 0;
-        getChars();
     };
 
     const nav = useNavigate();
+
+    const startsWithRef = useRef<HTMLInputElement>(null);
 
     return (
         <>  
             <Blank />
             {
-                !startWith ? null :
+                !startsWith ? null :
                 <h1 style={{
                     textAlign: 'center'
-                }}>Results for "<Highlighted>{ startWith }</Highlighted>"</h1>
+                }}>Results for "<Highlighted>{ startsWith }</Highlighted>"</h1>
             }
             <Container>
                 <BtnInARow>
@@ -117,12 +113,13 @@ function Characters() {
                     >
                         <Input 
                         onChange={handleSearchChange} 
-                        value={searchedChar}
+                        value={charStartsWith}
                         required
                         style={{
                             width: '200px'
                         }}
                         placeholder="search the characters start with."
+                        ref={startsWithRef}
                         />
                         &ensp;
                         <Btn>search</Btn>
@@ -157,21 +154,21 @@ function Characters() {
                 <Btn onClick={showFirst}>first</Btn>
                 <Btn 
                 onClick={showPrevious}
-                disabled={cnt === 0}
+                disabled={+nowPage === 1}
                 >prev</Btn>
                 {
                     [-3, -2, -1, 0, 1, 2, 3].map(idx => {
                         return (
                             <span key={idx}>
                                 {
-                                    !total ? null :
-                                    cnt + idx < 0 ? null :
-                                    cnt + idx > Math.floor(total / LIMIT) ? null :
+                                    !TOTAL ? null :
+                                    +nowPage + idx - 1 < 0 ? null :
+                                    +nowPage + idx > Math.floor(TOTAL / LIMIT) + 1 ? null :
                                     <Btn 
-                                    onClick={() => showCharsOfIndex(cnt + idx)}
-                                    clicked={ cnt === Math.floor(cnt + idx) }
+                                    onClick={() => showCharsOfIndex(+nowPage + idx)}
+                                    clicked={ +nowPage === Math.floor(+nowPage + idx) }
                                     >
-                                        { cnt + idx + 1 }
+                                        { +nowPage + idx }
                                     </Btn>
                                 }
                             </span>
@@ -180,7 +177,7 @@ function Characters() {
                 }
                 <Btn 
                 onClick={showNext}
-                disabled={total ? cnt === Math.floor(total / LIMIT) : false}
+                disabled={TOTAL ? +nowPage === Math.floor(TOTAL / LIMIT) : false}
                 >next</Btn>
                 <Btn onClick={showLast}>last</Btn>
             </div>
