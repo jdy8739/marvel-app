@@ -260,12 +260,12 @@ function Comics() {
                         return (
                             <span key={idx}>
                                 {
-                                    +nowPage + idx + 1 < 1 ||
+                                    +nowPage + idx < 1 ||
                                     +nowPage + idx > Math.floor(TOTAL / LIMIT) ? null :
                                     <Btn
                                     onClick={showAnotherPage}
                                     clicked={+nowPage === Math.floor(+nowPage + idx)}
-                                    >{ +nowPage + idx + 1 }</Btn>
+                                    >{ +nowPage + idx }</Btn>
                                 }
                             </span>
                         )
@@ -273,7 +273,7 @@ function Comics() {
                 }
                 <Btn
                 onClick={fetchNext}
-                disabled={+nowPage >= TOTAL / LIMIT - 1}
+                disabled={+nowPage >= TOTAL / LIMIT}
                 >next</Btn>
                 <Btn
                 onClick={fetchLast}
