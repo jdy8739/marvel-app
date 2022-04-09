@@ -160,8 +160,6 @@ function Comics() {
         setIsDateModalShown(false);
         nav(`/comics?dateRange=${startDate},${toDate}${title ? `&title=${title}` : ''}`);
         changeDateToChosenDate();
-        // cnt = 0;
-        // fetchComics(cnt);
     };
 
     const checkDateValid = () :boolean => {
@@ -180,7 +178,6 @@ function Comics() {
 
     const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        //cnt = 0;
         setSearchedComicsTitle(searchInput.current?.value || '');
         nav(`/comics?title=${searchInput.current?.value}${
             latterDate ? `&dateRange=${formerDate},${latterDate}` : ''
@@ -190,7 +187,6 @@ function Comics() {
     };
 
     const resetAllCondition = () => {
-        //cnt = 0;
         nav('/comics');
         setDate([]);
         setSearchedComicsTitle('');
