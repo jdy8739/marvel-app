@@ -6,6 +6,7 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
 import { seriesPageAtom, seriesSearchedTitleAtom } from "../atoms";
+import SeriesCharacters from "../components/SeriesCharacters";
 import { Blank, CharName, ClickToGoBack, Tab, Tabs } from "../styled";
 import { ISeries } from "../types_store/SeriesType";
 
@@ -43,9 +44,14 @@ function SeriesDetail() {
 
     const seriesMatch = useMatch('/series/detail/:id');
 
+    const seriesCharMatch = useMatch('/series/detail/:id/characters');
+
+    const match = 
+    seriesMatch || seriesCharMatch;
+
     const fetchSeriesDetail = async () => {
         const res = 
-        await fetch(`${BASE_URL}${GET_SERIES}/${seriesMatch?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`);
+        await fetch(`${BASE_URL}${GET_SERIES}/${match?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`);
 
         return await res.json();
     };
@@ -105,9 +111,16 @@ function SeriesDetail() {
                 </div>
             </Container>
             <Tabs>
-                <Tab>characters</Tab>
+                <Tab
+                clicked={Boolean(seriesCharMatch)}
+                onClick={() => nav('/series/detail/' + match?.params.id + '/characters')}
+                >characters</Tab>
                 <Tab>creators</Tab>
             </Tabs>
+            { seriesCharMatch ? 
+            <SeriesCharacters
+            id={match?.params.id || ''} 
+            /> : null }
         </>
     )
 };

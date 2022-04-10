@@ -254,6 +254,7 @@ export const CenterWord = styled.p`
     margin: auto auto;
     opacity: 0.0;
     transition: all 1s;
+    text-align: center;
 `;
 
 export const RoundModal = styled(motion.div)<{ path: string }>`
@@ -285,4 +286,5 @@ export const CharTitle = styled.h2`
     left: 0;
     right: 0;
     margin: auto;
+    text-align: center;
 `;
