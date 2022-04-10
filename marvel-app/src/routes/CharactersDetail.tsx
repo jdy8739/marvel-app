@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
@@ -58,30 +59,23 @@ function CharactersDetail() {
 
     const seriesMatch = useMatch('/characters/detail/:id/series');
 
-    const [char, setChar] = useState<ICharacter>();
-
-    const fetchSingleCharacter = (id: string) => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_ON_CHAR}/${id}?ts=1&apikey=${apikey}&hash=${hash}`)
-            .then(res => {
-                setChar(res.data);
-                setIsLodaing(false);
-            });
+    const fetchSingleCharacter = async (id: string) => {
+        const res = await fetch(
+            `${BASE_URL}${GET_ON_CHAR}/${id}?ts=1&apikey=${apikey}&hash=${hash}`);
+        
+        return await res.json();
     };
 
-    const [isLoading, setIsLodaing] = useState(true);
+    const id = charMatch?.params.id || 
+    comicsMatch?.params.id || 
+    eventsMatch?.params.id || 
+    seriesMatch?.params.id || '';
 
-    useEffect(() => {
-        fetchSingleCharacter(
-            charMatch?.params.id || 
-            comicsMatch?.params.id || 
-            eventsMatch?.params.id || 
-            seriesMatch?.params.id || ''
-        );
-    }, []);
+    const {data: char, isLoading} = useQuery<ICharacter>(
+        ['character', id], () => fetchSingleCharacter(id));
 
     const showSubDetail = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const match = charMatch || comicsMatch || eventsMatch || seriesMatch;
-        nav(`/characters/detail/${ match?.params.id }/${e.currentTarget.innerText}`);
+        nav(`/characters/detail/${ id }/${e.currentTarget.innerText}`);
     };
 
     const startsWith = useRecoilValue(charStartsWithAtom);

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
@@ -26,18 +27,15 @@ function ComicsDetail() {
 
     const match = comicsMatch || comicsCharMatch || comicsEventMatch;
 
-    const [comic, setComic] = useState<IComics>();
+    const fetchComic = async function() {
+        const res = 
+        await fetch(`${BASE_URL}${GET_ON_COMICS}/${match?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`);
 
-    const fetchComic = function() {
-        axios.get<IComics>(`${BASE_URL}${GET_ON_COMICS}/${match?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`)
-            .then(res => {
-                setComic(res.data);
-            });
+        return await res.json();
     };
 
-    useEffect(() => {
-        fetchComic();
-    }, []);
+    const { data: comic } = useQuery<IComics>(
+        ['comic', match?.params.id || ''], fetchComic);
 
     const title = useRecoilValue(comicsSearchedTitleAtom);
 

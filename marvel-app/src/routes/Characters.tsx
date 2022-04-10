@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
@@ -15,8 +16,6 @@ const BASE_STR = '1';
 
 function Characters() {
 
-    const [chars, setChars] = useState<ICharacter>();
-
     const location = useLocation();
 
     const paramsSearcher = new URLSearchParams(location.search);
@@ -31,15 +30,16 @@ function Characters() {
 
     setCharPage(+nowPage);
 
-    const fetchCharacters = () => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_CHAR}&apikey=${apikey}&hash=${hash}&offset=${
+    const fetchCharacters = async () => {
+        const res = await fetch(`${BASE_URL}${GET_CHAR}&apikey=${apikey}&hash=${hash}&offset=${
             (+nowPage - 1) * LIMIT}&limit=${LIMIT}${
             startsWith ? `&nameStartsWith=${startsWith}` : ''
-            }`)
-            .then(res => {
-                setChars(res.data);
-            });
+            }`);
+        return await res.json();
     };
+
+    const { data: chars } = useQuery<ICharacter>(
+        ['characters', nowPage, startsWith], fetchCharacters);
 
     let TOTAL = 0;
     if(chars?.data) {
@@ -70,11 +70,6 @@ function Characters() {
         nav(`/characters?page=${idx}${
             startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
     };
-    
-    useEffect(() => {
-        fetchCharacters();
-    }, [nowPage, startsWith]);
-
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCharStartsWith(e.currentTarget.value);

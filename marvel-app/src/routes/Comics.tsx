@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
@@ -45,8 +46,6 @@ const LIMIT = 12;
 
 function Comics() {
 
-    const [comics, setComics] = useState<IComics>();
-
     const location = useLocation();
 
     const paramsSearcher = new URLSearchParams(location.search);
@@ -63,22 +62,22 @@ function Comics() {
 
     const [[startDate, toDate], setDate] = useRecoilState(comicsSearchedDateAtom);
 
-    const [searchedComicsTitle, setSearchedComicsTitle] = useRecoilState(comicsSearchedTitleAtom);
+    const setSearchedComicsTitle = useSetRecoilState(comicsSearchedTitleAtom);
 
     const setPage = useSetRecoilState(comicsPageAtom);
     setPage(+nowPage);
 
-    const fetchComics = function() {
-        axios.get<IComics>(
-            `${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&offset=${(+nowPage - 1)* LIMIT}&limit=${LIMIT}${
-                latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
-                title ? `&title=${title}` : ''
-                }`
-            )
-            .then(res => {
-                setComics(res.data);
-            });
+    const fetchComics = async function() {
+        const res = await fetch(`${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&offset=${
+            (+nowPage - 1)* LIMIT}&limit=${LIMIT}${
+            latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
+            title ? `&title=${title}` : ''
+            }`);
+        return await res.json();
     };
+
+    const { data: comics } = useQuery<IComics>(
+        ['comics', nowPage, title, formerDate, latterDate], fetchComics);
 
     let TOTAL = 0;
     if(comics?.data.total) TOTAL = comics.data.total;
@@ -117,10 +116,6 @@ function Comics() {
             title ? `&title=${title}` : ''   
             }`);
     };
-
-    useEffect(() => {
-        fetchComics();
-    }, [title, formerDate, latterDate, nowPage]);
 
     const nav = useNavigate();
 
