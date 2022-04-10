@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
@@ -33,8 +34,6 @@ const LIMIT = 20;
 
 function Series() {
 
-    const [series, setSeries] = useState<ISeries>();
-
     const location = useLocation();
 
     const paramsSearcher = new URLSearchParams(location.search);
@@ -44,27 +43,24 @@ function Series() {
     const titleStartsWith: string = paramsSearcher.get('title') || '';
 
     const startYear: string = paramsSearcher.get('year') || '';
-    
-    const fetchSeries = function() {
-        axios.get<ISeries>(`${BASE_URL}${GET_SERIES}?ts=1&apikey=${apikey}&hash=${hash}&offset=${
+
+    const fetchSeries = async () => {
+        const res = await fetch(`${BASE_URL}${GET_SERIES}?ts=1&apikey=${apikey}&hash=${hash}&offset=${
             (+nowPage - 1) * LIMIT}&limit=${LIMIT}${
-                titleStartsWith ? `&titleStartsWith=${titleStartsWith}` : ''}${
-                startYear ? `&startYear=${startYear}` : ''
-                }
-            `)
-            .then(res => {
-                setSeries(res.data);
-            });
+            titleStartsWith ? `&titleStartsWith=${titleStartsWith}` : ''}${
+            startYear ? `&startYear=${startYear}` : ''
+            }`);
+        return await res.json();
     };
+
+    const { data: 
+        series, isLoading } = useQuery<ISeries>(
+            ['series', nowPage, titleStartsWith, startYear], fetchSeries);
 
     let TOTAL: number = 0;
     if(series) {
         TOTAL = series?.data.total;
     };
-
-    useEffect(() => {
-        fetchSeries();
-    }, [nowPage, titleStartsWith, startYear]);
 
     const nav = useNavigate();
 
