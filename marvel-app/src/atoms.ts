@@ -24,3 +24,13 @@ export const comicsPageAtom = atom<number>({
     key: 'comicsPageAtom',
     default: 1
 });
+
+export const seriesSearchedTitleAtom = atom<string>({
+    key: 'seriesSearchedTitleAtom',
+    default: ''
+});
+
+export const seriesPageAtom = atom<number>({
+    key: 'seriesPageAtom',
+    default: 1
+});

@@ -2,8 +2,10 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
+import { seriesPageAtom, seriesSearchedTitleAtom } from "../atoms";
 import { Blank, Btn, BtnInARow, CharName, Container, Highlighted, Input } from "../styled";
 import { ISeries } from "../types_store/SeriesType";
 
@@ -61,6 +63,13 @@ function Series() {
     if(series) {
         TOTAL = series?.data.total;
     };
+
+    const setSeriesSearchedTitle = 
+    useSetRecoilState(seriesSearchedTitleAtom);
+    setSeriesSearchedTitle(titleStartsWith);
+
+    const setSeriesPage = useSetRecoilState(seriesPageAtom);
+    setSeriesPage(+nowPage);
 
     const nav = useNavigate();
 

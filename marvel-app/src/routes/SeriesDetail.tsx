@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useMatch } from "react-router-dom";
+import { useQuery } from "react-query";
+import { useMatch, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
-import { Blank, CharName } from "../styled";
+import { seriesPageAtom, seriesSearchedTitleAtom } from "../atoms";
+import { Blank, CharName, ClickToGoBack, Tab, Tabs } from "../styled";
 import { ISeries } from "../types_store/SeriesType";
 
 const SeriesPortrait = styled.div<{ path: string }>`
@@ -15,15 +18,24 @@ const SeriesPortrait = styled.div<{ path: string }>`
     background-position: center center;
     margin: auto;
     position: relative;
+    transition: all 1s;
+    &:hover {
+        transform: scale(1.02);
+        ${ClickToGoBack} {
+            color: #F0131E;
+            opacity: 1;
+        }
+    }
 `;
 
-const SeriesTitle = styled.p`
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 20px;
-    text-align: center;
-    font-weight: bold;
+const SeriesTitle = styled.h2`
+
+`;
+
+const Container = styled.div`
+    width: 48%;
+    min-width: 280px;
+    margin: auto;
 `;
 
 
@@ -31,29 +43,71 @@ function SeriesDetail() {
 
     const seriesMatch = useMatch('/series/detail/:id');
 
-    const [series, setSeries] = useState<ISeries>();
+    const fetchSeriesDetail = async () => {
+        const res = 
+        await fetch(`${BASE_URL}${GET_SERIES}/${seriesMatch?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`);
 
-    const fetchSeriesDetail = () => {
-        axios.get<ISeries>(`${BASE_URL}${GET_SERIES}/${seriesMatch?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`)
-            .then(res => {
-                setSeries(res.data);
-                console.log(res.data);
-            });
+        return await res.json();
     };
 
-    useEffect(() => {
-        fetchSeriesDetail();
-    }, []);
+    const { data: series } = useQuery<ISeries>(
+        ['seriesElem', seriesMatch?.params.id], fetchSeriesDetail);
+
+    const page = useRecoilValue(seriesPageAtom);
+
+    const searchedTitle = useRecoilValue(seriesSearchedTitleAtom);
+
+    const goBackToSeriesPage = () => {
+        if(searchedTitle || page) {
+            nav(`/series?${searchedTitle ? `&title=${searchedTitle}` : ''}${
+            page ? `&page=${page}` : ''
+            }`);
+        } else nav('/series');
+    };
+
+    const nav = useNavigate();
+
+    //console.log(series);
+
+    const seriesNameSet: Set<string> = new Set();
+    series?.data.results[0].comics.items.forEach(item => {
+        seriesNameSet.add(item.name);
+    });
+
+    const seriesNameArr: string[] = Array.from(seriesNameSet);
 
     return (
         <>
             <Blank />
             <SeriesPortrait 
             path={series?.data.results[0].thumbnail.path + '/standard_fantastic.jpg'}
-            >
-                <SeriesTitle
-                >{ series?.data.results[0].title }</SeriesTitle>
+            onClick={goBackToSeriesPage}
+            >   
+                <ClickToGoBack>click to go back</ClickToGoBack>
             </SeriesPortrait>
+            <Container>
+                <div style={{
+                    textAlign: 'center'
+                }}>
+                    <SeriesTitle
+                    >{ series?.data.results[0].title }</SeriesTitle>
+                    <span>{ series?.data.results[0].startYear } - </span>
+                    <span>{ series?.data.results[0].endYear }</span>
+                    <div 
+                    style={{ lineHeight: '1px' }}
+                    >
+                        {
+                            seriesNameArr.map(item => {
+                                return <h5 key={item}>{ item }</h5>
+                            })
+                        }
+                    </div>
+                </div>
+            </Container>
+            <Tabs>
+                <Tab>characters</Tab>
+                <Tab>creators</Tab>
+            </Tabs>
         </>
     )
 };
