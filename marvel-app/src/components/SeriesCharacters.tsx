@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
@@ -13,7 +13,8 @@ function SeriesCharacters({ id }: { id: string }) {
     const [chars, setChars] = useState<ICharacter>();
 
     const fetchChars = () => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_SERIES}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash}`)
+        axios.get<ICharacter>
+        (`${BASE_URL}${GET_SERIES}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash}`)
             .then(res => {
                 setChars(res.data);
             });
@@ -46,19 +47,23 @@ function SeriesCharacters({ id }: { id: string }) {
         <>  
             <br></br>
             {
-                chars?.data.results.length === 0 ? 
+                chars?.data.results.length === 0 ?
                 <p style={{ textAlign: 'center' }}>Sorry. No data. :(</p> :
                 <Container>
                     {
                         chars?.data.results.map(char => {
                             return(
-                                <RoundPortrait
+                                <motion.span
                                 key={char.id}
-                                path={char.thumbnail.path + '/standard_xlarge.jpg'}
-                                onClick={() => showModal(char.id)}
+                                layoutId={char.id + ''}
                                 >
-                                    <RoundPortraitName>{ char.name.split('(', 2)[0] }</RoundPortraitName>
-                                </RoundPortrait>
+                                    <RoundPortrait
+                                    path={char.thumbnail.path + '/standard_xlarge.jpg'}
+                                    onClick={() => showModal(char.id)}
+                                    >
+                                        <RoundPortraitName>{ char.name.split('(', 2)[0] }</RoundPortraitName>
+                                    </RoundPortrait>
+                                </motion.span>
                             )
                         })
                     }
@@ -73,6 +78,7 @@ function SeriesCharacters({ id }: { id: string }) {
                         <RoundModal
                         path={clickedChar.thumbnail.path + '/standard_fantastic.jpg'}
                         onClick={toCharDetailPage}
+                        layoutId={clickedChar.id + ''}
                         >
                             <CenterWord>click to see more</CenterWord>
                             <CharTitle>{ clickedChar.name }</CharTitle>

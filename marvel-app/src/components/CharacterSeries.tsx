@@ -36,6 +36,9 @@ const ShowMoreBtn = styled(Btn)`
     width: 130px;
     display: block;
     margin: auto;
+    &:active {
+        background-color: white;
+    }
 `;
 
 const modalVariant = {
@@ -45,7 +48,7 @@ const modalVariant = {
     animate: {
         opacity: 1,
         transition: {
-            duration: 1.2
+            duration: 0.5
         }
     },
     exit: {
@@ -140,20 +143,16 @@ function CharacterSeries({ id }: { id: string }) {
                                 {
                                     series?.data.results.map(seriesElem => {
                                         return (
-                                            <span
+                                            <motion.span
                                             key={seriesElem.id}
+                                            layoutId={seriesElem.id + ''}
                                             >
-                                                {
-                                                    clickedSeries?.id === seriesElem.id ? 
-                                                    <SeriesElem /> :
-                                                    <SeriesElem
-                                                    path={seriesElem.thumbnail.path + "/standard_amazing.jpg"}
-                                                    onClick={() => showModal(seriesElem.id)}
-                                                    layoutId={seriesElem.id + ''}
-                                                    >
-                                                    </SeriesElem>
-                                                }
-                                            </span>
+                                                <SeriesElem
+                                                path={seriesElem.thumbnail.path + "/standard_amazing.jpg"}
+                                                onClick={() => showModal(seriesElem.id)}
+                                                >
+                                                </SeriesElem>    
+                                            </motion.span>
                                         )
                                     })
                                 }

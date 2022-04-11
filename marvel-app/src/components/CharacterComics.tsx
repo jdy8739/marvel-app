@@ -172,7 +172,6 @@ function CharacterComics({ id }: { id: string }) {
                                                 key={comic.id}
                                                 >
                                                     <ComicsCard
-                                                    key={comic.id}
                                                     path={`${ comic.thumbnail.path }/portrait_incredible.jpg`}
                                                     variants={SlideVariant}
                                                     initial="start"
@@ -193,7 +192,8 @@ function CharacterComics({ id }: { id: string }) {
                                 </AnimatePresence>
                                 <LeftArrow
                                 src={require('../images/arrow.png')}
-                                onClick={showPrev} />
+                                onClick={showPrev} 
+                                />
                                 <RightArrow 
                                 src={require('../images/arrow.png')}
                                 onClick={showNext} 

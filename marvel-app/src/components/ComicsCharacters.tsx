@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
@@ -49,20 +49,21 @@ function ComicsCharacters({ id }: { id: string }) {
                         {
                             chars?.data.results.map(char => {
                                 return (
-                                    <span 
-                                    key={char.id}>
+                                    <motion.span 
+                                    key={char.id}
+                                    layoutId={char.id + ''}
+                                    >
                                         {
                                             clickedChar?.id === char.id ? 
                                             <RoundPortrait /> :
                                             <RoundPortrait
-                                            layoutId={char.id + ''}
                                             path={char.thumbnail.path + "/standard_xlarge.jpg"}
                                             onClick={() => showModal(char.id)}
                                             >
                                                 <RoundPortraitName>{ char.name.split('(', 2)[0] }</RoundPortraitName>
                                             </RoundPortrait>
                                         }
-                                    </span>
+                                    </motion.span>
                                 )
                             })
                         }

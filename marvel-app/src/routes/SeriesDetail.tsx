@@ -7,7 +7,8 @@ import styled from "styled-components";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
 import { seriesPageAtom, seriesSearchedTitleAtom } from "../atoms";
 import SeriesCharacters from "../components/SeriesCharacters";
-import { Blank, CharName, ClickToGoBack, Tab, Tabs } from "../styled";
+import SeriesComics from "../components/SeriesComics";
+import { Blank, CharName, ClickToGoBack, Highlighted, Tab, Tabs } from "../styled";
 import { ISeries } from "../types_store/SeriesType";
 
 const SeriesPortrait = styled.div<{ path: string }>`
@@ -29,6 +30,15 @@ const SeriesPortrait = styled.div<{ path: string }>`
     }
 `;
 
+const SeriesElemName = styled.h5`
+    margin: 8px;
+    display: inline-block;
+    cursor: pointer;
+    &:hover {
+        color: #F0131E;
+    }
+`;
+
 const SeriesTitle = styled.h2`
 
 `;
@@ -46,8 +56,10 @@ function SeriesDetail() {
 
     const seriesCharMatch = useMatch('/series/detail/:id/characters');
 
+    const seriesComicsMatch = useMatch('/series/detail/:id/comics');
+
     const match = 
-    seriesMatch || seriesCharMatch;
+    seriesMatch || seriesCharMatch || seriesComicsMatch;
 
     const fetchSeriesDetail = async () => {
         const res = 
@@ -82,6 +94,13 @@ function SeriesDetail() {
 
     const seriesNameArr: string[] = Array.from(seriesNameSet);
 
+    const [comicsName, setComicsName] = useState('');
+
+    const showComicsInThisSeries = (item: string) => {
+        setComicsName(item);
+        nav('/series/detail/' + match?.params.id + '/comics');
+    };
+
     return (
         <>
             <Blank />
@@ -97,14 +116,22 @@ function SeriesDetail() {
                 }}>
                     <SeriesTitle
                     >{ series?.data.results[0].title }</SeriesTitle>
-                    <span>{ series?.data.results[0].startYear } - </span>
-                    <span>{ series?.data.results[0].endYear }</span>
-                    <div 
-                    style={{ lineHeight: '1px' }}
-                    >
+                    <div>
+                        published: &ensp;
+                        <Highlighted>
+                            { series?.data.results[0].startYear + " - "}
+                            { series?.data.results[0].endYear }
+                        </Highlighted>
+                    </div>
+                    <p>total number of comics: &ensp;
+                        <Highlighted>{seriesNameArr.length}</Highlighted>
+                    </p>
+                    <div >
                         {
                             seriesNameArr.map(item => {
-                                return <h5 key={item}>{ item }</h5>
+                                return <SeriesElemName
+                                onClick={() => showComicsInThisSeries(item)}
+                                key={item}>{ item }</SeriesElemName>
                             })
                         }
                     </div>
@@ -115,12 +142,20 @@ function SeriesDetail() {
                 clicked={Boolean(seriesCharMatch)}
                 onClick={() => nav('/series/detail/' + match?.params.id + '/characters')}
                 >characters</Tab>
-                <Tab>creators</Tab>
+                <Tab
+                clicked={Boolean(seriesComicsMatch)}
+                onClick={() => nav('/series/detail/' + match?.params.id + '/comics')}
+                >comics</Tab>
             </Tabs>
             { seriesCharMatch ? 
             <SeriesCharacters
             id={match?.params.id || ''} 
             /> : null }
+            { seriesComicsMatch ? 
+            <SeriesComics
+            chosenComicsName={comicsName}
+            id={match?.params.id || ''} 
+            />  : null}
         </>
     )
 };
