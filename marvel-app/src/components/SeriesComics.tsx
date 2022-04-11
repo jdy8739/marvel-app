@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
 import { ComicsCard } from "../styled";
 import { IComics } from "../types_store/ComicsType";
@@ -28,8 +29,8 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
         else {
             setVisible(() => 
             comics?.data.results.findIndex(comicsElem => 
-                comicsElem.title === chosenComicsName) || 0
-        )};
+                comicsElem.title === chosenComicsName) || 0)
+        };
     };
     
     useEffect(() => {
@@ -51,6 +52,8 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
         setVisible(
             visible => ++ visible === length ? 0 : visible ++);
     };
+
+    const nav = useNavigate();
 
     const [isBack, setIsBack] = useState(false);
 
@@ -105,6 +108,7 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
                                     animate="animate"
                                     exit="leave"
                                     custom={isBack}
+                                    onClick={() => nav('/comics/detail/' + comicsElem.id)}
                                     >
 
                                     </ComicsCard>

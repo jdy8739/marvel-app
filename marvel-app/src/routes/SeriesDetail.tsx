@@ -6,9 +6,11 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
 import { seriesPageAtom, seriesSearchedTitleAtom } from "../atoms";
+import { Wrapper } from "../components/CharacterComics";
 import SeriesCharacters from "../components/SeriesCharacters";
 import SeriesComics from "../components/SeriesComics";
 import { Blank, CharName, ClickToGoBack, Highlighted, Tab, Tabs } from "../styled";
+import { ICreators } from "../types_store/CreatorsTypes";
 import { ISeries } from "../types_store/SeriesType";
 
 const SeriesPortrait = styled.div<{ path: string }>`
@@ -58,8 +60,10 @@ function SeriesDetail() {
 
     const seriesComicsMatch = useMatch('/series/detail/:id/comics');
 
+    const seriesCreatorsMatch = useMatch('/series/detail/:id/creators');
+
     const match = 
-    seriesMatch || seriesCharMatch || seriesComicsMatch;
+    seriesMatch || seriesCharMatch || seriesComicsMatch || seriesCreatorsMatch;
 
     const fetchSeriesDetail = async () => {
         const res = 
@@ -100,6 +104,18 @@ function SeriesDetail() {
         setComicsName(item);
         nav('/series/detail/' + match?.params.id + '/comics');
     };
+
+    const [creators, setCreators] = useState<ICreators>();
+
+    useEffect(() => {
+        if(seriesCreatorsMatch && !creators) {
+            axios.get<ICreators>(
+                `${BASE_URL}${GET_SERIES}/${match?.params.id}/creators?ts=1&apikey=${apikey}&hash=${hash}`)
+                .then(res => {
+                    setCreators(res.data);
+                });
+        };
+    }, [seriesCreatorsMatch])
 
     return (
         <>
@@ -146,6 +162,10 @@ function SeriesDetail() {
                 clicked={Boolean(seriesComicsMatch)}
                 onClick={() => nav('/series/detail/' + match?.params.id + '/comics')}
                 >comics</Tab>
+                <Tab
+                clicked={Boolean(seriesCreatorsMatch)}
+                onClick={() => nav('/series/detail/' + match?.params.id + '/creators')}
+                >creators</Tab>
             </Tabs>
             { seriesCharMatch ? 
             <SeriesCharacters
@@ -156,6 +176,22 @@ function SeriesDetail() {
             chosenComicsName={comicsName}
             id={match?.params.id || ''} 
             />  : null}
+            { 
+                seriesCreatorsMatch ? 
+                <Wrapper>
+                    {
+                        creators?.data.results.map(creator => {
+                            return (
+                                <h4
+                                style={{ margin: '8px' }}
+                                key={creator.id}
+                                >{ creator.fullName }</h4>
+                            )
+                        })
+                    }
+                </Wrapper>
+                : null
+            }
         </>
     )
 };
