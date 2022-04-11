@@ -41,6 +41,22 @@ const ShowMoreBtn = styled(Btn)`
     }
 `;
 
+const Title = styled.h2`
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    bottom: 25px;
+`;
+
+const Years = styled.h5`
+    position: absolute;
+    bottom: 14px;
+    margin: 0;
+    right: 14px;
+`;
+
 const modalVariant = {
     initial: {
         opacity: 0,
@@ -77,7 +93,8 @@ function CharacterSeries({ id }: { id: string }) {
     }, []);
 
     const fetchSeriesContainingCharacter = () => {
-        axios.get<ISeries>(`${BASE_URL}${GET_ON_CHAR}/${ id }/${SUBJECT}?ts=1&apikey=${apikey}&hash=${hash}&limit=12`)
+        axios.get<ISeries>(
+            `${BASE_URL}${GET_ON_CHAR}/${ id }/${SUBJECT}?ts=1&apikey=${apikey}&hash=${hash}&limit=12`)
             .then(res => {
                 setSeries(res.data);
                 setIsLoading(false);
@@ -105,7 +122,8 @@ function CharacterSeries({ id }: { id: string }) {
         if(checkCntBiggerThanTotal()) return;
         cnt ++;
         axios.get<ISeries>(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/${SUBJECT}?ts=1&apikey=${apikey}&hash=${hash}&limit=12&offset=${(cnt - 1) * 12}`
+            `${BASE_URL}${GET_ON_CHAR}/${ id }/${SUBJECT}?ts=1&apikey=${apikey}&hash=${
+                hash}&limit=12&offset=${(cnt - 1) * 12}`
             )
             .then(res => {
                 setSeries(series => {
@@ -178,7 +196,14 @@ function CharacterSeries({ id }: { id: string }) {
                                             >
                                                 <ModelImage
                                                 path={clickedSeries.thumbnail.path + "/standard_fantastic.jpg"}
-                                                />
+                                                >
+                                                    <Title>{ clickedSeries.title }</Title>
+                                                </ModelImage>
+                                                <h5 
+                                                style={{ textAlign: 'center' }}>{ clickedSeries.description ? 
+                                                clickedSeries.description : 'No Descriptions' }</h5>
+                                                <Years>{ 
+                                                clickedSeries.startYear + "-" + clickedSeries.endYear }</Years>
                                             </Modal>
                                         </ModalBackground>
                                 }

@@ -133,9 +133,11 @@ export const Modal = styled(motion.div)`
 export const ModelImage = styled.div<{ path: string }>`
     width: 100%;
     height: 78%;
-    background-image: url(${ props => props.path });
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent) ,url(${ props => props.path });
     background-position: center center;
     background-size: cover;
+    position: relative;
+    padding: 1px;
 `;
 
 export const ComicsFrameForm = styled.div<{ path: string }>`
