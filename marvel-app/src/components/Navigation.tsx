@@ -24,15 +24,15 @@ const InnerNav = styled.div`
     display: flex;
 `;
 
-const Tab = styled(motion.p)<{ clicked?: boolean, isTop: boolean }>`
+const Tab = styled.p<{ clicked?: boolean, istop: boolean }>`
     padding: 15px;
     color: ${props => 
-    props.clicked && props.isTop ? 'red' : props.clicked && !props.isTop ? 'black' : 'white' };
+    props.clicked && props.istop ? 'red' : props.clicked && !props.istop ? 'black' : 'white' };
     &:hover {
         color: ${props => 
-    !props.clicked && !props.isTop ? 'black' : 
-    !props.clicked && props.isTop ? 'red' : 
-    props.clicked && props.isTop ? 'red' : 'white'};
+    !props.clicked && !props.istop ? 'black' : 
+    !props.clicked && props.istop ? 'red' : 
+    props.clicked && props.istop ? 'red' : 'white'};
     }
 `;
 
@@ -76,32 +76,32 @@ function Navigation() {
                 <InnerNav>
                     <Link to={"/"}>
                         <Tab
-                        isTop={isTop}
+                        istop={isTop}
                         clicked={Boolean(homeMatch)}
                         >Home</Tab>
                     </Link>
                     <Link to={"/characters"}>
                         <Tab
-                        isTop={isTop}
+                        istop={isTop}
                         clicked={Boolean(charMatch)}
                         >Characters</Tab>
                     </Link>
                     <Link to={"/comics"}>
                         <Tab
-                        isTop={isTop}
+                        istop={isTop}
                         clicked={Boolean(comicsMatch)}
                         >Comics</Tab>
                     </Link>
                     <Link to={"/series"}>
                         <Tab
-                        isTop={isTop}
+                        istop={isTop}
                         clicked={Boolean(seriesMatch)}
                         >Series</Tab>
                     </Link>
                     <p style={{ flexGrow: 1 }}></p>
                     <Link to={"/#"}>
                         <Tab
-                        isTop={isTop}
+                        istop={isTop}
                         >portfilio</Tab>
                     </Link>
                 </InnerNav>
