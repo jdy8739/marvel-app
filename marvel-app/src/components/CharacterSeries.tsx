@@ -201,7 +201,9 @@ function CharacterSeries({ id }: { id: string }) {
                                                 </ModelImage>
                                                 <h5 
                                                 style={{ textAlign: 'center' }}>{ clickedSeries.description ? 
-                                                clickedSeries.description : 'No Descriptions' }</h5>
+                                                clickedSeries.description.length > 100 ? clickedSeries.description.slice(0, 150) + '...' : 
+                                                clickedSeries.description
+                                                : 'No Descriptions' }</h5>
                                                 <Years>{ 
                                                 clickedSeries.startYear + "-" + clickedSeries.endYear }</Years>
                                             </Modal>
