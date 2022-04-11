@@ -24,10 +24,12 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
     };
 
     const findTargetIndexOfComics = () => {
-        setVisible(() => 
+        if(!chosenComicsName) setVisible(0);
+        else {
+            setVisible(() => 
             comics?.data.results.findIndex(comicsElem => 
                 comicsElem.title === chosenComicsName) || 0
-        );
+        )};
     };
     
     useEffect(() => {
