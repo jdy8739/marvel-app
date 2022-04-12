@@ -84,6 +84,10 @@ function CharacterSeries({ id }: { id: string }) {
 
     let onAniComplete = false;
 
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [clickedSeries, setClickedSeries] = useState<SeriesResult | null>();
+
     const [series, setSeries] = useState<ISeries>();
 
     const titleRef = useRef<HTMLHeadingElement>(null);
@@ -91,15 +95,38 @@ function CharacterSeries({ id }: { id: string }) {
     const modalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        modalRef.current?.addEventListener('mouseover', a);
         fetchSeriesContainingCharacter();
-        return () => {
-            cnt = 1;
-            modalRef.current?.removeEventListener('mouseover', a);
-        };
+        return () => { cnt = 1 };
     }, []);
 
-    const a = () => alert('x');
+    useEffect(() => {
+        if(clickedSeries && modalRef.current) {
+            modalRef.current.addEventListener(
+                'mouseover', changeWordToClick);
+            modalRef.current.addEventListener(
+                'mouseout', changeWordToOriginalTItle);
+        };
+        return () => {
+            if(modalRef.current) {
+                modalRef.current.addEventListener(
+                    'mouseover', changeWordToClick);
+                modalRef.current.addEventListener(
+                    'mouseout', changeWordToOriginalTItle);
+            };
+        };
+    }, [clickedSeries]);
+
+    const changeWordToClick = () => {
+        if(titleRef.current) {
+            titleRef.current.textContent = 'Click to see detail on this series.'
+        };
+    };
+
+    const changeWordToOriginalTItle = () => {
+        if(titleRef.current) {
+            titleRef.current.textContent = clickedSeries?.title || '';
+        };
+    };
 
     const fetchSeriesContainingCharacter = () => {
         axios.get<ISeries>(
@@ -112,10 +139,6 @@ function CharacterSeries({ id }: { id: string }) {
 
     const nav = useNavigate();
 
-    const [isLoading, setIsLoading] = useState(true);
-
-    const [clickedSeries, setClickedSeries] = useState<SeriesResult | null>();
-
     const toSeriesDetailPage = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         nav('/series/detail/' + clickedSeries?.id);
@@ -124,7 +147,8 @@ function CharacterSeries({ id }: { id: string }) {
     const showModal = (id: number) => {
         onAniComplete = false;
         setClickedSeries(() => {
-            return series?.data.results.find(seriesElem => seriesElem.id === id);
+            return series?.data.results.find(
+                seriesElem => seriesElem.id === id);
         });
     };
 
