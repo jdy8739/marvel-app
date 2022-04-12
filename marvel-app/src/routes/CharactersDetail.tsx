@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -90,6 +91,9 @@ function CharactersDetail() {
 
     return (
         <>  
+            <Helmet>
+                <title>{ char?.data.results[0].name }</title>
+            </Helmet>
             <Blank />
             {
                 isLoading ? <p style={{ textAlign: 'center' }}>loading... please wait.</p> :

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -190,6 +191,9 @@ function Comics() {
 
     return (
         <>
+            <Helmet>
+                <title>Comics</title>
+            </Helmet>
             <Blank />
             {
                 !title ? null :

@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
@@ -129,6 +130,9 @@ function Series() {
 
     return (
         <>
+            <Helmet>
+                <title>Series</title>
+            </Helmet>
             <Blank />
             {
                 !titleStartsWith ? null :

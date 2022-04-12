@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Helmet } from "react-helmet"
 
 const TitleBox = styled.div`
     position: absolute;
@@ -37,6 +38,9 @@ function Home() {
             alignItems: 'center',
             textAlign: 'center'
         }}>
+            <Helmet>
+                <title>Marvel Dictionary</title>
+            </Helmet>
             <TitleBox>
                 <h1>MARVEL</h1>
                 <h3>DICTIONARY</h3>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -56,6 +57,9 @@ function ComicsDetail() {
 
     return (
         <>
+            <Helmet>
+                <title>{ comic?.data.results[0].title }</title>
+            </Helmet>
             <Blank />
             <ComicPortrait
             path={comic?.data.results[0].thumbnail.path + '/portrait_uncanny.jpg'}
