@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
 import { Btn, Modal, ModalBackground, ModelImage } from "../styled";
@@ -85,12 +86,20 @@ function CharacterSeries({ id }: { id: string }) {
 
     const [series, setSeries] = useState<ISeries>();
 
+    const titleRef = useRef<HTMLHeadingElement>(null);
+
+    const modalRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
+        modalRef.current?.addEventListener('mouseover', a);
         fetchSeriesContainingCharacter();
         return () => {
             cnt = 1;
+            modalRef.current?.removeEventListener('mouseover', a);
         };
     }, []);
+
+    const a = () => alert('x');
 
     const fetchSeriesContainingCharacter = () => {
         axios.get<ISeries>(
@@ -101,11 +110,16 @@ function CharacterSeries({ id }: { id: string }) {
             });
     };
 
+    const nav = useNavigate();
+
     const [isLoading, setIsLoading] = useState(true);
 
     const [clickedSeries, setClickedSeries] = useState<SeriesResult | null>();
 
-    const preventBubbling = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
+    const toSeriesDetailPage = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        nav('/series/detail/' + clickedSeries?.id);
+    };
 
     const showModal = (id: number) => {
         onAniComplete = false;
@@ -191,13 +205,16 @@ function CharacterSeries({ id }: { id: string }) {
                                         onAnimationComplete={() => onAniComplete = true}
                                         >
                                             <Modal
-                                            onClick={preventBubbling}
+                                            ref={modalRef}
+                                            onClick={toSeriesDetailPage}
                                             layoutId={clickedSeries.id + ''}
                                             >
                                                 <ModelImage
                                                 path={clickedSeries.thumbnail.path + "/standard_fantastic.jpg"}
                                                 >
-                                                    <Title>{ clickedSeries.title }</Title>
+                                                    <Title
+                                                    ref={titleRef}
+                                                    >{ clickedSeries.title }</Title>
                                                 </ModelImage>
                                                 <h5 
                                                 style={{ textAlign: 'center' }}>{ clickedSeries.description ? 

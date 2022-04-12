@@ -116,6 +116,18 @@ export const ModalBackground = styled(motion.div)`
     top: 0;
 `;
 
+export const ModelImage = styled.div<{ path: string }>`
+    width: 100%;
+    height: 78%;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent) ,url(${ props => props.path });
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+    padding: 1px;
+    transition: all 1s;
+    cursor: pointer;
+`;
+
 export const Modal = styled(motion.div)`
     width: 400px;
     height: 520px;
@@ -128,16 +140,12 @@ export const Modal = styled(motion.div)`
     margin: auto auto;
     border-radius: 12px;
     overflow: hidden;
-`;
-
-export const ModelImage = styled.div<{ path: string }>`
-    width: 100%;
-    height: 78%;
-    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent) ,url(${ props => props.path });
-    background-position: center center;
-    background-size: cover;
-    position: relative;
-    padding: 1px;
+    &:hover {
+        ${ModelImage} {
+            filter: grayscale(0.9);
+            transform: scale(1.01);
+        }
+    }
 `;
 
 export const ComicsFrameForm = styled.div<{ path: string }>`
