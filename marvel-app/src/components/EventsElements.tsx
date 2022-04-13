@@ -2,18 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { IEventsResult } from "../types_store/EventsType";
 
-const EventCard = styled.div`
-    width: 420px;
-    height: 130px;
-    margin: 16px 8px;
-    position: relative;
-    border: 0.5px solid transparent;
-    transition: all 1s;
-    &:hover {
-        border: 0.5px solid #F0131E;
-    }
-`;
-
 const EventPic = styled.div<{ path: string }>`
     background-image: url(${ props => props.path });
     background-position: center center;
@@ -23,6 +11,7 @@ const EventPic = styled.div<{ path: string }>`
     top: 0;
     height: 130px;
     width: 130px;
+    filter: grayscale(1.0);
 `;
 
 const EventInfo = styled.div`
@@ -33,6 +22,22 @@ const EventInfo = styled.div`
     padding: 12px;
     h4 {
         margin: 0;
+    }
+`;
+
+const EventCard = styled.div`
+    width: 420px;
+    height: 130px;
+    margin: 16px 8px;
+    position: relative;
+    transition: all 1s;
+    &:hover {
+        ${EventPic} {
+            filter: grayscale(0.1);
+        }
+        ${EventInfo} {
+            color: #F0131E;
+        }
     }
 `;
 
