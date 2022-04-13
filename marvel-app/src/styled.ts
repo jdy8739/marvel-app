@@ -323,3 +323,12 @@ export const EventTitle = styled.div`
     font-size: 65px;
     font-weight: bold;
 `;
+
+export const Dot = styled.div<{ clicked: boolean }>`
+    width: ${ props => !props.clicked ? '10px' : '30px' };
+    height: 10px;
+    background-color: white;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+`;

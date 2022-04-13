@@ -5,13 +5,16 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
 import EventsElements from "../components/EventsElements";
-import { EventSliderTextBox, EventTitle, FullPageSliderPic } from "../styled";
+import { Dot, EventSliderTextBox, EventTitle, FullPageSliderPic } from "../styled";
 import { IEvents, IEventsResult } from "../types_store/EventsType";
 
 const HorizonBar = styled.div`
     background-color: #F0131E;
     width: 100vw;
     height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Window = styled.div<{ height: number }>`
@@ -167,7 +170,17 @@ function Events() {
                     </motion.span>
                 </AnimatePresence>
             </Window>
-            <HorizonBar />
+            <HorizonBar>
+                {
+                    [0, 1, 2, 3, 4, 5, 6].map(index => {
+                        return <Dot 
+                        key={index}
+                        clicked={visible === index}
+                        onClick={() => setVisible(index)}
+                        ></Dot>
+                    })
+                }
+            </HorizonBar>
             <br></br>
             <br></br>
             <EventsElements 
