@@ -34,6 +34,7 @@ const Tab = styled.p<{ clicked?: boolean, istop: boolean }>`
     !props.clicked && props.istop ? 'red' : 
     props.clicked && props.istop ? 'red' : 'white'};
     }
+    font-weight: bold;
 `;
 
 function Navigation() {
@@ -43,7 +44,7 @@ function Navigation() {
     const gradient = useTransform(
         scrollY,
         [0, 100],
-        ['rgba(0, 0, 0, 0.3)', '#F0131E']
+        ['rgba(0, 0, 0, 0.5)', '#F0131E']
     );
 
     const homeMatch = useMatch('/');

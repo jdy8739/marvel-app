@@ -1,9 +1,23 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
+import styled from "styled-components";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
+import EventsElements from "../components/EventsElements";
 import { EventSliderTextBox, EventTitle, FullPageSliderPic } from "../styled";
-import { IEvents } from "../types_store/EventsType";
+import { IEvents, IEventsResult } from "../types_store/EventsType";
+
+const HorizonBar = styled.div`
+    background-color: #F0131E;
+    width: 100vw;
+    height: 50px;
+`;
+
+const Window = styled.div`
+    width: 100vw;
+    height: 100vh;
+`;
 
 const TOTAL = 74;
 
@@ -39,6 +53,8 @@ function Events() {
 
     const { data: events } = useQuery<IEvents>(['events'], fetchEvents);
 
+    const [eventsArr, setEventsArr] = useState<IEventsResult[]>();
+
     const [visible, setVisible] = useState(0);
 
     const [isSliderComplete, setIsSliderComplete] = useState(true);
@@ -55,47 +71,94 @@ function Events() {
         setIsSliderComplete(true);
     };
 
+    useEffect(() => {
+        const timer = setInterval(increaseVisiblePicIndex, 9000);
+        return () => {
+            clearInterval(timer);
+        }
+    }, []);
+
+    useEffect(() => {
+        const tmpEventsArr: IEventsResult[] = [];
+        getRandomSevenNumArr().forEach(number => {
+            if(events?.data.results[number]) {
+                tmpEventsArr.push(events?.data.results[number]);
+            };
+        });
+        setEventsArr(tmpEventsArr);
+    }, [events])
+
+    const getRandomSevenNumArr = () :number[] => {
+        const set: Set<number> = new Set();
+        for(let i=0; set.size !== SLICED_FULL_PAGE_INDEX + 1; i++) {
+            set.add(Math.floor(Math.random() * TOTAL + 1));
+        };
+        return Array.from(set);
+    };
+
     return (
         <>
-            <AnimatePresence
-            onExitComplete={setSlidingCompleteDone}
-            >
-                <motion.span
-                    key={visible}
-                    variants={slidePicVarinat}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    >
-                    {
-                        events?.data.results.slice(0, SLICED_FULL_PAGE_INDEX).map((event, i) => {
-                            return (
-                                <span key={event.id}>
-                                    {
-                                        visible === i ?
-                                        <FullPageSliderPic
-                                        variants={slidePicVarinat}
-                                        path={event.thumbnail.path + '/landscape_incredible.jpg'}
-                                        onClick={increaseVisiblePicIndex}
-                                        >
-                                            <EventSliderTextBox>
-                                                <EventTitle>{ event.title }</EventTitle>
-                                                <h5>{ event.description }</h5>
+            <Helmet>
+                <title>Events</title>
+            </Helmet>
+            <Window>
+                <AnimatePresence
+                onExitComplete={setSlidingCompleteDone}
+                initial={false}
+                >
+                    <motion.span
+                        key={visible}
+                        >
+                        {
+                            eventsArr ? <>
+                                {
+                                    eventsArr.map((event, i) => {
+                                        return (
+                                            <span key={event.id}>
                                                 {
-                                                    event.start ? 
-                                                    <h5>
-                                                        { event.start.split(' ')[0] + " - " + event.end.split(' ')[0] }
-                                                    </h5> : null
+                                                    visible === i ?
+                                                    <FullPageSliderPic
+                                                    variants={slidePicVarinat}
+                                                    path={event.thumbnail.path + '/landscape_incredible.jpg'}
+                                                    onClick={increaseVisiblePicIndex}
+                                                    initial="initial"
+                                                    animate="animate"
+                                                    exit="exit"
+                                                    >
+                                                        <EventSliderTextBox>
+                                                            <EventTitle>{ event.title }</EventTitle>
+                                                            <h5>{ event.description }</h5>
+                                                            {
+                                                                event.start ? 
+                                                                <h5>
+                                                                    { event.start.split(' ')[0] + " - " + event.end.split(' ')[0] }
+                                                                </h5> : null
+                                                            }
+                                                            {
+                                                                event.previous && event.next ?
+                                                                <span>
+                                                                    <h5>PREVIOUS: { event.previous.name }</h5>
+                                                                    <h5>NEXT: { event.next.name }</h5>
+                                                                </span> : null
+                                                            }
+                                                        </EventSliderTextBox>
+                                                    </FullPageSliderPic> : null
                                                 }
-                                            </EventSliderTextBox>
-                                        </FullPageSliderPic> : null
-                                    }
-                                </span>
-                            )
-                        })
-                    }
-                </motion.span>
-            </AnimatePresence>
+                                            </span>
+                                        )
+                                    })
+                                } 
+                            </> : null
+                        }
+                    </motion.span>
+                </AnimatePresence>
+            </Window>
+            <HorizonBar />
+            <br></br>
+            <br></br>
+            <EventsElements 
+            events={events?.data.results}
+            />
         </>
     )
 };
