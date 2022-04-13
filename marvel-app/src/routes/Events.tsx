@@ -14,9 +14,9 @@ const HorizonBar = styled.div`
     height: 50px;
 `;
 
-const Window = styled.div`
+const Window = styled.div<{ height: number }>`
     width: 100vw;
-    height: 100vh;
+    height: ${props => props.height}px;
 `;
 
 const TOTAL = 74;
@@ -26,6 +26,19 @@ const SLICED_FULL_PAGE_INDEX = 7;
 function Events() {
 
     const windowWidth = window.outerWidth;
+
+    const [windowHeight, setWindowHeight] = useState(window.outerHeight);
+    
+    useEffect(() => {
+        window.addEventListener('resize', resizeWindowHeight);
+        return function() {
+            window.removeEventListener('resize', resizeWindowHeight);
+        };
+    }, []);
+
+    const resizeWindowHeight = () => {
+        setWindowHeight(window.outerHeight);
+    };
 
     const slidePicVarinat = {
         initial: {
@@ -101,7 +114,7 @@ function Events() {
             <Helmet>
                 <title>Events</title>
             </Helmet>
-            <Window>
+            <Window height={windowHeight - 220}>
                 <AnimatePresence
                 onExitComplete={setSlidingCompleteDone}
                 initial={false}
@@ -119,11 +132,12 @@ function Events() {
                                                     visible === i ?
                                                     <FullPageSliderPic
                                                     variants={slidePicVarinat}
-                                                    path={event.thumbnail.path + '/landscape_incredible.jpg'}
                                                     onClick={increaseVisiblePicIndex}
                                                     initial="initial"
                                                     animate="animate"
                                                     exit="exit"
+                                                    height={windowHeight - 220}
+                                                    path={event.thumbnail.path + '/landscape_incredible.jpg'}
                                                     >
                                                         <EventSliderTextBox>
                                                             <EventTitle>{ event.title }</EventTitle>

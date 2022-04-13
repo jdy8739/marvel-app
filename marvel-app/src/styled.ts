@@ -299,15 +299,15 @@ export const CharTitle = styled.h2`
     text-align: center;
 `;
 
-export const FullPageSliderPic = styled(motion.div)<{ path: string }>`
+export const FullPageSliderPic = styled(motion.div)<{ path: string, height: number }>`
     background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent), 
     url(${ props => props.path });
     background-position: center center;
     background-size: cover;
     width: 100vw;
-    height: 100vh;
-    max-width: 1720px;
-    max-height: 850px;
+    height: ${ props => props.height }px;
+    max-width: 2200px;
+    max-height: 1400px;
     position: absolute;
     display: flex;
     align-items: center;

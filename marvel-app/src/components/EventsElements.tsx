@@ -11,15 +11,19 @@ const EventPic = styled.div<{ path: string }>`
     top: 0;
     height: 130px;
     width: 130px;
+    transition: all 1s;
     filter: grayscale(1.0);
 `;
 
 const EventInfo = styled.div`
     position: absolute;
+    height: 85%;
+    width: 262px;
     right: 0;
     top: 0;
     text-align: right;
     padding: 12px;
+    transition: all 0.3s;
     h4 {
         margin: 0;
     }
@@ -34,9 +38,10 @@ const EventCard = styled.div`
     &:hover {
         ${EventPic} {
             filter: grayscale(0.1);
+            transform: scale(1.02);
         }
         ${EventInfo} {
-            color: #F0131E;
+            background-color: #F0131E;
         }
     }
 `;
