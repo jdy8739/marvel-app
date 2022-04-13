@@ -281,9 +281,9 @@ function Comics() {
                 onClick={fetchLast}
                 >last</Btn>
             </div>
-            {
-                !isDateModalShown ? null :
-                <AnimatePresence>
+            <AnimatePresence>  
+                { !isDateModalShown ? null :
+                
                     <ModalBackground
                     onClick={hideDateModal}
                     variants={modalVariant}
@@ -312,9 +312,8 @@ function Comics() {
                                 <Btn>search</Btn>
                             </DateForm>
                         </DateChooseModal>
-                    </ModalBackground>
-                </AnimatePresence> 
-            }
+                </ModalBackground> }
+            </AnimatePresence> 
         </>
     )
 };

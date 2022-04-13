@@ -80,7 +80,7 @@ export interface Previous {
     name: string;
 }
 
-export interface Result {
+export interface IEventsResult {
     id: number;
     title: string;
     description: string;
@@ -104,7 +104,7 @@ export interface Data {
     limit: number;
     total: number;
     count: number;
-    results: Result[];
+    results: IEventsResult[];
 }
 
 export interface IEvents {

@@ -298,3 +298,28 @@ export const CharTitle = styled.h2`
     margin: auto;
     text-align: center;
 `;
+
+export const FullPageSliderPic = styled(motion.div)<{ path: string }>`
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent), 
+    url(${ props => props.path });
+    background-position: center center;
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    max-width: 1720px;
+    max-height: 850px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    padding: 37px;
+    box-sizing: border-box;
+`;
+
+export const EventSliderTextBox = styled.div`
+    width: 65%;
+`;
+
+export const EventTitle = styled.div`
+    font-size: 65px;
+    font-weight: bold;
+`;

@@ -47,7 +47,7 @@ function ComicsDetail() {
     const nav = useNavigate();
 
     const backToComicsPage = function() {
-        if(title || formerDate || latterDate) {
+        if(title || formerDate || latterDate || page) {
             nav(`/comics?${title ? `&title=${title}` : ''}${
                 formerDate || latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
                 page ? `&page=${page}` : ''

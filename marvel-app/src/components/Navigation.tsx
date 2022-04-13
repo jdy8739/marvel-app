@@ -43,7 +43,7 @@ function Navigation() {
     const gradient = useTransform(
         scrollY,
         [0, 100],
-        ['transparent', '#F0131E']
+        ['rgba(0, 0, 0, 0.3)', '#F0131E']
     );
 
     const homeMatch = useMatch('/');
@@ -53,6 +53,8 @@ function Navigation() {
     const comicsMatch = useMatch('/comics/*');
 
     const seriesMatch = useMatch('/series/*');
+
+    const eventsMatch = useMatch('/events/*');
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
@@ -97,6 +99,12 @@ function Navigation() {
                         istop={isTop}
                         clicked={Boolean(seriesMatch)}
                         >Series</Tab>
+                    </Link>
+                    <Link to={"/events"}>
+                        <Tab
+                        istop={isTop}
+                        clicked={Boolean(eventsMatch)}
+                        >Events</Tab>
                     </Link>
                     <p style={{ flexGrow: 1 }}></p>
                     <Link to={"/#"}>
