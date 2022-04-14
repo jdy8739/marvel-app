@@ -6,14 +6,29 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_CHAR, hash } from "../api";
-import { charPageAtom, charStartsWithAtom } from "../atoms";
+import { charPageAtom, charStartsWithAtom, charNameAtom } from "../atoms";
 import CharacterCard from "../components/CharacterCard";
 import { Highlighted, Container, Btn, Input, Blank, BtnInARow } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
+const CharIcon = styled.span`
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    &:hover {
+        color: #F0131E;
+    }
+`;
+
 const LIMIT = 30;
 
 const BASE_STR = '1';
+
+const charArr: string[] = [];
+
+for(let i=65; i<91; i++) {
+    charArr.push(String.fromCharCode(i))
+};
 
 function Characters() {
 
@@ -25,7 +40,11 @@ function Characters() {
 
     let nowPage = paramsSearcher.get('page') || BASE_STR;
 
+    let name = paramsSearcher.get('name');
+
     const [charStartsWith, setCharStartsWith] = useRecoilState(charStartsWithAtom);
+
+    const [charName, setCharName] = useRecoilState(charNameAtom);
 
     const setCharPage = useSetRecoilState(charPageAtom);
 
@@ -34,13 +53,14 @@ function Characters() {
     const fetchCharacters = async () => {
         const res = await fetch(`${BASE_URL}${GET_CHAR}&apikey=${apikey}&hash=${hash}&offset=${
             (+nowPage - 1) * LIMIT}&limit=${LIMIT}${
-            startsWith ? `&nameStartsWith=${startsWith}` : ''
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}${
+            name ? `&name=${name}` : ''
             }`);
         return await res.json();
     };
 
     const { data: chars } = useQuery<ICharacter>(
-        ['characters', nowPage, startsWith], fetchCharacters);
+        ['characters', nowPage, startsWith, name], fetchCharacters);
 
     let TOTAL = 0;
     if(chars?.data) {
@@ -49,38 +69,63 @@ function Characters() {
 
     const showNext = () => {
         nav(`/characters?page=${+nowPage + 1}${
-            startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}${
+            name ? `&name=${name}` : ''
+            }`);
     };
 
     const showPrevious = () => {
         nav(`/characters?page=${+nowPage - 1}${
-            startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}${
+            name ? `&name=${name}` : ''
+            }`);
     };
 
     const showFirst = () => {
         nav(`/characters?page=1${
-            startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}${
+            name ? `&name=${name}` : ''
+            }`);
     };
 
     const showLast = () => {
         nav(`/characters?page=${(Math.floor(TOTAL / LIMIT) + 1)}${
-            startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}${
+            name ? `&name=${name}` : ''
+            }`);
     };
 
     const showCharsOfIndex = (idx: number) => {
         nav(`/characters?page=${idx}${
-            startsWith ? `&nameStartsWith=${startsWith}` : ''}`);
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}${
+            name ? `&name=${name}` : ''
+            }`);
     };
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCharStartsWith(e.currentTarget.value);
+        setCharName(e.currentTarget.value);
     };
 
-    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSearchNameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setCharStartsWith(startsWithRef.current?.value || '');
-        nav(`/characters?nameStartsWith=${charStartsWith}`);
-    };  
+        const searchedChar = 
+            nameSearchRef.current?.value || '';
+
+        setCharName(searchedChar);
+        setCharStartsWith('');
+
+        nav(`/characters?name=${searchedChar}`);
+    };
+
+    const handleStartsWithClick = (e: React.MouseEvent<HTMLSpanElement>) => {
+        const searchedCharName = 
+            e.currentTarget.textContent || '';
+
+        setCharStartsWith(searchedCharName);
+        setCharName('');
+
+        nav(`/characters?nameStartsWith=${searchedCharName}`);
+    };
 
     const resetSearch = () => {
         nav('/characters');
@@ -88,7 +133,7 @@ function Characters() {
 
     const nav = useNavigate();
 
-    const startsWithRef = useRef<HTMLInputElement>(null);
+    const nameSearchRef = useRef<HTMLInputElement>(null);
 
     return (
         <>  
@@ -97,28 +142,34 @@ function Characters() {
             </Helmet>
             <Blank />
             {
-                !startsWith ? null :
+                !startsWith && !name ? null :
                 <h1 style={{
                     textAlign: 'center'
-                }}>Results for "<Highlighted>{ startsWith }</Highlighted>"</h1>
+                }}>Results for "<Highlighted>{ startsWith || name }</Highlighted>"</h1>
             }
             <Container>
+                <BtnInARow>
+                    { charArr.map(char => 
+                    <CharIcon
+                    onClick={handleStartsWithClick}
+                    key={char}>{ char }</CharIcon>) }
+                </BtnInARow>
                 <BtnInARow>
                     <form
                     style={{
                         display: 'inline-block'
                     }}
-                    onSubmit={handleSearchSubmit}
+                    onSubmit={handleSearchNameSubmit}
                     >
                         <Input 
                         onChange={handleSearchChange} 
-                        value={charStartsWith}
+                        value={charName}
                         required
                         style={{
-                            width: '200px'
+                            width: '170px'
                         }}
-                        placeholder="search the characters start with."
-                        ref={startsWithRef}
+                        placeholder="search the character name."
+                        ref={nameSearchRef}
                         />
                         &ensp;
                         <Btn>search</Btn>

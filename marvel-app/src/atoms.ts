@@ -5,6 +5,11 @@ export const charStartsWithAtom = atom<string>({
     default: ''
 });
 
+export const charNameAtom = atom<string>({
+    key: 'chartNameAtom',
+    default: ''
+});
+
 export const charPageAtom = atom<number>({
     key: 'charPageAtom',
     default: 1

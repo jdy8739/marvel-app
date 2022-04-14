@@ -6,7 +6,7 @@ import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { charPageAtom, charStartsWithAtom } from "../atoms";
+import { charNameAtom, charPageAtom, charStartsWithAtom } from "../atoms";
 import CharacterComics from "../components/CharacterComics";
 import CharacterEvents from "../components/CharacterEvents";
 import CharacterSeries from "../components/CharacterSeries";
@@ -81,12 +81,15 @@ function CharactersDetail() {
 
     const startsWith = useRecoilValue(charStartsWithAtom);
 
+    const name = useRecoilValue(charNameAtom);
+
     const page = useRecoilValue(charPageAtom);
 
     const backToCharPage = () => {
         nav(`/characters?${page ? `&page=${page}` : ''}${
-            startsWith ? `&nameStartsWith=${startsWith}` : ''}
-        `);
+            startsWith ? `&nameStartsWith=${startsWith}` : ''}${
+            name ? `&name=${name}` : ''
+            }`);
     };
 
     return (
