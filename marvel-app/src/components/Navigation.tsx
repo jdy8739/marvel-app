@@ -111,7 +111,7 @@ function Navigation() {
                     <Link to={"/#"}>
                         <Tab
                         istop={isTop}
-                        >portfilio</Tab>
+                        >Portfilio</Tab>
                     </Link>
                 </InnerNav>
             </Navi>

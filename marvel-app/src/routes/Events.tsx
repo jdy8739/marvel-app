@@ -80,18 +80,21 @@ function Events() {
             setIsSliderComplete(false);
             setVisible(
                 index => index + 1 === SLICED_FULL_PAGE_INDEX ? 0 : index += 1);
+            clearInterval(timer);
         };
     };
+
+    const timer = 
+            setInterval(increaseVisiblePicIndex, 9000);
 
     const setSlidingCompleteDone = () => {
         setIsSliderComplete(true);
     };
 
     useEffect(() => {
-        const timer = setInterval(increaseVisiblePicIndex, 9000);
         return () => {
             clearInterval(timer);
-        }
+        };
     }, []);
 
     useEffect(() => {
