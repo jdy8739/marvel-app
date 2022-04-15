@@ -33,7 +33,7 @@ const Wrapper = styled.div`
     margin: auto;
 `;
 
-const ShowMoreBtn = styled(Btn)`
+export const ShowMoreBtn = styled(Btn)`
     width: 130px;
     display: block;
     margin: auto;

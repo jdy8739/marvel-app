@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useMatch } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
+import EventCharacters from "../components/EventsCharacters";
 import { EventTitle, Tab, Tabs } from "../styled";
 import { IEvents } from "../types_store/EventsType";
 
@@ -31,14 +32,22 @@ function EventsDetail() {
 
     const eventMatch = useMatch('/events/detail/:id');
 
+    const eventCharMatch = useMatch('/events/detail/:id/characters');
+
+    const match = eventMatch || eventCharMatch;
+
     const fetchEvent = async () => {
         const res = await fetch(
-            `${BASE_URL}${GET_EVENTS}/${eventMatch?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`);
+            `${BASE_URL}${GET_EVENTS}/${match?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`);
         return await res.json();
     };
 
-    const { data: event, isLoading } = useQuery<IEvents>(
+    const { data, isLoading } = useQuery<IEvents>(
         ['event', eventMatch?.params.id], fetchEvent);
+
+    const event = data?.data.results[0];
+
+    const nav = useNavigate();
 
     return (
         <>
@@ -46,42 +55,47 @@ function EventsDetail() {
                 isLoading ? <p>Loading. Please wait.</p> :
                 <>
                     <FullPagePic
-                    path={event?.data.results[0].thumbnail.path + '/landscape_incredible.jpg'}
+                    path={event?.thumbnail.path + '/landscape_incredible.jpg'}
                     >
-                        <EventTitle>{ event?.data.results[0].title }</EventTitle>
+                        <EventTitle>{ event?.title }</EventTitle>
                         <h5 
                         style={{ width: '70vw' }}
-                        >{ event?.data.results[0].description }</h5>
+                        >{ event?.description }</h5>
                         <Desc>
                             { 
-                                event?.data.results[0].start ? 
+                                event?.start ? 
                                 <>
                                     {
-                                        event?.data.results[0].start.split(' ')[0] + " - " + 
-                                        event?.data.results[0].end.split(' ')[0]
+                                        event?.start.split(' ')[0] + " - " + 
+                                        event?.end.split(' ')[0]
                                     }
                                 </> : null
                             }   
                         </Desc>
                         {
-                            event?.data.results[0].previous ?
-                            <Desc>PREVIOUS: { event?.data.results[0].previous.name }</Desc> : null
+                            event?.previous ?
+                            <Desc>PREVIOUS: { event?.previous.name }</Desc> : null
                         }
                         {
-                            event?.data.results[0].next ?
-                            <Desc>PREVIOUS: { event?.data.results[0].next.name }</Desc> : null
+                            event?.next ?
+                            <Desc>NEXT: { event?.next.name }</Desc> : null
                         }
                         <Tabs 
                         style={{ 
                             justifyContent: 'left',
                         }}
                         >
-                            <Tab>characters</Tab>
+                            <Tab
+                            onClick={() => nav(`/events/detail/${event?.id ?? ''}/characters`)}
+                            >characters</Tab>
                             <Tab>comics</Tab>
                             <Tab>series</Tab>
                         </Tabs>
                     </FullPagePic>
                     <div style={{ height: '150vh', width: '100vw' }}>
+                        {
+                            eventCharMatch ? <EventCharacters id={match?.params.id || ''}/> : null
+                        }
                     </div>
                 </>
             }

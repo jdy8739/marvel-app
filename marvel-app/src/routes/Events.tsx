@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
 import EventsElements from "../components/EventsElements";
@@ -20,6 +21,18 @@ const HorizonBar = styled.div`
 const Window = styled.div<{ height: number }>`
     width: 100vw;
     height: ${props => props.height}px;
+`;
+
+const SeeMoreBtn = styled.button`
+    background-color: #F0131E;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    &:hover {
+        background-color: transparent;
+    }
 `;
 
 const TOTAL = 74;
@@ -113,6 +126,8 @@ function Events() {
         return Array.from(set);
     };
 
+    const nav = useNavigate();
+
     return (
         <>
             <Helmet>
@@ -159,6 +174,9 @@ function Events() {
                                                                     <h5>NEXT: { event.next.name }</h5>
                                                                 </span> : null
                                                             }
+                                                            <SeeMoreBtn 
+                                                            onClick={() => nav('/events/detail/' + event.id)}
+                                                            >see more</SeeMoreBtn>
                                                         </EventSliderTextBox>
                                                     </FullPageSliderPic> : null
                                                 }

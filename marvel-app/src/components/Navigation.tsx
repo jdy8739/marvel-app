@@ -19,8 +19,8 @@ const Navi = styled(motion.div)`
 `;
 
 const InnerNav = styled.div`
-    width: 80%;
-    max-width: 1450px;
+    width: 85%;
+    max-width: 1950px;
     display: flex;
 `;
 
