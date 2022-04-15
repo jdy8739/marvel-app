@@ -7,6 +7,7 @@ import CharactersDetail from './routes/CharactersDetail';
 import Comics from './routes/Comics';
 import ComicsDetail from './routes/ComicsDetail';
 import Events from './routes/Events';
+import EventsDetail from './routes/EventsDetail';
 import Home from './routes/Home';
 import Series from './routes/Series';
 import SeriesDetail from './routes/SeriesDetail';
@@ -24,6 +25,7 @@ function App() {
               <Route path='/comics/*' element={ <Comics /> } />
               <Route path='/series/detail/:id/*' element={ <SeriesDetail /> } />
               <Route path='/series/*' element={ <Series /> } />
+              <Route path='/events/detail/:id/*' element={ <EventsDetail/> } />
               <Route path='/events/*' element={ <Events /> } />
               <Route path="/*" element={ <Home /> } />
             </Routes>

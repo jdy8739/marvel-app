@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IEventsResult } from "../types_store/EventsType";
 
@@ -47,6 +48,9 @@ const EventCard = styled.div`
 `;
 
 function EventsElements({ events }: { events?: IEventsResult[] }) {
+
+    const nav = useNavigate();
+
     return (
         <>
             {
@@ -59,7 +63,10 @@ function EventsElements({ events }: { events?: IEventsResult[] }) {
                     {
                         events.map(event => {
                             return (
-                                <EventCard key={event.id}>
+                                <EventCard 
+                                key={event.id}
+                                onClick={() => nav('/events/detail/' + event.id)}
+                                >
                                     <EventPic 
                                     path={event.thumbnail.path + '/standard_medium.jpg'} 
                                     />
