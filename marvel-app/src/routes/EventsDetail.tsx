@@ -4,6 +4,7 @@ import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
 import EventCharacters from "../components/EventsCharacters";
+import EventComics from "../components/EventsComics";
 import { EventTitle, Tab, Tabs } from "../styled";
 import { IEvents } from "../types_store/EventsType";
 
@@ -34,7 +35,9 @@ function EventsDetail() {
 
     const eventCharMatch = useMatch('/events/detail/:id/characters');
 
-    const match = eventMatch || eventCharMatch;
+    const eventComicsMatch = useMatch('/events/detail/:id/comics');
+
+    const match = eventMatch || eventCharMatch || eventComicsMatch;
 
     const fetchEvent = async () => {
         const res = await fetch(
@@ -87,16 +90,21 @@ function EventsDetail() {
                         >
                             <Tab
                             onClick={() => nav(`/events/detail/${event?.id ?? ''}/characters`)}
+                            clicked={Boolean(eventCharMatch)}
                             >characters</Tab>
-                            <Tab>comics</Tab>
+                            <Tab
+                            onClick={() => nav(`/events/detail/${event?.id ?? ''}/comics`)}
+                            clicked={Boolean(eventComicsMatch)}
+                            >comics</Tab>
                             <Tab>series</Tab>
                         </Tabs>
-                    </FullPagePic>
-                    <div style={{ height: '150vh', width: '100vw' }}>
-                        {
-                            eventCharMatch ? <EventCharacters id={match?.params.id || ''}/> : null
-                        }
-                    </div>
+                    </FullPagePic>  
+                    {
+                        eventCharMatch ? <EventCharacters id={match?.params.id || ''}/> : null
+                    }
+                    {
+                        eventComicsMatch ? <EventComics id={match?.params.id || ''}/> : null
+                    }
                 </>
             }
         </>

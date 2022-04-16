@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
-import { ICharacter } from "../types_store/CharatersType";
+import { ICharacter, ICharacterResult } from "../types_store/CharatersType";
 import { AnimatePresence, motion } from "framer-motion";
-import { Container, RoundPortrait, RoundPortraitName } from "../styled";
+import { CenterWord, CharTitle, Container, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../styled";
 import { ShowMoreBtn } from "./CharacterSeries";
+import { useNavigate } from "react-router-dom";
 
 const LIMIT = 20;
 
@@ -23,7 +24,7 @@ function EventCharacters({ id }: { id: string }) {
         };
         axios.get<ICharacter>(
             `${BASE_URL}${GET_EVENTS}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash
-            }&offset=${offsetCnt * LIMIT}&limit=${offsetCnt * LIMIT + LIMIT}`)
+            }&offset=${offsetCnt * LIMIT}`)
             .then(res => {
                 setChars(chars => {
                     if(!chars) return res.data;
@@ -43,6 +44,18 @@ function EventCharacters({ id }: { id: string }) {
         else return false;
     };
 
+    const [clickedChar, setClickedChar] = useState<ICharacterResult | null>();
+
+    const showModal = (id: number) => {
+        setClickedChar(() => {
+            return chars?.data.results.find(char => char.id === id);
+        });
+    };
+
+    const hideModal = () => setClickedChar(null);
+
+    const nav = useNavigate();
+
     return (
         <>  
             <Container style={{
@@ -57,6 +70,7 @@ function EventCharacters({ id }: { id: string }) {
                             >
                                 <RoundPortrait
                                 path={char.thumbnail.path + "/standard_xlarge.jpg"}
+                                onClick={() => showModal(char.id)}
                                 >
                                     <RoundPortraitName>{ char.name.split('(', 2)[0] }</RoundPortraitName>
                                 </RoundPortrait>
@@ -66,6 +80,23 @@ function EventCharacters({ id }: { id: string }) {
                     })
                 }
             </Container>
+            <AnimatePresence>
+                {
+                    !clickedChar ? null :
+                    <ModalBackground
+                    onClick={hideModal}
+                    >
+                        <RoundModal 
+                        path={clickedChar.thumbnail.path + '/standard_fantastic.jpg'}
+                        layoutId={clickedChar.id + ''}
+                        onClick={() => nav('/characters/detail/' + clickedChar.id)}
+                        >   
+                            <CenterWord>click to see more</CenterWord>
+                            <CharTitle>{ clickedChar.name }</CharTitle>
+                        </RoundModal>
+                    </ModalBackground>
+                }
+            </AnimatePresence>
             <br></br>
             <br></br>
             <ShowMoreBtn onClick={plusOffsetCnt}>show more</ShowMoreBtn>
