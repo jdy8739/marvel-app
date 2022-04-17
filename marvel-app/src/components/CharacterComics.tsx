@@ -42,6 +42,8 @@ export const RightArrow = styled.img`
     }
 `;
 
+let offsetCnt = 0;
+
 function CharacterComics({ id }: { id: string }) {
 
     const [comics, setComics] = useState<IComics>();
@@ -50,13 +52,23 @@ function CharacterComics({ id }: { id: string }) {
 
     const fetchComicsContainingCharacter = () => {
         axios.get(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12`
-            )
+            `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12
+            &offset=${offsetCnt * 12}`)
             .then(res => {
-                setComics(res.data);
+                setComics(comics => {
+                    if(!comics) return res.data;
+                    else {
+                        const copied = {...comics};
+                        copied.data.results.splice(
+                            copied.data.results.length, 0, ...res.data.data.results);
+                        return copied;
+                    };
+                });
                 setIsLoading(false);
             });
     };
+
+    const total = comics?.data.total || 0;
 
     useEffect(() => {
         fetchComicsContainingCharacter();
@@ -78,11 +90,26 @@ function CharacterComics({ id }: { id: string }) {
         setIsBack(false);
         setVisible(visible => {
             if(comics?.data.results) {
-                return visible + 1 === comics.data.results.length ? 0 : visible + 1;  
+                const nowTotal = comics.data.results.length;
+                if(visible + 1 === nowTotal && nowTotal < total) {
+                    const confirm = 
+                        window.confirm('Data has reached limit. Want fetch more?');
+                    if(confirm) {
+                        offsetCnt ++;
+                        fetchComicsContainingCharacter();
+                        return visible + 1;
+                    };
+                };
+                return visible + 1 === nowTotal ? 0 : visible + 1;  
             } else return 0;
-        }
-    )
+        });
     };
+
+    useEffect(() => {
+        return () => {
+            offsetCnt = 0;
+        };
+    }, []);
 
     const [isBack, setIsBack] = useState(false);
 
@@ -134,12 +161,11 @@ function CharacterComics({ id }: { id: string }) {
         };
 
         setIsLoading(true);
-        axios.get(
+        axios.get<IComics>(
             `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12&dateRange=${dateFrom},${dateTo}`
             )
             .then(res => {
                 setComics(res.data);
-                console.log(res.data);
                 setIsLoading(false);
             });
     };
