@@ -19,7 +19,7 @@ function EventCharacters({ id }: { id: string }) {
 
     useEffect(() => {
         if(isCntBeyondTotal()) {
-            alert('No to show more!');
+            alert('No more to show!');
             return;
         };
         axios.get<ICharacter>(
