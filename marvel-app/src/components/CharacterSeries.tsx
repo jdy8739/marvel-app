@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
 import { Btn, Modal, ModalBackground, ModelImage } from "../styled";
-import { ISeries, SeriesResult } from "../types_store/SeriesType";
+import { ISeries, ISeriesResult } from "../types_store/SeriesType";
 
 export const SeriesElem = styled(motion.div)<{ path?: string }>`
     background-image: url(${ props => props.path });
@@ -86,7 +86,7 @@ function CharacterSeries({ id }: { id: string }) {
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const [clickedSeries, setClickedSeries] = useState<SeriesResult | null>();
+    const [clickedSeries, setClickedSeries] = useState<ISeriesResult | null>();
 
     const [series, setSeries] = useState<ISeries>();
 
