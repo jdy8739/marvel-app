@@ -55,7 +55,7 @@ function CharacterComics({ id }: { id: string }) {
     const fetchComicsContainingCharacter = () => {
         axios.get(
             `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=${LIMIT}
-            &offset=${offsetCnt * 12}`)
+            &offset=${offsetCnt * LIMIT}`)
             .then(res => {
                 setComics(comics => {
                     if(!comics) return res.data;

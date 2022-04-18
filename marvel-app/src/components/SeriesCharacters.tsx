@@ -5,25 +5,39 @@ import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
 import { Blank, CenterWord, CharTitle, Container, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../styled";
 import { ICharacter, ICharacterResult } from "../types_store/CharatersType";
+import { ShowMoreBtn } from "./CharacterSeries";
 
 type TypeCharResult = ICharacterResult | undefined;
+
+const LIMIT = 12;
 
 function SeriesCharacters({ id }: { id: string }) {
 
     const [chars, setChars] = useState<ICharacter>();
 
+    const [offsetCnt, setOffsetCnt] = useState(0);
+
     const fetchChars = () => {
-        axios.get<ICharacter>
-        (`${BASE_URL}${GET_SERIES}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash}`)
+        axios.get<ICharacter>(
+            `${BASE_URL}${GET_SERIES}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash
+            }&offset=${offsetCnt * LIMIT}&limit=${LIMIT}`)
             .then(res => {
                 console.log(res.data);
-                setChars(res.data);
+                setChars(chars => {
+                    if(!chars) return res.data;
+                    else {
+                        const copied = {...chars};
+                        copied.data.results = 
+                            copied.data.results.concat(res.data.data.results);
+                        return copied;
+                    };
+                });
             });
     };
 
     useEffect(() => {
         fetchChars();
-    }, []);
+    }, [offsetCnt]);
 
     const [clickedChar, setClickedChar] = useState<TypeCharResult>(undefined);
 
@@ -40,6 +54,20 @@ function SeriesCharacters({ id }: { id: string }) {
     const toCharDetailPage = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         nav('/characters/detail/' + clickedChar?.id);
+    };
+
+    const plusOffsetCnt = () => {
+        if(checkMoreToShow()) return;
+        setOffsetCnt(offsetCnt => offsetCnt + 1);
+    }
+
+    const checkMoreToShow = () :boolean => {
+        const total = chars?.data.total || 0;
+        if(total / LIMIT < offsetCnt + 1) {
+            alert('No more to show!');
+            return true;
+        };
+        return false;
     };
 
     const nav = useNavigate();
@@ -87,6 +115,9 @@ function SeriesCharacters({ id }: { id: string }) {
                     </ModalBackground>
                 }
             </AnimatePresence>
+            <br></br>
+            <br></br>
+            <ShowMoreBtn onClick={plusOffsetCnt}>show more</ShowMoreBtn>
         </>
     )
 };
