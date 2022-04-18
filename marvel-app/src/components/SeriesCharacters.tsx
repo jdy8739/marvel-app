@@ -16,6 +16,7 @@ function SeriesCharacters({ id }: { id: string }) {
         axios.get<ICharacter>
         (`${BASE_URL}${GET_SERIES}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash}`)
             .then(res => {
+                console.log(res.data);
                 setChars(res.data);
             });
     };

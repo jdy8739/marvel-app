@@ -44,6 +44,8 @@ export const RightArrow = styled.img`
 
 let offsetCnt = 0;
 
+const LIMIT =  12;
+
 function CharacterComics({ id }: { id: string }) {
 
     const [comics, setComics] = useState<IComics>();
@@ -52,7 +54,7 @@ function CharacterComics({ id }: { id: string }) {
 
     const fetchComicsContainingCharacter = () => {
         axios.get(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12
+            `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=${LIMIT}
             &offset=${offsetCnt * 12}`)
             .then(res => {
                 setComics(comics => {
