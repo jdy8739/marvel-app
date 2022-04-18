@@ -34,11 +34,11 @@ function ComicsEvents({ id }: { id: string }) {
                                     >
 
                                     </EventCard>
-                                    <p style={{
+                                    <div style={{
                                         textAlign: 'center',
-                                    }}>title: &ensp;
-                                        <Highlighted>{ event.title }</Highlighted>
-                                    </p>
+                                    }}>
+                                        <h4>{ event.title }</h4>
+                                    </div>
                                 </div>
                             )
                         })

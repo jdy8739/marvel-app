@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Btn, ComicsCard, Input } from "../styled";
+import { Btn, ComicsCard, Highlighted, Input } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
 export const Wrapper = styled.div`
@@ -207,9 +207,15 @@ function CharacterComics({ id }: { id: string }) {
                                                     onClick={() => nav('/comics/detail/' + comic.id)}
                                                     >
                                                     </ComicsCard>
-                                                    <h4 style={{
+                                                    <div style={{
                                                         textAlign: 'center'
-                                                    }}>{ comic.title }</h4>
+                                                    }}>
+                                                        <h4>{ comic.title }</h4>
+                                                        <span>
+                                                            <Highlighted>{(visible + 1)}</Highlighted>
+                                                            { " / " + comics?.data.results.length }
+                                                        </span>
+                                                    </div>
                                                 </span>
                                                 : null
                                             )

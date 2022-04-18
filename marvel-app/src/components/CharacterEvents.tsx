@@ -17,18 +17,37 @@ export const EventCard = styled(motion.div)<{ path: string }>`
     margin: auto;
 `;
 
+let offsetCnt = 0;
+
 function CharacterEvents({ id }: { id: string }) {
 
     const [events, setEvents] = useState<IEvents>();
 
     const fetchEventsContainingCharacter = () => {
         axios.get(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/events?ts=1&apikey=${apikey}&hash=${hash}&limit=12`
+            `${BASE_URL}${GET_ON_CHAR}/${ id }/events?ts=1&apikey=${apikey}&hash=${hash}&limit=12
+            &offset=${offsetCnt * 12}`
             )
             .then(res => {
-                setEvents(res.data);
+                setEvents(event => {
+                    if(!event) return res.data;
+                    else {
+                        const copied = {...event};
+                        copied.data.results.splice(
+                            copied.data.results.length, 0, ...res.data.data.results);
+                        return copied;
+                    };
+                });
             });
     };
+
+    const total = events?.data.total || 0;
+
+    useEffect(() => {
+        return () => {
+            offsetCnt = 0;
+        };
+    });
 
     useEffect(() => {
         fetchEventsContainingCharacter();
@@ -50,7 +69,17 @@ function CharacterEvents({ id }: { id: string }) {
         setIsBack(false);
         setVisible(visible => {
             if(events?.data.results) {
-                return visible + 1 === events.data.results.length ? 0 : visible + 1;  
+                const nowTotal = events.data.results.length;
+                if(visible + 1 === nowTotal && nowTotal < total) {
+                    const confirm = 
+                        window.confirm('Data has reached limit. Want fetch more?');
+                    if(confirm) {
+                        offsetCnt ++;
+                        fetchEventsContainingCharacter();
+                        return visible + 1;
+                    };
+                };
+                return visible + 1 === nowTotal ? 0 : visible + 1;  
             } else return 0;
         }
     )
@@ -117,11 +146,15 @@ function CharacterEvents({ id }: { id: string }) {
                                                 custom={isBack}
                                                 key={event.id}
                                                 /> 
-                                                <p style={{
+                                                <div style={{
                                                     textAlign: 'center',
-                                                }}>title: &ensp;
-                                                    <Highlighted>{ event.title }</Highlighted>
-                                                </p>
+                                                }}>
+                                                    <h4>{ event.title }</h4>
+                                                    <span>
+                                                        <Highlighted>{(visible + 1)}</Highlighted>
+                                                        { " / " + events?.data.results.length }
+                                                    </span>
+                                                </div>
                                             </>
                                             : null
                                         }
