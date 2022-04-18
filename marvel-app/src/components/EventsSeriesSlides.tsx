@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ISeriesResult } from "../types_store/SeriesType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
@@ -10,7 +10,7 @@ const LeftArrowBox = styled.div`
     height: 100%;
     position: absolute;
     left: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(255, 255, 255, 0.12);
     display: flex;
     align-items: center;
 `;
@@ -20,7 +20,7 @@ const RightArrowBox = styled.div`
     height: 100%;
     position: absolute;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(255, 255, 255, 0.12);
     display: flex;
     align-items: center;
 `;
@@ -40,6 +40,8 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
         <Wrapper style={{ 
             position: 'relative',
             maxWidth: '1950px',
+            width: '100%',
+            marginBottom: '30px'
         }}
         >
             <AnimatePresence>
@@ -88,4 +90,4 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
     )
 };
 
-export default EventsSeriesSlides;
+export default React.memo(EventsSeriesSlides);

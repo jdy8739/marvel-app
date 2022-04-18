@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
+import { Blank } from "../styled";
 import { ISeries } from "../types_store/SeriesType";
 import { ShowMoreBtn } from "./CharacterSeries";
 import EventsSeriesSlides from "./EventsSeriesSlides";
@@ -36,12 +37,23 @@ function EventSeries({ id }: { id: string }) {
             });
     };
 
+    const TOTAL = series?.data.total || 0;
+
     useEffect(() => {
         fetchEventSeries();
     }, [offsetCnt]);
 
     const plusOffsetCnt = () => {
+        if(!checkMoreSeries()) return;
         setOffsetCnt(offsetCnt => offsetCnt + 1);
+    };
+
+    const checkMoreSeries = () :boolean => {
+        if(Math.ceil(TOTAL / LIMIT) < offsetCnt + 2) {
+            alert('No more to show!');
+            return false;
+        }
+        return true;
     };
 
     return (
@@ -51,7 +63,7 @@ function EventSeries({ id }: { id: string }) {
                     return (
                         <SeriesFlexBox key={i}>
                             {
-                                series.data.results.length / LIMIT < i ? null :
+                                series.data.results.length / LIMIT <= i ? null :
                                 <EventsSeriesSlides
                                 slidesElements={series?.data.results.slice(i * LIMIT, i * LIMIT + LIMIT)}
                                 />
