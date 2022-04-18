@@ -33,6 +33,15 @@ const SeriesPortrait = styled.div<{ path: string }>`
     }
 `;
 
+const CreatorWrapper = styled.div`
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    justify-content: center;
+    margin-top: 32px;
+`;
+
 const SeriesElemName = styled.h5`
     margin: 8px;
     display: inline-block;
@@ -68,13 +77,15 @@ function SeriesDetail() {
 
     const fetchSeriesDetail = async () => {
         const res = 
-        await fetch(`${BASE_URL}${GET_SERIES}/${match?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`);
-
+        await fetch(
+            `${BASE_URL}${GET_SERIES}/${match?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`);
         return await res.json();
     };
 
-    const { data: series } = useQuery<ISeries>(
+    const { data } = useQuery<ISeries>(
         ['seriesElem', seriesMatch?.params.id], fetchSeriesDetail);
+
+    const series = data?.data.results[0];
 
     const page = useRecoilValue(seriesPageAtom);
 
@@ -90,10 +101,8 @@ function SeriesDetail() {
 
     const nav = useNavigate();
 
-    //console.log(series);
-
     const seriesNameSet: Set<string> = new Set();
-    series?.data.results[0].comics.items.forEach(item => {
+    series?.comics.items.forEach(item => {
         seriesNameSet.add(item.name);
     });
 
@@ -113,6 +122,7 @@ function SeriesDetail() {
             axios.get<ICreators>(
                 `${BASE_URL}${GET_SERIES}/${match?.params.id}/creators?ts=1&apikey=${apikey}&hash=${hash}`)
                 .then(res => {
+                    //console.log(res.data);
                     setCreators(res.data);
                 });
         };
@@ -121,11 +131,11 @@ function SeriesDetail() {
     return (
         <>
             <Helmet>
-                <title>{ series?.data.results[0].title }</title>
+                <title>{ series?.title }</title>
             </Helmet>
             <Blank />
             <SeriesPortrait 
-            path={series?.data.results[0].thumbnail.path + '/standard_fantastic.jpg'}
+            path={series?.thumbnail.path + '/standard_fantastic.jpg'}
             onClick={goBackToSeriesPage}
             >   
                 <ClickToGoBack>click to go back</ClickToGoBack>
@@ -135,16 +145,16 @@ function SeriesDetail() {
                     textAlign: 'center'
                 }}>
                     <SeriesTitle
-                    >{ series?.data.results[0].title }</SeriesTitle>
+                    >{ series?.title }</SeriesTitle>
                     <div>
                         published: &ensp;
                         <Highlighted>
-                            { series?.data.results[0].startYear + " - "}
-                            { series?.data.results[0].endYear }
+                            { series?.startYear + " - "}
+                            { series?.endYear }
                         </Highlighted>
                     </div>
                     <p>total number of comics: &ensp;
-                        <Highlighted>{seriesNameArr.length}</Highlighted>
+                        <Highlighted>{series?.comics.available}</Highlighted>
                     </p>
                     <div >
                         {
@@ -182,7 +192,7 @@ function SeriesDetail() {
             />  : null}
             { 
                 seriesCreatorsMatch ? 
-                <Wrapper>
+                <CreatorWrapper>
                     {
                         creators?.data.results.map(creator => {
                             return (
@@ -193,7 +203,7 @@ function SeriesDetail() {
                             )
                         })
                     }
-                </Wrapper>
+                </CreatorWrapper>
                 : null
             }
         </>

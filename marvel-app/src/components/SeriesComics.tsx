@@ -28,7 +28,6 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
             &offset=${offsetCnt * 12}`)
             .then(res => {
                 setComics(comics => {
-                    console.log(res.data);
                     if(!comics) return res.data;
                     else {
                         const copied = {...comics};
@@ -58,7 +57,7 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
 
     useEffect(() => {
         findTargetIndexOfComics();
-    }, [chosenComicsName, comics]);
+    }, [chosenComicsName]);
 
     const length = comics?.data.results.length || 0;
 
@@ -160,6 +159,9 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
                             )
                         })
                     }
+                    <Highlighted>
+                        <h5>{ visible === -1  ? 'No data. Please keep clicking the carousel.' : '' }</h5>
+                    </Highlighted>
                 </AnimatePresence>
                 <LeftArrow
                 src={require('../images/arrow.png')}

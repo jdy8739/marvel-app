@@ -164,7 +164,8 @@ function CharacterComics({ id }: { id: string }) {
 
         setIsLoading(true);
         axios.get<IComics>(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=12&dateRange=${dateFrom},${dateTo}`
+            `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash
+            }&limit=12&dateRange=${dateFrom},${dateTo}`
             )
             .then(res => {
                 setComics(res.data);
