@@ -22,7 +22,6 @@ function SeriesCharacters({ id }: { id: string }) {
             `${BASE_URL}${GET_SERIES}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash
             }&offset=${offsetCnt * LIMIT}&limit=${LIMIT}`)
             .then(res => {
-                console.log(res.data);
                 setChars(chars => {
                     if(!chars) return res.data;
                     else {

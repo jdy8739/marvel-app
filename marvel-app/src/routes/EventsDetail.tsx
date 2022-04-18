@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
 import EventCharacters from "../components/EventsCharacters";
 import EventComics from "../components/EventsComics";
+import EventSeries from "../components/EventsSeries";
 import { EventTitle, Tab, Tabs } from "../styled";
 import { IEvents } from "../types_store/EventsType";
 
@@ -37,7 +38,10 @@ function EventsDetail() {
 
     const eventComicsMatch = useMatch('/events/detail/:id/comics');
 
-    const match = eventMatch || eventCharMatch || eventComicsMatch;
+    const eventSeriesMatch = useMatch('/events/detail/:id/series');
+
+    const match = 
+        eventMatch || eventCharMatch || eventComicsMatch || eventSeriesMatch;
 
     const fetchEvent = async () => {
         const res = await fetch(
@@ -96,7 +100,10 @@ function EventsDetail() {
                             onClick={() => nav(`/events/detail/${event?.id ?? ''}/comics`)}
                             clicked={Boolean(eventComicsMatch)}
                             >comics</Tab>
-                            <Tab>series</Tab>
+                            <Tab
+                            onClick={() => nav(`/events/detail/${event?.id ?? ''}/series`)}
+                            clicked={Boolean(eventSeriesMatch)}
+                            >series</Tab>
                         </Tabs>
                     </FullPagePic>  
                     {
@@ -104,6 +111,9 @@ function EventsDetail() {
                     }
                     {
                         eventComicsMatch ? <EventComics id={match?.params.id || ''}/> : null
+                    }
+                    {
+                        eventSeriesMatch ? <EventSeries id={match?.params.id || ''}/> : null
                     }
                 </>
             }

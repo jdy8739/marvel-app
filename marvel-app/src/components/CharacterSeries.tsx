@@ -7,7 +7,7 @@ import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
 import { Btn, Modal, ModalBackground, ModelImage } from "../styled";
 import { ISeries, SeriesResult } from "../types_store/SeriesType";
 
-const SeriesElem = styled(motion.div)<{ path?: string }>`
+export const SeriesElem = styled(motion.div)<{ path?: string }>`
     background-image: url(${ props => props.path });
     width: 180px;
     height: 180px;
@@ -213,6 +213,7 @@ function CharacterSeries({ id }: { id: string }) {
                                     })
                                 }
                             </Wrapper>
+                            <br></br>
                             <br></br>
                             <ShowMoreBtn
                             onClick={fetchMoreSeries}
