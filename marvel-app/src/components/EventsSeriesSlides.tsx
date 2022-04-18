@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 import styled from "styled-components";
 import { ISeriesResult } from "../types_store/SeriesType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
@@ -24,7 +25,17 @@ const RightArrowBox = styled.div`
     align-items: center;
 `;
 
+const SLIDES_LIMIT = 6;
+
 function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[] }) {
+
+    const [count, setCount] = useState(0);
+
+    const showNext = () => setCount(cnt => {
+        return cnt + 1 === Math.floor(
+            slidesElements.length / SLIDES_LIMIT) ? 0 : cnt + 1
+    });
+
     return (
         <Wrapper style={{ 
             position: 'relative',
@@ -33,7 +44,8 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
         >
             <AnimatePresence>
                 {
-                    slidesElements.slice(0, 7)
+                    slidesElements.slice(
+                    count * SLIDES_LIMIT, count * SLIDES_LIMIT + SLIDES_LIMIT)
                     .map(slide => {
                         return (
                             <motion.span
@@ -69,6 +81,7 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
                     margin: 'auto'
                 }}
                 src={require('../images/arrow.png')}
+                onClick={showNext}
                 />
             </RightArrowBox>
         </Wrapper>

@@ -10,7 +10,7 @@ const SeriesFlexBox = styled.div`
     display: flex;
 `;
 
-const LIMIT = 20;
+const LIMIT = 18;
 
 function EventSeries({ id }: { id: string }) {
 
@@ -21,9 +21,18 @@ function EventSeries({ id }: { id: string }) {
     const fetchEventSeries = () => {
         axios.get<ISeries>(
             `${BASE_URL}${GET_EVENTS}/${id}/comics?ts=1&apikey=${apikey}&hash=${hash
-            }&offset=${offsetCnt * LIMIT}`)
+            }&offset=${offsetCnt * LIMIT}&limit=${LIMIT}`)
             .then(res => {
-                setSeries(res.data);
+                console.log(res.data);
+                setSeries(series => {
+                    if(!series) return res.data;
+                    else {
+                        const copied = {...series};
+                        copied.data.results = 
+                            copied.data.results.concat(res.data.data.results);
+                        return copied;
+                    };
+                });
             });
     };
 
@@ -42,7 +51,7 @@ function EventSeries({ id }: { id: string }) {
                     return (
                         <SeriesFlexBox key={i}>
                             {
-                                i % LIMIT !== 0 ? null :
+                                series.data.results.length / LIMIT < i ? null :
                                 <EventsSeriesSlides
                                 slidesElements={series?.data.results.slice(i * LIMIT, i * LIMIT + LIMIT)}
                                 />
