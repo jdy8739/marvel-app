@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
-import { Blank, CharName, ComicsCard, ComicsFrameForm, Container } from "../styled";
+import { Blank, CharName, ComicsCard, ComicsFrameForm, Container, Loading } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 import { ShowMoreBtn } from "./CharacterSeries";
 
@@ -12,6 +13,8 @@ function EventComics({ id }: { id: string }) {
     const [comics, setComics] = useState<IComics>();
 
     const [offsetCnt, setOffsetCnt] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const plusOffsetCnt = () => setOffsetCnt(cnt => cnt + 1);
 
@@ -33,6 +36,7 @@ function EventComics({ id }: { id: string }) {
                         return copied;
                     };
                 });
+                setIsLoading(false);
             });
     }, [offsetCnt]);
 
@@ -42,25 +46,31 @@ function EventComics({ id }: { id: string }) {
         else return false;
     };
 
+    const nav = useNavigate();
+
     return (
         <>
-            <Container>
-                {
-                    comics?.data.results.map(comicsElem => {
-                        return (
-                            <ComicsFrameForm 
-                            key={comicsElem.id}
-                            path={`${ comicsElem.thumbnail.path }/portrait_incredible.jpg`}
-                            >
-                                
-                                <CharName 
-                                length={comicsElem.title.length}
-                                >{ comicsElem.title.length > 20 ? comicsElem.title.slice(0, 20) + '...' : comicsElem.title }</CharName>
-                            </ComicsFrameForm>
-                        )
-                    })
-                }
-            </Container>
+            {
+                isLoading ? <Loading src={require('../images/giphy.gif')} /> :
+                <Container>
+                    {
+                        comics?.data.results.map(comicsElem => {
+                            return (
+                                <ComicsFrameForm 
+                                key={comicsElem.id}
+                                path={`${ comicsElem.thumbnail.path }/portrait_incredible.jpg`}
+                                onClick={() => nav('/comics/detail/' + comicsElem.id)}
+                                >
+                                    
+                                    <CharName 
+                                    length={comicsElem.title.length}
+                                    >{ comicsElem.title.length > 20 ? comicsElem.title.slice(0, 20) + '...' : comicsElem.title }</CharName>
+                                </ComicsFrameForm>
+                            )
+                        })
+                    }
+                </Container>
+            }
             <br></br>
             <br></br>
             <ShowMoreBtn onClick={plusOffsetCnt}>show more</ShowMoreBtn>

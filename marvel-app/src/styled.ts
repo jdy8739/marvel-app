@@ -353,3 +353,10 @@ export const Dot = styled.div<{ clicked: boolean }>`
     border-radius: 5px;
     cursor: pointer;
 `;
+
+export const Loading = styled.img`
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: auto;
+`;

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { modalVariant } from "../routes/Comics";
 import { Modal, ModalBackground, ModelImage, Title } from "../styled";
@@ -8,23 +9,25 @@ import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
 import { SeriesElem } from "./CharacterSeries";
 
 const LeftArrowBox = styled.div`
-    width: 70px;
+    width: 55px;
     height: 95%;
     position: absolute;
     left: 0;
     background-color: rgba(255, 255, 255, 0.12);
     display: flex;
     align-items: center;
+    border-radius: 0px 16px 16px 0px;
 `;
 
 const RightArrowBox = styled.div`
-    width: 70px;
+    width: 55px;
     height: 95%;
     position: absolute;
     right: 0;
     background-color: rgba(255, 255, 255, 0.12);
     display: flex;
     align-items: center;
+    border-radius: 16px 0px 0px 16px;
 `;
 
 const SeriesSlides = styled(motion.span)`
@@ -39,13 +42,13 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
 
     const showNext = () => setCount(cnt => {
         if(slidesElements.length <= SLIDES_LIMIT) return 0;
-        return cnt + 1 === Math.floor(
+        return cnt + 1 === Math.ceil(
             slidesElements.length / SLIDES_LIMIT) ? 0 : cnt + 1
     });
 
     const showPrevious = () => setCount(cnt => {
         if(slidesElements.length <= SLIDES_LIMIT) return 0;
-        return cnt - 1 === -1 ? Math.floor(
+        return cnt - 1 === -1 ? Math.ceil(
             slidesElements.length / SLIDES_LIMIT) - 1 : cnt - 1
     });
 
@@ -59,8 +62,10 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
 
     const hideModal = () => setClickedSeries(null);
 
-    const stopProppagation = 
-        (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation(); 
+    const toSeriesDetailPage = 
+        (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
+
+    const nav = useNavigate();
 
     return (
         <Wrapper style={{ 
@@ -104,7 +109,7 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
                     >
                         <Modal
                         layoutId={clickedSeries.id + ''}
-                        onClick={stopProppagation}
+                        onClick={toSeriesDetailPage}
                         >
                             <ModelImage
                             path={clickedSeries.thumbnail.path + "/standard_fantastic.jpg"}

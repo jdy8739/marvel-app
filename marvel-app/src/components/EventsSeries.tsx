@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
-import { Blank } from "../styled";
+import { Blank, Loading } from "../styled";
 import { ISeries } from "../types_store/SeriesType";
 import { ShowMoreBtn } from "./CharacterSeries";
 import EventsSeriesSlides from "./EventsSeriesSlides";
@@ -19,7 +19,11 @@ function EventSeries({ id }: { id: string }) {
 
     const [offsetCnt, setOffsetCnt] = useState(0);
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const fetchEventSeries = () => {
+        if(!isLoading) setIsLoading(true);
+
         axios.get<ISeries>(
             `${BASE_URL}${GET_EVENTS}/${id}/comics?ts=1&apikey=${apikey}&hash=${hash
             }&offset=${offsetCnt * LIMIT}&limit=${LIMIT}`)
@@ -33,6 +37,7 @@ function EventSeries({ id }: { id: string }) {
                         return copied;
                     };
                 });
+                setIsLoading(false);
             });
     };
 
@@ -56,20 +61,25 @@ function EventSeries({ id }: { id: string }) {
     };
     
     return (
-        <>
+        <>  
             {
-                series?.data.results.map((seriesElem, i) => {
-                    return (
-                        <SeriesFlexBox key={i}>
-                            {
-                                series.data.results.length / LIMIT <= i ? null :
-                                <EventsSeriesSlides
-                                slidesElements={series?.data.results.slice(i * LIMIT, i * LIMIT + LIMIT)}
-                                />
-                            }
-                        </SeriesFlexBox>
-                    )
-                })
+                isLoading ? <Loading src={require('../images/giphy.gif')} /> :
+                <>
+                    {
+                        series?.data.results.map((seriesElem, i) => {
+                            return (
+                                <SeriesFlexBox key={i}>
+                                    {
+                                        series.data.results.length / LIMIT <= i ? null :
+                                        <EventsSeriesSlides
+                                        slidesElements={series?.data.results.slice(i * LIMIT, i * LIMIT + LIMIT)}
+                                        />
+                                    }
+                                </SeriesFlexBox>
+                            )
+                        })
+                    }
+                </>
             }
             <br></br>
             <br></br>
