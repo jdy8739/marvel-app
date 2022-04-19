@@ -24,7 +24,6 @@ function EventSeries({ id }: { id: string }) {
             `${BASE_URL}${GET_EVENTS}/${id}/comics?ts=1&apikey=${apikey}&hash=${hash
             }&offset=${offsetCnt * LIMIT}&limit=${LIMIT}`)
             .then(res => {
-                console.log(res.data);
                 setSeries(series => {
                     if(!series) return res.data;
                     else {
@@ -55,7 +54,7 @@ function EventSeries({ id }: { id: string }) {
         }
         return true;
     };
-
+    
     return (
         <>
             {
