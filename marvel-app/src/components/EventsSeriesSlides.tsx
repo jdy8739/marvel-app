@@ -2,10 +2,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { modalVariant } from "../routes/Comics";
-import { Modal, ModalBackground, ModelImage } from "../styled";
+import { Modal, ModalBackground, ModelImage, Title } from "../styled";
 import { ISeriesResult } from "../types_store/SeriesType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
-import { SeriesElem, Title } from "./CharacterSeries";
+import { SeriesElem } from "./CharacterSeries";
 
 const LeftArrowBox = styled.div`
     width: 70px;

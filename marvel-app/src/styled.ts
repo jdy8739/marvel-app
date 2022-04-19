@@ -130,6 +130,18 @@ export const ModelImage = styled.div<{ path: string }>`
     cursor: pointer;
 `;
 
+export const Title = styled.h2`
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    bottom: 25px;
+    padding: 1.5px;
+    color: rgba(255, 255, 255, 0.75);
+    transition: all 1s;
+`;
+
 export const Modal = styled(motion.div)`
     width: 400px;
     height: 520px;
@@ -146,6 +158,10 @@ export const Modal = styled(motion.div)`
         ${ModelImage} {
             filter: grayscale(0.9);
             transform: scale(1.01);
+        }
+        ${Title} {
+            opacity: 0;
+            transform: translateY(8px);
         }
     }
     h5 {

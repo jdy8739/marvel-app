@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Btn, Modal, ModalBackground, ModelImage } from "../styled";
+import { Btn, Modal, ModalBackground, ModelImage, Title } from "../styled";
 import { ISeries, ISeriesResult } from "../types_store/SeriesType";
 
 export const SeriesElem = styled(motion.div)<{ path?: string }>`
@@ -40,16 +40,6 @@ export const ShowMoreBtn = styled(Btn)`
     &:active {
         background-color: white;
     }
-`;
-
-export const Title = styled.h2`
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin: auto;
-    text-align: center;
-    bottom: 25px;
-    padding: 1.5px;
 `;
 
 export const Years = styled.h5`
@@ -239,7 +229,7 @@ function CharacterSeries({ id }: { id: string }) {
                                                 path={clickedSeries.thumbnail.path + "/standard_fantastic.jpg"}
                                                 >
                                                     <Title
-                                                    ref={titleRef}
+                                                    //ref={titleRef}
                                                     >{ clickedSeries.title }</Title>
                                                 </ModelImage>
                                                 <h5 
