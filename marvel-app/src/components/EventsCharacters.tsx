@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
 import { ICharacter, ICharacterResult } from "../types_store/CharatersType";
 import { AnimatePresence, motion } from "framer-motion";
-import { CenterWord, CharTitle, Container, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../styled";
+import { Blank, CenterWord, CharTitle, Container, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../styled";
 import { ShowMoreBtn } from "./CharacterSeries";
 import { useNavigate } from "react-router-dom";
 
@@ -100,6 +100,7 @@ function EventCharacters({ id }: { id: string }) {
             <br></br>
             <br></br>
             <ShowMoreBtn onClick={plusOffsetCnt}>show more</ShowMoreBtn>
+            <Blank />
         </>
     )
 };

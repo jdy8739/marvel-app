@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Btn, ComicsCard, Highlighted, Input } from "../styled";
+import { Blank, Btn, ComicsCard, Highlighted, Input } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
 export const Wrapper = styled.div`
@@ -238,7 +238,6 @@ function CharacterComics({ id }: { id: string }) {
                     }
                     <div style={{
                         textAlign: 'center',
-                        marginBottom: '100px'
                     }}>
                         <br></br>
                         <br></br>
@@ -265,6 +264,7 @@ function CharacterComics({ id }: { id: string }) {
                     </div>
                 </>
             }
+            <Blank />
         </>
     )
 };

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
 import EventsElements from "../components/EventsElements";
-import { Dot, EventSliderTextBox, EventTitle, FullPageSliderPic } from "../styled";
+import { Blank, Dot, EventSliderTextBox, EventTitle, FullPageSliderPic } from "../styled";
 import { IEvents, IEventsResult } from "../types_store/EventsType";
 
 const HorizonBar = styled.div`
@@ -205,6 +205,7 @@ function Events() {
             <EventsElements 
             events={events?.data.results}
             />
+            <Blank />
         </>
     )
 };

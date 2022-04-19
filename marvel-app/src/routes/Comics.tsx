@@ -313,7 +313,8 @@ function Comics() {
                             </DateForm>
                         </DateChooseModal>
                 </ModalBackground> }
-            </AnimatePresence> 
+            </AnimatePresence>
+            <Blank />
         </>
     )
 };

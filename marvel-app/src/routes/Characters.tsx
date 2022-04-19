@@ -231,6 +231,7 @@ function Characters() {
                 >next</Btn>
                 <Btn onClick={showLast}>last</Btn>
             </div>
+            <Blank />
         </>
     )
 };

@@ -239,6 +239,7 @@ function Series() {
                 onClick={showLast}
                 >last</Btn>
             </div>
+            <Blank />
         </>
     )
 };

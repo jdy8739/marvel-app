@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
-import { Highlighted } from "../styled";
+import { Blank, Highlighted } from "../styled";
 import { IEvents } from "../types_store/EventsType";
 import { EventCard } from "./CharacterEvents";
 
@@ -45,6 +45,7 @@ function ComicsEvents({ id }: { id: string }) {
                     }
                 </> : <p style={{ textAlign: 'center' }}>Sorry. No data. :(</p>
             }
+            <Blank />
         </>
     )
 };

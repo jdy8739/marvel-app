@@ -3,7 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
-import { ComicsCard, Highlighted } from "../styled";
+import { Blank, ComicsCard, Highlighted } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
 
@@ -172,6 +172,7 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
                 onClick={showNext}
                 />
             </Wrapper>
+            <Blank />
         </>
     )
 };

@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Btn, Modal, ModalBackground, ModelImage, Title } from "../styled";
+import { Blank, Btn, Modal, ModalBackground, ModelImage, Title } from "../styled";
 import { ISeries, ISeriesResult } from "../types_store/SeriesType";
 
 export const SeriesElem = styled(motion.div)<{ path?: string }>`
@@ -44,9 +44,9 @@ export const ShowMoreBtn = styled(Btn)`
 
 export const Years = styled.h5`
     position: absolute;
-    bottom: 14px;
+    bottom: 3px;
     margin: 0;
-    right: 14px;
+    right: 3px;
 `;
 
 const modalVariant = {
@@ -247,7 +247,7 @@ function CharacterSeries({ id }: { id: string }) {
                     }
                 </>
             }
-            <div style={{ height: '100px' }}></div>
+            <Blank />
         </>
     )
 };

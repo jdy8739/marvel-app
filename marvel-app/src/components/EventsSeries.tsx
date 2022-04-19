@@ -74,6 +74,7 @@ function EventSeries({ id }: { id: string }) {
             <br></br>
             <br></br>
             <ShowMoreBtn onClick={plusOffsetCnt}>show more</ShowMoreBtn>
+            <Blank />
         </>
     )
 };

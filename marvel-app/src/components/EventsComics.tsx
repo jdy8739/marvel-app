@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
-import { CharName, ComicsCard, ComicsFrameForm, Container } from "../styled";
+import { Blank, CharName, ComicsCard, ComicsFrameForm, Container } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 import { ShowMoreBtn } from "./CharacterSeries";
 
@@ -44,26 +44,27 @@ function EventComics({ id }: { id: string }) {
 
     return (
         <>
-        <Container>
-            {
-                comics?.data.results.map(comicsElem => {
-                    return (
-                        <ComicsFrameForm 
-                        key={comicsElem.id}
-                        path={`${ comicsElem.thumbnail.path }/portrait_incredible.jpg`}
-                        >
-                            
-                            <CharName 
-                            length={comicsElem.title.length}
-                            >{ comicsElem.title.length > 20 ? comicsElem.title.slice(0, 20) + '...' : comicsElem.title }</CharName>
-                        </ComicsFrameForm>
-                    )
-                })
-            }
-        </Container>
-        <br></br>
-        <br></br>
-        <ShowMoreBtn onClick={plusOffsetCnt}>show more</ShowMoreBtn>
+            <Container>
+                {
+                    comics?.data.results.map(comicsElem => {
+                        return (
+                            <ComicsFrameForm 
+                            key={comicsElem.id}
+                            path={`${ comicsElem.thumbnail.path }/portrait_incredible.jpg`}
+                            >
+                                
+                                <CharName 
+                                length={comicsElem.title.length}
+                                >{ comicsElem.title.length > 20 ? comicsElem.title.slice(0, 20) + '...' : comicsElem.title }</CharName>
+                            </ComicsFrameForm>
+                        )
+                    })
+                }
+            </Container>
+            <br></br>
+            <br></br>
+            <ShowMoreBtn onClick={plusOffsetCnt}>show more</ShowMoreBtn>
+            <Blank />
         </>
     )
 };
