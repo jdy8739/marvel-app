@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Highlighted } from "../styled";
+import { Highlighted, Loading } from "../styled";
 import { IEvents } from "../types_store/EventsType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
 
@@ -23,7 +23,10 @@ function CharacterEvents({ id }: { id: string }) {
 
     const [events, setEvents] = useState<IEvents>();
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const fetchEventsContainingCharacter = () => {
+        if(!isLoading) channgeIsLoadingStatus();
         axios.get(
             `${BASE_URL}${GET_ON_CHAR}/${ id }/events?ts=1&apikey=${apikey}&hash=${hash}&limit=12
             &offset=${offsetCnt * 12}`
@@ -38,10 +41,13 @@ function CharacterEvents({ id }: { id: string }) {
                         return copied;
                     };
                 });
+                channgeIsLoadingStatus();
             });
     };
 
     const total = events?.data.total || 0;
+
+    const channgeIsLoadingStatus = () => setIsLoading(now => !now);
 
     useEffect(() => {
         return () => {
@@ -116,6 +122,7 @@ function CharacterEvents({ id }: { id: string }) {
 
     return (
         <>
+            { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
             {
                 events?.data.results.length === 0 ? 
                 <p style={{

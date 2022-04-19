@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { apikey, BASE_URL, GET_CHAR, hash } from "../api";
 import { charPageAtom, charStartsWithAtom, charNameAtom } from "../atoms";
 import CharacterCard from "../components/CharacterCard";
-import { Highlighted, Container, Btn, Input, Blank, BtnInARow } from "../styled";
+import { Highlighted, Container, Btn, Input, Blank, BtnInARow, Loading } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
 const CharIcon = styled.span`
@@ -59,7 +59,7 @@ function Characters() {
         return await res.json();
     };
 
-    const { data: chars } = useQuery<ICharacter>(
+    const { data: chars, isLoading } = useQuery<ICharacter>(
         ['characters', nowPage, startsWith, name], fetchCharacters);
 
     let TOTAL = 0;
@@ -141,6 +141,7 @@ function Characters() {
                 <title>Marvel Characters</title>
             </Helmet>
             <Blank />
+            { isLoading ? <><Loading src={require('../images/giphy.gif')}/><Blank /></> : null }
             {
                 !startsWith && !name ? null :
                 <h1 style={{

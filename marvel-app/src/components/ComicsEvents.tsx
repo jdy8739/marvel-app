@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
-import { Blank, Highlighted } from "../styled";
+import { Blank, Highlighted, Loading } from "../styled";
 import { IEvents } from "../types_store/EventsType";
 import { EventCard } from "./CharacterEvents";
 
@@ -9,10 +9,13 @@ function ComicsEvents({ id }: { id: string }) {
 
     const [events, setEvents] = useState<IEvents>();
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const fetchComicsEvents = () => {
         axios.get<IEvents>(`${BASE_URL}${GET_ON_COMICS}/${id}/events?ts=1&apikey=${apikey}&hash=${hash}`)
             .then(res => {
                 setEvents(res.data);
+                setIsLoading(false);
             });
     };
 
@@ -22,6 +25,7 @@ function ComicsEvents({ id }: { id: string }) {
 
     return(
         <>
+            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
             {
                 events?.data.results.length !== 0 ?
                 <>

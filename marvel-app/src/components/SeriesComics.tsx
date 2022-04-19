@@ -3,7 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
-import { Blank, ComicsCard, Highlighted } from "../styled";
+import { Blank, ComicsCard, Highlighted, Loading } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
 
@@ -22,7 +22,10 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
 
     const [visible, setVisible] = useState(0);
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const fetchComics = () => {
+        if(!isLoading) changeIsLoadingStatus();
         axios.get<IComics>(
             `${BASE_URL}${GET_SERIES}/${id}/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=${LIMIT}
             &offset=${offsetCnt * 12}`)
@@ -36,10 +39,13 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
                         return copied;
                     };
                 });
+                changeIsLoadingStatus();
             });
     };
 
     const total = comics?.data.total || 0;
+
+    const changeIsLoadingStatus = () => setIsLoading(now => !now);
 
     const findTargetIndexOfComics = () => {
         if(!chosenComicsName) setVisible(0);
@@ -119,6 +125,7 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
 
     return (
         <>  
+            { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
             <br></br>
             <p style={{
                 textAlign: 'center'

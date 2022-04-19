@@ -357,6 +357,11 @@ export const Dot = styled.div<{ clicked: boolean }>`
 export const Loading = styled.img`
     width: 60px;
     height: 60px;
-    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
     margin: auto;
+    z-index: 99;
 `;

@@ -10,7 +10,7 @@ import { charNameAtom, charPageAtom, charStartsWithAtom } from "../atoms";
 import CharacterComics from "../components/CharacterComics";
 import CharacterEvents from "../components/CharacterEvents";
 import CharacterSeries from "../components/CharacterSeries";
-import { Blank, ClickToGoBack, Tab, Tabs } from "../styled";
+import { Blank, ClickToGoBack, Loading, Tab, Tabs } from "../styled";
 import { ICharacter } from "../types_store/CharatersType";
 
 const CharName = styled.h1<{ length: number }>`
@@ -72,7 +72,7 @@ function CharactersDetail() {
     eventsMatch?.params.id || 
     seriesMatch?.params.id || '';
 
-    const {data: char, isLoading} = useQuery<ICharacter>(
+    const { data: char, isLoading } = useQuery<ICharacter>(
         ['character', id], () => fetchSingleCharacter(id));
 
     const showSubDetail = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -98,58 +98,54 @@ function CharactersDetail() {
                 <title>{ char?.data.results[0].name }</title>
             </Helmet>
             <Blank />
+            { isLoading ? <><Loading src={require('../images/giphy.gif')}/><Blank /></> : null }
+            <Portrait 
+            path={`${char?.data.results[0].thumbnail.path}/portrait_uncanny.jpg`}
+            onClick={backToCharPage}
+            >
+                <ClickToGoBack>click portrait to go back</ClickToGoBack>
+                <CharName
+                length={ char?.data.results[0].name.length || 0 }
+                >{ char?.data.results[0].name }</CharName>
+            </Portrait>
+            <br></br>
+            <br></br>
+            <p
+            style={{
+                width: '40%',
+                textAlign: 'center',
+                margin: 'auto'
+            }}
+            >{ char?.data.results[0].description || 'No Description' }</p>
+            <Tabs>
+                <Tab
+                onClick={showSubDetail}
+                disabled={ Boolean(comicsMatch) }
+                clicked={ Boolean(comicsMatch) }
+                >comics</Tab>
+                <Tab
+                onClick={showSubDetail}
+                disabled={ Boolean(eventsMatch) }
+                clicked={ Boolean(eventsMatch) }
+                >events</Tab>
+                <Tab
+                onClick={showSubDetail}
+                disabled={ Boolean(seriesMatch) }
+                clicked={ Boolean(seriesMatch) }
+                >series</Tab>
+            </Tabs>
+            <div style={{ height: '60px' }}></div>
             {
-                isLoading ? <p style={{ textAlign: 'center' }}>loading... please wait.</p> :
-                <>  
-                    <Portrait 
-                    path={`${char?.data.results[0].thumbnail.path}/portrait_uncanny.jpg`}
-                    onClick={backToCharPage}
-                    >
-                        <ClickToGoBack>click portrait to go back</ClickToGoBack>
-                        <CharName
-                        length={ char?.data.results[0].name.length || 0 }
-                        >{ char?.data.results[0].name }</CharName>
-                    </Portrait>
-                    <br></br>
-                    <br></br>
-                    <p
-                    style={{
-                        width: '40%',
-                        textAlign: 'center',
-                        margin: 'auto'
-                    }}
-                    >{ char?.data.results[0].description || 'No Description' }</p>
-                    <Tabs>
-                        <Tab
-                        onClick={showSubDetail}
-                        disabled={ Boolean(comicsMatch) }
-                        clicked={ Boolean(comicsMatch) }
-                        >comics</Tab>
-                        <Tab
-                        onClick={showSubDetail}
-                        disabled={ Boolean(eventsMatch) }
-                        clicked={ Boolean(eventsMatch) }
-                        >events</Tab>
-                        <Tab
-                        onClick={showSubDetail}
-                        disabled={ Boolean(seriesMatch) }
-                        clicked={ Boolean(seriesMatch) }
-                        >series</Tab>
-                    </Tabs>
-                    <div style={{ height: '60px' }}></div>
-                    {
-                        comicsMatch ? 
-                        <CharacterComics id={ comicsMatch.params.id || '' }/> : null
-                    }
-                    {
-                        eventsMatch ? 
-                        <CharacterEvents id={ eventsMatch.params.id || '' }/> : null
-                    }
-                    {
-                        seriesMatch ? 
-                        <CharacterSeries id={ seriesMatch.params.id || '' }/> : null
-                    }
-                </>
+                comicsMatch ? 
+                <CharacterComics id={ comicsMatch.params.id || '' }/> : null
+            }
+            {
+                eventsMatch ? 
+                <CharacterEvents id={ eventsMatch.params.id || '' }/> : null
+            }
+            {
+                seriesMatch ? 
+                <CharacterSeries id={ seriesMatch.params.id || '' }/> : null
             }
         </>
     )

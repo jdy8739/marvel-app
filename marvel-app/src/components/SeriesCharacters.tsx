@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
-import { Blank, CenterWord, CharTitle, Container, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../styled";
+import { Blank, CenterWord, CharTitle, Container, Loading, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../styled";
 import { ICharacter, ICharacterResult } from "../types_store/CharatersType";
 import { ShowMoreBtn } from "./CharacterSeries";
 
@@ -17,7 +17,11 @@ function SeriesCharacters({ id }: { id: string }) {
 
     const [offsetCnt, setOffsetCnt] = useState(0);
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const fetchChars = () => {
+        if(!isLoading) setIsLoading(true);
+
         axios.get<ICharacter>(
             `${BASE_URL}${GET_SERIES}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash
             }&offset=${offsetCnt * LIMIT}&limit=${LIMIT}`)
@@ -31,6 +35,7 @@ function SeriesCharacters({ id }: { id: string }) {
                         return copied;
                     };
                 });
+                setIsLoading(false);
             });
     };
 
@@ -73,6 +78,7 @@ function SeriesCharacters({ id }: { id: string }) {
 
     return (
         <>  
+            { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
             <br></br>
             {
                 chars?.data.results.length === 0 ?

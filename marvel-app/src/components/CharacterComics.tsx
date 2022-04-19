@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Blank, Btn, ComicsCard, Highlighted, Input } from "../styled";
+import { Blank, Btn, ComicsCard, Highlighted, Input, Loading } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
 export const Wrapper = styled.div`
@@ -53,6 +53,7 @@ function CharacterComics({ id }: { id: string }) {
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchComicsContainingCharacter = () => {
+        if(!isLoading) channgeIsLoadingStatus();
         axios.get(
             `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=${LIMIT}
             &offset=${offsetCnt * LIMIT}`)
@@ -66,7 +67,7 @@ function CharacterComics({ id }: { id: string }) {
                         return copied;
                     };
                 });
-                setIsLoading(false);
+                channgeIsLoadingStatus();
             });
     };
 
@@ -75,6 +76,8 @@ function CharacterComics({ id }: { id: string }) {
     useEffect(() => {
         fetchComicsContainingCharacter();
     }, []);
+
+    const channgeIsLoadingStatus = () => setIsLoading(now => !now);
 
     const [visible, setVisible] = useState(0);
 
@@ -162,14 +165,15 @@ function CharacterComics({ id }: { id: string }) {
             return;
         };
 
-        setIsLoading(true);
+        if(!isLoading) channgeIsLoadingStatus();
+        
         axios.get<IComics>(
             `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash
             }&limit=12&dateRange=${dateFrom},${dateTo}`
             )
             .then(res => {
                 setComics(res.data);
-                setIsLoading(false);
+                channgeIsLoadingStatus();
             });
     };
 
@@ -177,93 +181,90 @@ function CharacterComics({ id }: { id: string }) {
 
     return (
         <>  
+            { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
             {
-                isLoading ? <p style={{ textAlign: 'center' }}>loading... please wait.</p> :
+                comics?.data.results.length === 0 ? 
+                <p style={{ textAlign: 'center' }}>cannot find any data :(</p> : 
                 <>
-                    {
-                        comics?.data.results.length === 0 ? 
-                        <p style={{ textAlign: 'center' }}>cannot find any data :(</p> : 
-                        <>
-                            <p style={{
-                                textAlign: 'center'
-                            }}
-                            >This character is contained in these comics.</p>
-                            <Wrapper>
-                                <AnimatePresence 
-                                exitBeforeEnter
-                                custom={isBack}
-                                >
-                                    {
-                                        comics?.data.results.map((comic, i) => {
-                                            return (
-                                                visible === i ? 
-                                                <span
-                                                key={comic.id}
-                                                >
-                                                    <ComicsCard
-                                                    path={`${ comic.thumbnail.path }/portrait_incredible.jpg`}
-                                                    variants={SlideVariant}
-                                                    initial="start"
-                                                    animate="animate"
-                                                    exit="leave"
-                                                    custom={isBack}
-                                                    onClick={() => nav('/comics/detail/' + comic.id)}
-                                                    >
-                                                    </ComicsCard>
-                                                    <div style={{
-                                                        textAlign: 'center'
-                                                    }}>
-                                                        <h4>{ comic.title }</h4>
-                                                        <span>
-                                                            <Highlighted>{(visible + 1)}</Highlighted>
-                                                            { " / " + comics?.data.results.length }
-                                                        </span>
-                                                    </div>
+                    <p style={{
+                        textAlign: 'center'
+                    }}
+                    >This character is contained in these comics.</p>
+                    <Wrapper>
+                        <AnimatePresence 
+                        exitBeforeEnter
+                        custom={isBack}
+                        >
+                            {
+                                comics?.data.results.map((comic, i) => {
+                                    return (
+                                        visible === i ? 
+                                        <span
+                                        key={comic.id}
+                                        >
+                                            <ComicsCard
+                                            path={`${ comic.thumbnail.path }/portrait_incredible.jpg`}
+                                            variants={SlideVariant}
+                                            initial="start"
+                                            animate="animate"
+                                            exit="leave"
+                                            custom={isBack}
+                                            onClick={() => nav('/comics/detail/' + comic.id)}
+                                            >
+                                            </ComicsCard>
+                                            <div style={{
+                                                textAlign: 'center'
+                                            }}>
+                                                <h4>{ comic.title }</h4>
+                                                <span>
+                                                    <Highlighted>{(visible + 1)}</Highlighted>
+                                                    { " / " + comics?.data.results.length }
                                                 </span>
-                                                : null
-                                            )
-                                        })
-                                    }
-                                </AnimatePresence>
-                                <LeftArrow
-                                src={require('../images/arrow.png')}
-                                onClick={showPrev} 
-                                />
-                                <RightArrow 
-                                src={require('../images/arrow.png')}
-                                onClick={showNext} 
-                                />
-                            </Wrapper>
-                        </>
-                    }
-                    <div style={{
-                        textAlign: 'center',
-                    }}>
-                        <br></br>
-                        <br></br>
-                        <p>find by date if there are no data you find above.</p>
-                        <form onSubmit={handleDateSubmit}>
-                            <label>
-                                <span>from </span>
-                                <Input 
-                                type="date"
-                                onChange={handleDateFrom}
-                                />
-                            </label>
-                            &ensp;
-                            <label>
-                                <span>to </span>
-                                <Input 
-                                type="date"
-                                onChange={handleDateTo}
-                                />
-                            </label>
-                            &ensp;
-                            <Btn>search</Btn>
-                        </form>
-                    </div>
+                                            </div>
+                                        </span>
+                                        : null
+                                    )
+                                })
+                            }
+                        </AnimatePresence>
+                        <LeftArrow
+                        src={require('../images/arrow.png')}
+                        onClick={showPrev} 
+                        />
+                        <RightArrow 
+                        src={require('../images/arrow.png')}
+                        onClick={showNext} 
+                        />
+                    </Wrapper>
                 </>
             }
+            <div style={{
+                textAlign: 'center',
+            }}>
+                <br></br>
+                <br></br>
+                <p>find by date if there are no data you find above.</p>
+                <form onSubmit={handleDateSubmit}>
+                    <label>
+                        <span>from </span>
+                        <Input 
+                        type="date"
+                        onChange={handleDateFrom}
+                        />
+                    </label>
+                    &ensp;
+                    <label>
+                        <span>to </span>
+                        <Input 
+                        type="date"
+                        onChange={handleDateTo}
+                        />
+                    </label>
+                    &ensp;
+                    <Btn>search</Btn>
+                </form>
+            </div>
+
             <Blank />
         </>
     )

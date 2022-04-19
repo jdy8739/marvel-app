@@ -9,7 +9,7 @@ import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
 import { comicsSearchedTitleAtom, comicsSearchedDateAtom, comicsPageAtom } from "../atoms";
 import ComicsCharacters from "../components/ComicsCharacters";
 import ComicsEvents from "../components/ComicsEvents";
-import { Blank, ClickToGoBack, ComicPortrait, Tab, Tabs } from "../styled";
+import { Blank, ClickToGoBack, ComicPortrait, Loading, Tab, Tabs } from "../styled";
 import { IComics } from "../types_store/ComicsType";
 
 const Container = styled.div`
@@ -35,7 +35,7 @@ function ComicsDetail() {
         return await res.json();
     };
 
-    const { data: comic } = useQuery<IComics>(
+    const { data: comic, isLoading } = useQuery<IComics>(
         ['comic', match?.params.id || ''], fetchComic);
 
     const title = useRecoilValue(comicsSearchedTitleAtom);
@@ -61,6 +61,7 @@ function ComicsDetail() {
                 <title>{ comic?.data.results[0].title }</title>
             </Helmet>
             <Blank />
+            { isLoading ? <><Loading src={require('../images/giphy.gif')}/><Blank /></> : null }
             <ComicPortrait
             path={comic?.data.results[0].thumbnail.path + '/portrait_uncanny.jpg'}
             onClick={backToComicsPage}

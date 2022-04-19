@@ -24,6 +24,9 @@ function EventCharacters({ id }: { id: string }) {
             alert('No more to show!');
             return;
         };
+
+        if(!isLoading) setIsLoading(true);
+        
         axios.get<ICharacter>(
             `${BASE_URL}${GET_EVENTS}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash
             }&offset=${offsetCnt * LIMIT}`)
@@ -61,11 +64,12 @@ function EventCharacters({ id }: { id: string }) {
 
     return (
         <>  
+            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
             <Container style={{
                 marginTop: '30px'
             }}>
                 {
-                    isLoading ? <Loading src={require('../images/giphy.gif')}/> :
+                    isLoading && !chars ? <Loading src={require('../images/giphy.gif')}/> :
                     <>
                         {
                             chars?.data.results.map(char => {

@@ -10,7 +10,7 @@ import { seriesPageAtom, seriesSearchedTitleAtom } from "../atoms";
 import { Wrapper } from "../components/CharacterComics";
 import SeriesCharacters from "../components/SeriesCharacters";
 import SeriesComics from "../components/SeriesComics";
-import { Blank, CharName, ClickToGoBack, Highlighted, Tab, Tabs } from "../styled";
+import { Blank, CharName, ClickToGoBack, Highlighted, Loading, Tab, Tabs } from "../styled";
 import { ICreators } from "../types_store/CreatorsTypes";
 import { ISeries } from "../types_store/SeriesType";
 
@@ -82,7 +82,7 @@ function SeriesDetail() {
         return await res.json();
     };
 
-    const { data } = useQuery<ISeries>(
+    const { data, isLoading } = useQuery<ISeries>(
         ['seriesElem', seriesMatch?.params.id], fetchSeriesDetail);
 
     const series = data?.data.results[0];
@@ -134,6 +134,7 @@ function SeriesDetail() {
                 <title>{ series?.title }</title>
             </Helmet>
             <Blank />
+            { isLoading ? <><Loading src={require('../images/giphy.gif')}/><Blank /></> : null }
             <SeriesPortrait 
             path={series?.thumbnail.path + '/standard_fantastic.jpg'}
             onClick={goBackToSeriesPage}

@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
-import { CharTitle, CenterWord, Container, Modal, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName, Blank } from "../styled";
+import { CharTitle, CenterWord, Container, Modal, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName, Blank, Loading } from "../styled";
 import { ICharacterResult, ICharacter } from "../types_store/CharatersType";
 
 type TypeCharResult = ICharacterResult | undefined;
@@ -12,10 +12,13 @@ function ComicsCharacters({ id }: { id: string }) {
 
     const [chars, setChars] = useState<ICharacter>();
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const fetchCharactersInThisComic = () => {
         axios.get<ICharacter>(`${BASE_URL}${GET_ON_COMICS}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash}`)
             .then(res => {
                 setChars(res.data);
+                setIsLoading(false);
             });
     };
 
@@ -41,6 +44,7 @@ function ComicsCharacters({ id }: { id: string }) {
 
     return (
         <>
+            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
             <Container>
                 {
                     chars?.data.results.length === 0 ? 

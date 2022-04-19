@@ -7,7 +7,7 @@ import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
 import { seriesPageAtom, seriesSearchedTitleAtom } from "../atoms";
-import { Blank, Btn, BtnInARow, CharName, Container, Highlighted, Input } from "../styled";
+import { Blank, Btn, BtnInARow, CharName, Container, Highlighted, Input, Loading } from "../styled";
 import { ISeries } from "../types_store/SeriesType";
 
 const SeriesFrame = styled.div<{ path: string }>`
@@ -134,6 +134,7 @@ function Series() {
                 <title>Series</title>
             </Helmet>
             <Blank />
+            { isLoading ? <><Loading src={require('../images/giphy.gif')}/><Blank /></> : null }
             {
                 !titleStartsWith ? null :
                 <h1 style={{

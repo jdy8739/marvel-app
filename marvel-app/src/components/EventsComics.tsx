@@ -23,6 +23,9 @@ function EventComics({ id }: { id: string }) {
             alert('No more to show!');
             return;
         };
+
+        if(!isLoading) setIsLoading(true);
+
         axios.get<IComics>(
             `${BASE_URL}${GET_EVENTS}/${id}/comics?ts=1&apikey=${apikey}&hash=${hash
             }&offset=${offsetCnt * LIMIT}`)
@@ -50,8 +53,9 @@ function EventComics({ id }: { id: string }) {
 
     return (
         <>
+            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
             {
-                isLoading ? <Loading src={require('../images/giphy.gif')} /> :
+                isLoading && !comics ? <Loading src={require('../images/giphy.gif')} /> :
                 <Container>
                     {
                         comics?.data.results.map(comicsElem => {
