@@ -23,7 +23,7 @@ const P = styled.p`
     text-align: center;
 `;
 
-const modalVariant = {
+export const modalVariant = {
     initial: {
         opacity: 0,
     },

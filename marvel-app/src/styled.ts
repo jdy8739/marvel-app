@@ -114,12 +114,14 @@ export const ModalBackground = styled(motion.div)`
     height: 100vh;
     position: fixed;
     top: 0;
+    z-index: 90;
 `;
 
 export const ModelImage = styled.div<{ path: string }>`
     width: 100%;
     height: 78%;
-    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent) ,url(${ props => props.path });
+    background-image: 
+        linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent), url(${ props => props.path });
     background-position: center center;
     background-size: cover;
     position: relative;
@@ -145,6 +147,9 @@ export const Modal = styled(motion.div)`
             filter: grayscale(0.9);
             transform: scale(1.01);
         }
+    }
+    h5 {
+        padding: 8px;
     }
 `;
 

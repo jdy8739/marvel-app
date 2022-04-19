@@ -42,7 +42,7 @@ export const ShowMoreBtn = styled(Btn)`
     }
 `;
 
-const Title = styled.h2`
+export const Title = styled.h2`
     position: absolute;
     left: 0;
     right: 0;
@@ -51,7 +51,7 @@ const Title = styled.h2`
     bottom: 25px;
 `;
 
-const Years = styled.h5`
+export const Years = styled.h5`
     position: absolute;
     bottom: 14px;
     margin: 0;
