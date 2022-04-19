@@ -122,7 +122,7 @@ function SeriesDetail() {
             axios.get<ICreators>(
                 `${BASE_URL}${GET_SERIES}/${match?.params.id}/creators?ts=1&apikey=${apikey}&hash=${hash}`)
                 .then(res => {
-                    //console.log(res.data);
+
                     setCreators(res.data);
                 });
         };

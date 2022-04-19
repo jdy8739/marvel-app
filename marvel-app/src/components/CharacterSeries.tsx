@@ -49,6 +49,7 @@ export const Title = styled.h2`
     margin: auto;
     text-align: center;
     bottom: 25px;
+    padding: 1.5px;
 `;
 
 export const Years = styled.h5`

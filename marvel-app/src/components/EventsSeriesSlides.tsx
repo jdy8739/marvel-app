@@ -33,20 +33,18 @@ const SeriesSlides = styled(motion.span)`
 
 const SLIDES_LIMIT = 6;
 
-const SLIDES_NUM_IN_ROW = 6;
-
 function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[] }) {
 
     const [count, setCount] = useState(0);
 
     const showNext = () => setCount(cnt => {
-        if(slidesElements.length <= SLIDES_NUM_IN_ROW) return 0;
+        if(slidesElements.length <= SLIDES_LIMIT) return 0;
         return cnt + 1 === Math.floor(
             slidesElements.length / SLIDES_LIMIT) ? 0 : cnt + 1
     });
 
     const showPrevious = () => setCount(cnt => {
-        if(slidesElements.length <= SLIDES_NUM_IN_ROW) return 0;
+        if(slidesElements.length <= SLIDES_LIMIT) return 0;
         return cnt - 1 === -1 ? Math.floor(
             slidesElements.length / SLIDES_LIMIT) - 1 : cnt - 1
     });

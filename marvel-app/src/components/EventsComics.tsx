@@ -24,7 +24,6 @@ function EventComics({ id }: { id: string }) {
             `${BASE_URL}${GET_EVENTS}/${id}/comics?ts=1&apikey=${apikey}&hash=${hash
             }&offset=${offsetCnt * LIMIT}`)
             .then(res => {
-                console.log(res.data);
                 setComics(comics => {
                     if(!comics) return res.data;
                     else {
