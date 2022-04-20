@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Blank, Btn, Modal, ModalBackground, ModelImage, Title } from "../styled";
+import { Blank, Btn, Loading, Modal, ModalBackground, ModelImage, Title } from "../styled";
 import { ISeries, ISeriesResult } from "../types_store/SeriesType";
 
 export const SeriesElem = styled(motion.div)<{ path?: string }>`
@@ -67,7 +67,7 @@ const modalVariant = {
     }
 };
 
-let cnt = 1;
+const LIMIT = 12;
 
 function CharacterSeries({ id }: { id: string }) {
 
@@ -79,6 +79,8 @@ function CharacterSeries({ id }: { id: string }) {
 
     const [clickedSeries, setClickedSeries] = useState<ISeriesResult | null>();
 
+    const [offset, setOffset] = useState(0);
+
     const [series, setSeries] = useState<ISeries>();
 
     const titleRef = useRef<HTMLHeadingElement>(null);
@@ -87,8 +89,7 @@ function CharacterSeries({ id }: { id: string }) {
 
     useEffect(() => {
         fetchSeriesContainingCharacter();
-        return () => { cnt = 1 };
-    }, []);
+    }, [offset]);
 
     useEffect(() => {
         if(clickedSeries && modalRef.current) {
@@ -120,13 +121,28 @@ function CharacterSeries({ id }: { id: string }) {
     };
 
     const fetchSeriesContainingCharacter = () => {
+        if(checkCntBiggerThanTotal()) return;
+
+        if(!isLoading) changeIsLoadingStatus();
+
         axios.get<ISeries>(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/${SUBJECT}?ts=1&apikey=${apikey}&hash=${hash}&limit=12`)
+            `${BASE_URL}${GET_ON_CHAR}/${ id }/${SUBJECT}?ts=1&apikey=${apikey}&hash=${hash
+            }&offset=${offset * LIMIT}&limit=${LIMIT}`)
             .then(res => {
-                setSeries(res.data);
-                setIsLoading(false);
+                setSeries(series => {
+                    if(!series) setSeries(res.data);
+                    else {
+                        const copied = { ...series };
+                        copied.data.results.splice(
+                            copied.data.results.length, 0, ...res.data.data.results);
+                        return copied;
+                    };
+                });
+                changeIsLoadingStatus();
             });
     };
+
+    const changeIsLoadingStatus = () => setIsLoading(now => !now);
 
     const nav = useNavigate();
 
@@ -147,29 +163,9 @@ function CharacterSeries({ id }: { id: string }) {
         if(onAniComplete) setClickedSeries(null);
     };
 
-    const fetchMoreSeries = () => {
-        if(checkCntBiggerThanTotal()) return;
-        cnt ++;
-        axios.get<ISeries>(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/${SUBJECT}?ts=1&apikey=${apikey}&hash=${
-                hash}&limit=12&offset=${(cnt - 1) * 12}`
-            )
-            .then(res => {
-                setSeries(series => {
-                    if(series) {
-                        const copied = { ...series };
-                        copied.data?.results.splice(copied.data.results.length, 0,
-                            ...res.data.data.results
-                            );
-                        return copied;
-                    };
-                });
-            });
-    };
-
     const checkCntBiggerThanTotal = () :boolean => {
         if(series?.data.total) {
-            if(cnt * 12 > series?.data.total) {
+            if(offset * LIMIT > series?.data.total) {
                 alert('No More to show!');
                 return true;
             } else return false;
@@ -179,72 +175,69 @@ function CharacterSeries({ id }: { id: string }) {
 
     return (
         <>
+            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
+
             {
-                isLoading ? <p style={{ textAlign: 'center' }}>loading... please wait.</p> :
+                series?.data.results.length === 0 ? 
+                <p style={{ textAlign: 'center' }}>sorry. no data. :(</p> :
                 <>
-                    {
-                        series?.data.results.length === 0 ? 
-                        <p style={{ textAlign: 'center' }}>sorry. no data. :(</p> :
-                        <>
-                            <Wrapper>
-                                {
-                                    series?.data.results.map(seriesElem => {
-                                        return (
-                                            <motion.span
-                                            key={seriesElem.id}
-                                            layoutId={seriesElem.id + ''}
-                                            >
-                                                <SeriesElem
-                                                path={seriesElem.thumbnail.path + "/standard_amazing.jpg"}
-                                                onClick={() => showModal(seriesElem.id)}
-                                                >
-                                                </SeriesElem>    
-                                            </motion.span>
-                                        )
-                                    })
-                                }
-                            </Wrapper>
-                            <br></br>
-                            <br></br>
-                            <ShowMoreBtn
-                            onClick={fetchMoreSeries}
-                            >show more</ShowMoreBtn>
-                            <AnimatePresence>
-                                {
-                                    !clickedSeries ? null :
-                                        <ModalBackground
-                                        onClick={hideModal}
-                                        variants={modalVariant}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        onAnimationComplete={() => onAniComplete = true}
+                    <Wrapper>
+                        {
+                            series?.data.results.map(seriesElem => {
+                                return (
+                                    <motion.span
+                                    key={seriesElem.id}
+                                    layoutId={seriesElem.id + ''}
+                                    >
+                                        <SeriesElem
+                                        path={seriesElem.thumbnail.path + "/standard_amazing.jpg"}
+                                        onClick={() => showModal(seriesElem.id)}
                                         >
-                                            <Modal
-                                            ref={modalRef}
-                                            onClick={toSeriesDetailPage}
-                                            layoutId={clickedSeries.id + ''}
-                                            >
-                                                <ModelImage
-                                                path={clickedSeries.thumbnail.path + "/standard_fantastic.jpg"}
-                                                >
-                                                    <Title
-                                                    //ref={titleRef}
-                                                    >{ clickedSeries.title }</Title>
-                                                </ModelImage>
-                                                <h5 
-                                                style={{ textAlign: 'center' }}>{ clickedSeries.description ? 
-                                                clickedSeries.description.length > 100 ? clickedSeries.description.slice(0, 150) + '...' : 
-                                                clickedSeries.description
-                                                : 'No Descriptions' }</h5>
-                                                <Years>{ 
-                                                clickedSeries.startYear + "-" + clickedSeries.endYear }</Years>
-                                            </Modal>
-                                        </ModalBackground>
-                                }
-                            </AnimatePresence>
-                        </>
-                    }
+                                        </SeriesElem>    
+                                    </motion.span>
+                                )
+                            })
+                        }
+                    </Wrapper>
+                    <br></br>
+                    <br></br>
+                    <ShowMoreBtn
+                    onClick={() => setOffset(offset => offset + 1)}
+                    >show more</ShowMoreBtn>
+                    <AnimatePresence>
+                        {
+                            !clickedSeries ? null :
+                                <ModalBackground
+                                onClick={hideModal}
+                                variants={modalVariant}
+                                initial="initial"
+                                animate="animate"
+                                exit="exit"
+                                onAnimationComplete={() => onAniComplete = true}
+                                >
+                                    <Modal
+                                    ref={modalRef}
+                                    onClick={toSeriesDetailPage}
+                                    layoutId={clickedSeries.id + ''}
+                                    >
+                                        <ModelImage
+                                        path={clickedSeries.thumbnail.path + "/standard_fantastic.jpg"}
+                                        >
+                                            <Title
+                                            //ref={titleRef}
+                                            >{ clickedSeries.title }</Title>
+                                        </ModelImage>
+                                        <h5 
+                                        style={{ textAlign: 'center' }}>{ clickedSeries.description ? 
+                                        clickedSeries.description.length > 100 ? clickedSeries.description.slice(0, 150) + '...' : 
+                                        clickedSeries.description
+                                        : 'No Descriptions' }</h5>
+                                        <Years>{ 
+                                        clickedSeries.startYear + "-" + clickedSeries.endYear }</Years>
+                                    </Modal>
+                                </ModalBackground>
+                        }
+                    </AnimatePresence>
                 </>
             }
             <Blank />

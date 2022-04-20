@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
 import EventsElements from "../components/EventsElements";
-import { Blank, Dot, EventSliderTextBox, EventTitle, FullPageSliderPic } from "../styled";
+import { Blank, Dot, EventSliderTextBox, EventTitle, FullPageSliderPic, Loading } from "../styled";
 import { IEvents, IEventsResult } from "../types_store/EventsType";
 
 const HorizonBar = styled.div`
@@ -80,7 +80,7 @@ function Events() {
         return await res.json();
     };
 
-    const { data: events } = useQuery<IEvents>(['events'], fetchEvents);
+    const { data: events, isLoading } = useQuery<IEvents>(['events'], fetchEvents);
 
     const [eventsArr, setEventsArr] = useState<IEventsResult[]>();
 
@@ -133,6 +133,7 @@ function Events() {
             <Helmet>
                 <title>Events</title>
             </Helmet>
+            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
             <Window height={windowHeight - 220}>
                 <AnimatePresence
                 onExitComplete={setSlidingCompleteDone}

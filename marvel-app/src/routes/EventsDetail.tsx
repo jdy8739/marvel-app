@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -6,7 +7,7 @@ import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
 import EventCharacters from "../components/EventsCharacters";
 import EventComics from "../components/EventsComics";
 import EventSeries from "../components/EventsSeries";
-import { EventTitle, Tab, Tabs } from "../styled";
+import { EventTitle, Loading, Tab, Tabs } from "../styled";
 import { IEvents } from "../types_store/EventsType";
 
 const FullPagePic = styled.div<{ path: string }>`
@@ -58,6 +59,10 @@ function EventsDetail() {
 
     return (
         <>
+            <Helmet>
+                <title>{ event?.title }</title>
+            </Helmet>
+            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
             {
                 isLoading ? <p>Loading. Please wait.</p> :
                 <>

@@ -134,7 +134,7 @@ function SeriesDetail() {
                 <title>{ series?.title }</title>
             </Helmet>
             <Blank />
-            { isLoading ? <><Loading src={require('../images/giphy.gif')}/><Blank /></> : null }
+            { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
             <SeriesPortrait 
             path={series?.thumbnail.path + '/standard_fantastic.jpg'}
             onClick={goBackToSeriesPage}

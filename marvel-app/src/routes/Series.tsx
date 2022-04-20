@@ -134,7 +134,7 @@ function Series() {
                 <title>Series</title>
             </Helmet>
             <Blank />
-            { isLoading ? <><Loading src={require('../images/giphy.gif')}/><Blank /></> : null }
+            { isLoading ? <Loading src={require('../images/giphy.gif')} />: null }
             {
                 !titleStartsWith ? null :
                 <h1 style={{
