@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/marvel-app/static/js/main.db76f79c.js",
+    "main.js": "/marvel-app/static/js/main.d0a18c1d.js",
     "static/media/giphy.gif": "/marvel-app/static/media/giphy.f235a9091e23a90b6d99.gif",
     "static/media/arrow.png": "/marvel-app/static/media/arrow.f49fbd84fc6f97117191.png",
     "index.html": "/marvel-app/index.html",
-    "main.db76f79c.js.map": "/marvel-app/static/js/main.db76f79c.js.map"
+    "main.d0a18c1d.js.map": "/marvel-app/static/js/main.d0a18c1d.js.map"
   },
   "entrypoints": [
-    "static/js/main.db76f79c.js"
+    "static/js/main.d0a18c1d.js"
   ]
 }
