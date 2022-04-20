@@ -1,21 +1,11 @@
 import axios from "axios";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Highlighted, Loading } from "../styled";
+import { Highlighted, Loading, EventCard } from "../styled";
 import { IEvents } from "../types_store/EventsType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
-
-
-export const EventCard = styled(motion.div)<{ path: string }>`
-    width: 320px;
-    height: 230px;
-    background-image: url(${ props => props.path });
-    background-position: center center;
-    background-size: cover;
-    margin: auto;
-`;
 
 let offsetCnt = 0;
 
@@ -120,6 +110,8 @@ function CharacterEvents({ id }: { id: string }) {
         })
     };
 
+    const nav = useNavigate();
+
     return (
         <>
             { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
@@ -140,7 +132,9 @@ function CharacterEvents({ id }: { id: string }) {
                         {
                             events?.data.results.map((event, i) => {
                                 return (
-                                    <span key={i}>
+                                    <span key={i}
+                                    onClick={() => nav('/events/detail/' + event.id)}
+                                    >
                                         {
                                             visible === i ?
                                             <>

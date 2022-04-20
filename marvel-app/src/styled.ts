@@ -237,6 +237,23 @@ export const DateChooseModal = styled.div`
     margin: auto auto;
 `;
 
+export const EventCard = styled(motion.div)<{ path: string }>`
+    width: 320px;
+    height: 230px;
+    background-image: url(${ props => props.path });
+    background-position: center center;
+    background-size: cover;
+    margin: auto;
+    cursor: pointer;
+    border: 1px solid transparent;
+    filter: grayscale(0.5);
+    &:hover {
+        filter: grayscale(0);
+        border: 1px solid #F0131E;
+    }
+`;
+
+
 export const BtnInARow = styled.div`
     width: 100%;
     text-align: right;

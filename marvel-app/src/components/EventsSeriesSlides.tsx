@@ -62,10 +62,11 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
 
     const hideModal = () => setClickedSeries(null);
 
-    const toSeriesDetailPage = 
-        (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
-
     const nav = useNavigate();
+
+    const toSeriesDetailPage = 
+        (id: number) => nav('/comics/detail/' + id);
+        
 
     return (
         <Wrapper style={{ 
@@ -109,7 +110,7 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
                     >
                         <Modal
                         layoutId={clickedSeries.id + ''}
-                        onClick={toSeriesDetailPage}
+                        onClick={() => toSeriesDetailPage(clickedSeries.id)}
                         >
                             <ModelImage
                             path={clickedSeries.thumbnail.path + "/standard_fantastic.jpg"}

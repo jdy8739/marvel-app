@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
-import { Blank, Highlighted, Loading } from "../styled";
+import { Blank, EventCard, Loading } from "../styled";
 import { IEvents } from "../types_store/EventsType";
-import { EventCard } from "./CharacterEvents";
 
 function ComicsEvents({ id }: { id: string }) {
 
@@ -23,6 +23,8 @@ function ComicsEvents({ id }: { id: string }) {
         fetchComicsEvents();
     }, []);
 
+    const nav = useNavigate();
+
     return(
         <>
             { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
@@ -35,6 +37,7 @@ function ComicsEvents({ id }: { id: string }) {
                                 <div key={event.id}>
                                     <EventCard
                                     path={event.thumbnail.path + '/landscape_xlarge.jpg'}
+                                    onClick={() => nav('/events/detail/' + event.id)}
                                     >
 
                                     </EventCard>
