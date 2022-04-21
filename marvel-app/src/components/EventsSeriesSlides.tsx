@@ -72,8 +72,9 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
         <Wrapper style={{ 
             position: 'relative',
             maxWidth: '1950px',
-            width: '100%',
-            marginBottom: '30px'
+            width: '100vw',
+            marginBottom: '30px',
+            overflow: "hidden"
         }}
         >
             <AnimatePresence>

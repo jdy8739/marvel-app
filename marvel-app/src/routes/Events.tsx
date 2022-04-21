@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +32,15 @@ const SeeMoreBtn = styled.button`
     cursor: pointer;
     &:hover {
         background-color: transparent;
+    }
+`;
+
+const SmallTitle = styled.h5`
+    color: white;
+    display: inline-block;
+    cursor: pointer;
+    &:hover {
+        color: #F0131E;
     }
 `;
 
@@ -126,6 +135,17 @@ function Events() {
         return Array.from(set);
     };
 
+    const showDataofThisTitle = async (e: React.MouseEvent<HTMLHeadingElement>) => {
+        e.stopPropagation();
+        const targetName = 
+            e.currentTarget.textContent?.split(': ')[1];
+        const res = await fetch(`${BASE_URL}${GET_EVENTS}?ts=1&apikey=${apikey}&hash=${
+            hash}&name=${targetName}`);
+        const data: IEvents = await res.json();
+        if(data) 
+            nav('/events/detail/' + data.data.results[0].id);
+    };
+
     const nav = useNavigate();
 
     return (
@@ -170,10 +190,15 @@ function Events() {
                                                             }
                                                             {
                                                                 event.previous && event.next ?
-                                                                <span>
-                                                                    <h5>PREVIOUS: { event.previous.name }</h5>
-                                                                    <h5>NEXT: { event.next.name }</h5>
-                                                                </span> : null
+                                                                <div>
+                                                                    <SmallTitle
+                                                                    onClick={showDataofThisTitle}
+                                                                    >{ "previous: " + event.previous.name.toUpperCase() }</SmallTitle>
+                                                                    &emsp;
+                                                                    <SmallTitle
+                                                                    onClick={showDataofThisTitle}
+                                                                    >{ "next: " + event.next.name.toUpperCase() }</SmallTitle>
+                                                                </div> : null
                                                             }
                                                             <SeeMoreBtn 
                                                             onClick={() => nav('/events/detail/' + event.id)}

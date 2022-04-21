@@ -30,6 +30,14 @@ const Desc = styled.h5`
     margin: 4px;
 `;
 
+const SmallTitle = styled.h5`
+    color: white;
+    display: inline-block;
+    cursor: pointer;
+    &:hover {
+        color: #F0131E;
+    }
+`;
 
 function EventsDetail() {
 
@@ -54,6 +62,17 @@ function EventsDetail() {
         ['event', eventMatch?.params.id], fetchEvent);
 
     const event = data?.data.results[0];
+
+    const showDataofThisTitle = async (e: React.MouseEvent<HTMLHeadingElement>) => {
+        e.stopPropagation();
+        const targetName = 
+            e.currentTarget.textContent?.split(': ')[1];
+        const res = await fetch(`${BASE_URL}${GET_EVENTS}?ts=1&apikey=${apikey}&hash=${
+            hash}&name=${targetName}`);
+        const data: IEvents = await res.json();
+        if(data) 
+            nav('/events/detail/' + data.data.results[0].id);
+    };
 
     const nav = useNavigate();
 
@@ -85,12 +104,16 @@ function EventsDetail() {
                             }   
                         </Desc>
                         {
-                            event?.previous ?
-                            <Desc>PREVIOUS: { event?.previous.name }</Desc> : null
-                        }
-                        {
-                            event?.next ?
-                            <Desc>NEXT: { event?.next.name }</Desc> : null
+                            event?.previous && event.next ?
+                            <div>
+                                <SmallTitle
+                                onClick={showDataofThisTitle}
+                                >{ "previous: " + event.previous.name.toUpperCase() }</SmallTitle>
+                                &emsp;
+                                <SmallTitle
+                                onClick={showDataofThisTitle}
+                                >{ "next: " + event.next.name.toUpperCase() }</SmallTitle>
+                            </div> : null
                         }
                         <Tabs 
                         style={{ 

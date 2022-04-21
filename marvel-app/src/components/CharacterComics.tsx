@@ -243,7 +243,7 @@ function CharacterComics({ id }: { id: string }) {
             }}>
                 <br></br>
                 <br></br>
-                <p>find by date if there are no data you find above.</p>
+                <p>Find by date if there are no data you find above.</p>
                 <form onSubmit={handleDateSubmit}>
                     <label>
                         <span>from </span>
