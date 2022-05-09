@@ -2,10 +2,10 @@ import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
-import { Blank, ComicsCard, Highlighted, Loading } from "../styled";
-import { IComics } from "../types_store/ComicsType";
-import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
+import { apikey, BASE_URL, GET_SERIES, hash } from "../../../api";
+import { Blank, ComicsCard, Highlighted, Loading } from "../../../styled";
+import { IComics } from "../../../types_store/ComicsType";
+import { LeftArrow, RightArrow, Wrapper } from "../../../routes/character_detail/components/CharacterComics";
 
 interface ISeriesComics {
     id: string
@@ -125,7 +125,7 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
 
     return (
         <>  
-            { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
+            { isLoading ? <Loading src={require('../../../images/giphy.gif')} /> : null }
             <br></br>
             <p style={{
                 textAlign: 'center'
@@ -171,11 +171,11 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
                     </Highlighted>
                 </AnimatePresence>
                 <LeftArrow
-                src={require('../images/arrow.png')}
+                src={require('../../../images/arrow.png')}
                 onClick={showPrev}
                 />
                 <RightArrow 
-                src={require('../images/arrow.png')}
+                src={require('../../../images/arrow.png')}
                 onClick={showNext}
                 />
             </Wrapper>

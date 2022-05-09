@@ -3,9 +3,9 @@ import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Blank, Btn, ComicsCard, Highlighted, Input, Loading } from "../styled";
-import { IComics } from "../types_store/ComicsType";
+import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../../../api";
+import { Blank, Btn, ComicsCard, Highlighted, Input, Loading } from "../../../styled";
+import { IComics } from "../../../types_store/ComicsType";
 
 export const Wrapper = styled.div`
     display: flex;
@@ -181,7 +181,7 @@ function CharacterComics({ id }: { id: string }) {
 
     return (
         <>  
-            { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
+            { isLoading ? <Loading src={require('../../../images/giphy.gif')} /> : null }
             {
                 comics?.data.results.length === 0 ? 
                 <p style={{ textAlign: 'center' }}>cannot find any data :(</p> : 
@@ -228,11 +228,11 @@ function CharacterComics({ id }: { id: string }) {
                             }
                         </AnimatePresence>
                         <LeftArrow
-                        src={require('../images/arrow.png')}
+                        src={require('../../../images/arrow.png')}
                         onClick={showPrev} 
                         />
                         <RightArrow 
-                        src={require('../images/arrow.png')}
+                        src={require('../../../images/arrow.png')}
                         onClick={showNext} 
                         />
                     </Wrapper>

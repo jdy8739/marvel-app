@@ -5,14 +5,13 @@ import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
-import { seriesPageAtom, seriesSearchedTitleAtom } from "../atoms";
-import { Wrapper } from "../components/CharacterComics";
-import SeriesCharacters from "../components/SeriesCharacters";
-import SeriesComics from "../components/SeriesComics";
-import { Blank, CharName, ClickToGoBack, Highlighted, Loading, Tab, Tabs } from "../styled";
-import { ICreators } from "../types_store/CreatorsTypes";
-import { ISeries } from "../types_store/SeriesType";
+import { apikey, BASE_URL, GET_SERIES, hash } from "../../api";
+import { seriesPageAtom, seriesSearchedTitleAtom } from "../../atoms";
+import SeriesCharacters from "./components/SeriesCharacters";
+import SeriesComics from "./components/SeriesComics";
+import { Blank, ClickToGoBack, Highlighted, Loading, Tab, Tabs } from "../../styled";
+import { ICreators } from "../../types_store/CreatorsTypes";
+import { ISeries } from "../../types_store/SeriesType";
 
 const SeriesPortrait = styled.div<{ path: string }>`
     width: 345px;
@@ -64,16 +63,23 @@ const Container = styled.div`
 
 function SeriesDetail() {
 
-    const seriesMatch = useMatch('/series/detail/:id');
+    const seriesMatch = 
+        useMatch('/series/detail/:id');
 
-    const seriesCharMatch = useMatch('/series/detail/:id/characters');
+    const seriesCharMatch = 
+        useMatch('/series/detail/:id/characters');
 
-    const seriesComicsMatch = useMatch('/series/detail/:id/comics');
+    const seriesComicsMatch = 
+        useMatch('/series/detail/:id/comics');
 
-    const seriesCreatorsMatch = useMatch('/series/detail/:id/creators');
+    const seriesCreatorsMatch = 
+        useMatch('/series/detail/:id/creators');
 
     const match = 
-    seriesMatch || seriesCharMatch || seriesComicsMatch || seriesCreatorsMatch;
+        seriesMatch || 
+        seriesCharMatch || 
+        seriesComicsMatch || 
+        seriesCreatorsMatch;
 
     const fetchSeriesDetail = async () => {
         const res = 
@@ -134,7 +140,7 @@ function SeriesDetail() {
                 <title>{ series?.title }</title>
             </Helmet>
             <Blank />
-            { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
+            { isLoading ? <Loading src={require('../../images/giphy.gif')} /> : null }
             <SeriesPortrait 
             path={series?.thumbnail.path + '/standard_fantastic.jpg'}
             onClick={goBackToSeriesPage}

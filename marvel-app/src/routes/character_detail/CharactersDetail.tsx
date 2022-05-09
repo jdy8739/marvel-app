@@ -1,17 +1,17 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
-import { useLocation, useMatch, useNavigate } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { charNameAtom, charPageAtom, charStartsWithAtom } from "../atoms";
-import CharacterComics from "../components/CharacterComics";
-import CharacterEvents from "../components/CharacterEvents";
-import CharacterSeries from "../components/CharacterSeries";
-import { Blank, ClickToGoBack, Loading, Tab, Tabs } from "../styled";
-import { ICharacter } from "../types_store/CharatersType";
+import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../../api";
+import { charNameAtom, charPageAtom, charStartsWithAtom } from "../../atoms";
+import CharacterComics from "./components/CharacterComics";
+import CharacterEvents from "./components/CharacterEvents";
+import CharacterSeries from "./components/CharacterSeries";
+import { Blank, ClickToGoBack, Loading, Tab, Tabs } from "../../styled";
+import { ICharacter } from "../../types_store/CharatersType";
 
 const CharName = styled.h1<{ length: number }>`
     position: absolute;
@@ -98,7 +98,7 @@ function CharactersDetail() {
                 <title>{ char?.data.results[0].name }</title>
             </Helmet>
             <Blank />
-            { isLoading ? <><Loading src={require('../images/giphy.gif')}/><Blank /></> : null }
+            { isLoading ? <><Loading src={require('../../images/giphy.gif')}/><Blank /></> : null }
             <Portrait 
             path={`${char?.data.results[0].thumbnail.path}/portrait_uncanny.jpg`}
             onClick={backToCharPage}

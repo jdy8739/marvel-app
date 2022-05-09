@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
-import { Blank, CharName, ComicsCard, ComicsFrameForm, Container, Loading } from "../styled";
-import { IComics } from "../types_store/ComicsType";
-import { ShowMoreBtn } from "./CharacterSeries";
+import { apikey, BASE_URL, GET_EVENTS, hash } from "../../../api";
+import { Blank, CharName, ComicsCard, ComicsFrameForm, Container, Loading } from "../../../styled";
+import { IComics } from "../../../types_store/ComicsType";
+import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
 
 const LIMIT = 20;
 
@@ -53,9 +53,9 @@ function EventComics({ id }: { id: string }) {
 
     return (
         <>
-            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={require('../../../images/giphy.gif')}/> : null }
             {
-                isLoading && !comics ? <Loading src={require('../images/giphy.gif')} /> :
+                isLoading && !comics ? <Loading src={require('../../../images/giphy.gif')} /> :
                 <Container>
                     {
                         comics?.data.results.map(comicsElem => {

@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
-import { ICharacter, ICharacterResult } from "../types_store/CharatersType";
+import { apikey, BASE_URL, GET_EVENTS, hash } from "../../../api";
+import { ICharacter, ICharacterResult } from "../../../types_store/CharatersType";
 import { AnimatePresence, motion } from "framer-motion";
-import { Blank, CenterWord, CharTitle, Container, Loading, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../styled";
-import { ShowMoreBtn } from "./CharacterSeries";
+import { Blank, CenterWord, CharTitle, Container, Loading, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../../../styled";
+import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
 import { useNavigate } from "react-router-dom";
 
 const LIMIT = 20;
@@ -64,12 +64,12 @@ function EventCharacters({ id }: { id: string }) {
 
     return (
         <>  
-            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={require('../../../images/giphy.gif')}/> : null }
             <Container style={{
                 marginTop: '30px'
             }}>
                 {
-                    isLoading && !chars ? <Loading src={require('../images/giphy.gif')}/> :
+                    isLoading && !chars ? <Loading src={require('../../../images/giphy.gif')}/> :
                     <>
                         {
                             chars?.data.results.map(char => {

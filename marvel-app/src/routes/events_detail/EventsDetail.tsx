@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
-import EventCharacters from "../components/EventsCharacters";
-import EventComics from "../components/EventsComics";
-import EventSeries from "../components/EventsSeries";
-import { EventTitle, Loading, Tab, Tabs } from "../styled";
-import { IEvents } from "../types_store/EventsType";
+import { apikey, BASE_URL, GET_EVENTS, hash } from "../../api";
+import EventCharacters from "./components/EventsCharacters";
+import EventComics from "./components/EventsComics";
+import EventSeries from "./components/EventsSeries";
+import { EventTitle, Loading, Tab, Tabs } from "../../styled";
+import { IEvents } from "../../types_store/EventsType";
 
 const FullPagePic = styled.div<{ path: string }>`
     background-image: linear-gradient(to top, rgba(0, 0, 0, 1), transparent), 
@@ -81,7 +80,7 @@ function EventsDetail() {
             <Helmet>
                 <title>{ event?.title }</title>
             </Helmet>
-            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={require('../../images/giphy.gif')}/> : null }
             {
                 isLoading ? <p>Loading. Please wait.</p> :
                 <>

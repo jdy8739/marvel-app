@@ -3,9 +3,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Blank, Btn, Loading, Modal, ModalBackground, ModelImage, Title } from "../styled";
-import { ISeries, ISeriesResult } from "../types_store/SeriesType";
+import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../../../api";
+import { Blank, Btn, Loading, Modal, ModalBackground, ModelImage, Title } from "../../../styled";
+import { ISeries, ISeriesResult } from "../../../types_store/SeriesType";
 
 export const SeriesElem = styled(motion.div)<{ path?: string }>`
     background-image: url(${ props => props.path });
@@ -175,7 +175,7 @@ function CharacterSeries({ id }: { id: string }) {
 
     return (
         <>
-            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={require('../../../images/giphy.gif')}/> : null }
 
             {
                 series?.data.results.length === 0 ? 

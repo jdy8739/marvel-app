@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
-import { Blank, Loading } from "../styled";
-import { ISeries } from "../types_store/SeriesType";
-import { ShowMoreBtn } from "./CharacterSeries";
-import EventsSeriesSlides from "./EventsSeriesSlides";
+import { apikey, BASE_URL, GET_EVENTS, hash } from "../../../api";
+import { Blank, Loading } from "../../../styled";
+import { ISeries } from "../../../types_store/SeriesType";
+import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
+import EventsSeriesSlides from "../components/EventsSeriesSlides";
+
 
 const SeriesFlexBox = styled.div`
     display: flex;
@@ -62,9 +63,9 @@ function EventSeries({ id }: { id: string }) {
     
     return (
         <>  
-            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={require('../../../images/giphy.gif')}/> : null }
             {
-                isLoading && !series ? <Loading src={require('../images/giphy.gif')} /> :
+                isLoading && !series ? <Loading src={require('../../../images/giphy.gif')} /> :
                 <>
                     {
                         series?.data.results.map((seriesElem, i) => {

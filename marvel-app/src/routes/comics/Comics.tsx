@@ -6,10 +6,10 @@ import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_COMICS, hash } from "../api";
-import { comicsSearchedTitleAtom, comicsSearchedDateAtom, comicsPageAtom } from "../atoms";
-import { Blank, Btn, BtnInARow, CharName, ComicsFrameForm, Container, DateChooseModal, Highlighted, Input, Loading, ModalBackground } from "../styled";
-import { IComics } from "../types_store/ComicsType";
+import { apikey, BASE_URL, GET_COMICS, hash } from "../../api";
+import { comicsSearchedTitleAtom, comicsSearchedDateAtom, comicsPageAtom } from "../../atoms";
+import { Blank, Btn, BtnInARow, CharName, ComicsFrameForm, Container, DateChooseModal, Highlighted, Input, Loading, ModalBackground } from "../../styled";
+import { IComics } from "../../types_store/ComicsType";
 
 const DateForm = styled.form`
     display: flex;
@@ -195,7 +195,7 @@ function Comics() {
                 <title>Comics</title>
             </Helmet>
             <Blank />
-            { isLoading ? <><Loading src={require('../images/giphy.gif')}/><Blank /></> : null }
+            { isLoading ? <><Loading src={require('../../images/giphy.gif')}/><Blank /></> : null }
             {
                 !title ? null :
                 <h1 style={{

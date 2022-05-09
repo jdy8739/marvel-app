@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { IEventsResult } from "../types_store/EventsType";
+import { IEventsResult } from "../../types_store/EventsType";
 
 const EventPic = styled.div<{ path: string }>`
     background-image: url(${ props => props.path });

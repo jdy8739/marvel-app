@@ -1,15 +1,14 @@
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_CHAR, hash } from "../api";
-import { charPageAtom, charStartsWithAtom, charNameAtom } from "../atoms";
-import CharacterCard from "../components/CharacterCard";
-import { Highlighted, Container, Btn, Input, Blank, BtnInARow, Loading } from "../styled";
-import { ICharacter } from "../types_store/CharatersType";
+import { apikey, BASE_URL, GET_CHAR, hash } from "../../api";
+import { charPageAtom, charStartsWithAtom, charNameAtom } from "../../atoms";
+import CharacterCard from "../../components/commons/CharacterCard";
+import { Highlighted, Container, Btn, Input, Blank, BtnInARow, Loading } from "../../styled";
+import { ICharacter } from "../../types_store/CharatersType";
 
 const CharIcon = styled.span`
     padding: 5px;
@@ -141,7 +140,7 @@ function Characters() {
                 <title>Marvel Characters</title>
             </Helmet>
             <Blank />
-            { isLoading ? <><Loading src={require('../images/giphy.gif')}/><Blank /></> : null }
+            { isLoading ? <><Loading src={require('../../images/giphy.gif')}/><Blank /></> : null }
             {
                 !startsWith && !name ? null :
                 <h1 style={{

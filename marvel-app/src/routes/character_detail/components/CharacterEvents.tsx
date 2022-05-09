@@ -2,9 +2,9 @@ import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../api";
-import { Highlighted, Loading, EventCard } from "../styled";
-import { IEvents } from "../types_store/EventsType";
+import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../../../api";
+import { Highlighted, Loading, EventCard } from "../../../styled";
+import { IEvents } from "../../../types_store/EventsType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
 
 let offsetCnt = 0;
@@ -114,7 +114,7 @@ function CharacterEvents({ id }: { id: string }) {
 
     return (
         <>
-            { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
+            { isLoading ? <Loading src={require('../../../images/giphy.gif')} /> : null }
             {
                 events?.data.results.length === 0 ? 
                 <p style={{
@@ -165,10 +165,10 @@ function CharacterEvents({ id }: { id: string }) {
                         }
                         </AnimatePresence>
                         <LeftArrow
-                        src={require('../images/arrow.png')}
+                        src={require('../../../images/arrow.png')}
                         onClick={showPrev} />
                         <RightArrow 
-                        src={require('../images/arrow.png')}
+                        src={require('../../../images/arrow.png')}
                         onClick={showNext} />
                     </Wrapper>
                 </>

@@ -4,10 +4,10 @@ import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_EVENTS, hash } from "../api";
-import EventsElements from "../components/EventsElements";
-import { Blank, Dot, EventSliderTextBox, EventTitle, FullPageSliderPic, Loading } from "../styled";
-import { IEvents, IEventsResult } from "../types_store/EventsType";
+import { apikey, BASE_URL, GET_EVENTS, hash } from "../../api";
+import EventsElements from "../../components/commons/EventsElements";
+import { Blank, Dot, EventSliderTextBox, EventTitle, FullPageSliderPic, Loading } from "../../styled";
+import { IEvents, IEventsResult } from "../../types_store/EventsType";
 
 const HorizonBar = styled.div`
     background-color: #F0131E;
@@ -153,7 +153,7 @@ function Events() {
             <Helmet>
                 <title>Events</title>
             </Helmet>
-            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={require('../../images/giphy.gif')}/> : null }
             <Window height={windowHeight - 220}>
                 <AnimatePresence
                 onExitComplete={setSlidingCompleteDone}

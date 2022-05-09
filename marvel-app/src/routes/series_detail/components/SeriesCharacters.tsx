@@ -1,11 +1,12 @@
+
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
-import { Blank, CenterWord, CharTitle, Container, Loading, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../styled";
-import { ICharacter, ICharacterResult } from "../types_store/CharatersType";
-import { ShowMoreBtn } from "./CharacterSeries";
+import { apikey, BASE_URL, GET_SERIES, hash } from "../../../api";
+import { Blank, CenterWord, CharTitle, Container, Loading, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../../../styled";
+import { ICharacter, ICharacterResult } from "../../../types_store/CharatersType";
+import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
 
 type TypeCharResult = ICharacterResult | undefined;
 
@@ -78,7 +79,7 @@ function SeriesCharacters({ id }: { id: string }) {
 
     return (
         <>  
-            { isLoading ? <Loading src={require('../images/giphy.gif')} /> : null }
+            { isLoading ? <Loading src={require('../../../images/giphy.gif')} /> : null }
             <br></br>
             {
                 chars?.data.results.length === 0 ?

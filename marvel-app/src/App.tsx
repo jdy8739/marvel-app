@@ -1,16 +1,15 @@
-import React from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import Navigation from './components/Navigation';
-import Characters from './routes/Characters';
-import CharactersDetail from './routes/CharactersDetail';
-import Comics from './routes/Comics';
-import ComicsDetail from './routes/ComicsDetail';
-import Events from './routes/Events';
-import EventsDetail from './routes/EventsDetail';
+import Characters from './routes/characters/Characters';
+import CharactersDetail from './routes/character_detail/CharactersDetail';
+import Comics from './routes/comics/Comics';
+import ComicsDetail from './routes/comics_detail/ComicsDetail';
+import Events from './routes/events/Events';
+import EventsDetail from './routes/events_detail/EventsDetail';
 import Home from './routes/Home';
-import Series from './routes/Series';
-import SeriesDetail from './routes/SeriesDetail';
+import Series from './routes/series/Series';
+import SeriesDetail from './routes/series_detail/SeriesDetail';
 
 function App() {
   return (

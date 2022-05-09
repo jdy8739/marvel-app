@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../api";
-import { Blank, EventCard, Loading } from "../styled";
-import { IEvents } from "../types_store/EventsType";
+import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../../../api";
+import { Blank, EventCard, Loading } from "../../../styled";
+import { IEvents } from "../../../types_store/EventsType";
 
 function ComicsEvents({ id }: { id: string }) {
 
@@ -27,7 +27,7 @@ function ComicsEvents({ id }: { id: string }) {
 
     return(
         <>
-            { isLoading ? <Loading src={require('../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={require('../../../images/giphy.gif')}/> : null }
             {
                 events?.data.results.length !== 0 ?
                 <>

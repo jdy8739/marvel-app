@@ -1,6 +1,6 @@
 import React from "react";
-import { CharacterCardForm, CharName, Highlighted } from "../styled";
-import { ICharacterResult } from "../types_store/CharatersType";
+import { CharacterCardForm, CharName } from "../../styled";
+import { ICharacterResult } from "../../types_store/CharatersType";
 
 function CharacterCard({ char }: { char: ICharacterResult }) {
     return (

@@ -2,11 +2,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { modalVariant } from "../routes/Comics";
-import { Modal, ModalBackground, ModelImage, Title } from "../styled";
-import { ISeriesResult } from "../types_store/SeriesType";
-import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
-import { SeriesElem } from "./CharacterSeries";
+import { modalVariant } from "../../comics/Comics";
+import { Modal, ModalBackground, ModelImage, Title } from "../../../styled";
+import { ISeriesResult } from "../../../types_store/SeriesType";
+import { LeftArrow, RightArrow, Wrapper } from "../../character_detail/components/CharacterComics";
+import { SeriesElem } from "../../character_detail/components/CharacterSeries";
 
 const LeftArrowBox = styled.div`
     width: 55px;
@@ -137,7 +137,7 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
                     right: '0', 
                     margin: 'auto'
                 }}
-                src={require('../images/arrow.png')}
+                src={require('../../../images/arrow.png')}
                 onClick={showPrevious}
                 />
             </LeftArrowBox>
@@ -149,7 +149,7 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
                     right: '0', 
                     margin: 'auto'
                 }}
-                src={require('../images/arrow.png')}
+                src={require('../../../images/arrow.png')}
                 onClick={showNext}
                 />
             </RightArrowBox>

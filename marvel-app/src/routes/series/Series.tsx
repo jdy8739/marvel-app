@@ -1,14 +1,13 @@
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_SERIES, hash } from "../api";
-import { seriesPageAtom, seriesSearchedTitleAtom } from "../atoms";
-import { Blank, Btn, BtnInARow, CharName, Container, Highlighted, Input, Loading } from "../styled";
-import { ISeries } from "../types_store/SeriesType";
+import { apikey, BASE_URL, GET_SERIES, hash } from "../../api";
+import { seriesPageAtom, seriesSearchedTitleAtom } from "../../atoms";
+import { Blank, Btn, BtnInARow, CharName, Container, Highlighted, Input, Loading } from "../../styled";
+import { ISeries } from "../../types_store/SeriesType";
 
 const SeriesFrame = styled.div<{ path: string }>`
     width: 175px;
@@ -134,7 +133,7 @@ function Series() {
                 <title>Series</title>
             </Helmet>
             <Blank />
-            { isLoading ? <><Loading src={require('../images/giphy.gif')} /><Blank /></>: null }
+            { isLoading ? <><Loading src={require('../../images/giphy.gif')} /><Blank /></>: null }
             {
                 !titleStartsWith ? null :
                 <h1 style={{
