@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_EVENTS, hash } from "../../../api";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import { Blank, Loading } from "../../../styled";
 import { ISeries } from "../../../types_store/SeriesType";
 import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
@@ -26,8 +26,7 @@ function EventSeries({ id }: { id: string }) {
         if(!isLoading) setIsLoading(true);
 
         axios.get<ISeries>(
-            `${BASE_URL}${GET_EVENTS}/${id}/comics?ts=1&apikey=${apikey}&hash=${hash
-            }&offset=${offsetCnt * LIMIT}&limit=${LIMIT}`)
+            `${BASE_URL}events/${ id }/comics?${KEY_STRING}&offset=${offsetCnt * LIMIT}&limit=${LIMIT}`)
             .then(res => {
                 setSeries(series => {
                     if(!series) return res.data;

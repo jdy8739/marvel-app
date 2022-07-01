@@ -5,13 +5,13 @@ import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_SERIES, hash } from "../../api";
 import { seriesPageAtom, seriesSearchedTitleAtom } from "../../atoms";
 import SeriesCharacters from "./components/SeriesCharacters";
 import SeriesComics from "./components/SeriesComics";
 import { Blank, ClickToGoBack, Highlighted, Loading, Tab, Tabs } from "../../styled";
 import { ICreators } from "../../types_store/CreatorsTypes";
 import { ISeries } from "../../types_store/SeriesType";
+import { BASE_URL, KEY_STRING } from "../../key";
 
 const SeriesPortrait = styled.div<{ path: string }>`
     width: 345px;
@@ -84,7 +84,7 @@ function SeriesDetail() {
     const fetchSeriesDetail = async () => {
         const res = 
         await fetch(
-            `${BASE_URL}${GET_SERIES}/${match?.params.id}?ts=1&apikey=${apikey}&hash=${hash}`);
+            `${BASE_URL}series/${match?.params.id}?${KEY_STRING}`);
         return await res.json();
     };
 
@@ -126,7 +126,7 @@ function SeriesDetail() {
     useEffect(() => {
         if(seriesCreatorsMatch && !creators) {
             axios.get<ICreators>(
-                `${BASE_URL}${GET_SERIES}/${match?.params.id}/creators?ts=1&apikey=${apikey}&hash=${hash}`)
+                `${BASE_URL}series/${match?.params.id}/creators?${KEY_STRING}`)
                 .then(res => {
 
                     setCreators(res.data);

@@ -4,9 +4,9 @@ import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_CHAR, hash } from "../../api";
 import { charPageAtom, charStartsWithAtom, charNameAtom } from "../../atoms";
 import CharacterCard from "../../components/commons/CharacterCard";
+import { BASE_URL, KEY_STRING } from "../../key";
 import { Highlighted, Container, Btn, Input, Blank, BtnInARow, Loading } from "../../styled";
 import { ICharacter } from "../../types_store/CharatersType";
 
@@ -41,7 +41,7 @@ function Characters() {
 
     let name = paramsSearcher.get('name');
 
-    const [charStartsWith, setCharStartsWith] = useRecoilState(charStartsWithAtom);
+    const setCharStartsWith = useSetRecoilState(charStartsWithAtom);
 
     const [charName, setCharName] = useRecoilState(charNameAtom);
 
@@ -50,7 +50,7 @@ function Characters() {
     setCharPage(+nowPage);
 
     const fetchCharacters = async () => {
-        const res = await fetch(`${BASE_URL}${GET_CHAR}&apikey=${apikey}&hash=${hash}&offset=${
+        const res = await fetch(`${BASE_URL}characters?${KEY_STRING}&offset=${
             (+nowPage - 1) * LIMIT}&limit=${LIMIT}${
             startsWith ? `&nameStartsWith=${startsWith}` : ''}${
             name ? `&name=${name}` : ''

@@ -3,7 +3,7 @@ import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_SERIES, hash } from "../../../api";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import { Blank, CenterWord, CharTitle, Container, Loading, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../../../styled";
 import { ICharacter, ICharacterResult } from "../../../types_store/CharatersType";
 import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
@@ -24,8 +24,7 @@ function SeriesCharacters({ id }: { id: string }) {
         if(!isLoading) setIsLoading(true);
 
         axios.get<ICharacter>(
-            `${BASE_URL}${GET_SERIES}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash
-            }&offset=${offsetCnt * LIMIT}&limit=${LIMIT}`)
+            `${BASE_URL}series/${ id }/characters?${KEY_STRING}&offset=${offsetCnt * LIMIT}&limit=${LIMIT}`)
             .then(res => {
                 setChars(chars => {
                     if(!chars) return res.data;

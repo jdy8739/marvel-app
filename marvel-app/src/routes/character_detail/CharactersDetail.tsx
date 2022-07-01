@@ -5,13 +5,13 @@ import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../../api";
 import { charNameAtom, charPageAtom, charStartsWithAtom } from "../../atoms";
 import CharacterComics from "./components/CharacterComics";
 import CharacterEvents from "./components/CharacterEvents";
 import CharacterSeries from "./components/CharacterSeries";
 import { Blank, ClickToGoBack, Loading, Tab, Tabs } from "../../styled";
 import { ICharacter } from "../../types_store/CharatersType";
+import { BASE_URL, KEY_STRING } from "../../key";
 
 const CharName = styled.h1<{ length: number }>`
     position: absolute;
@@ -23,7 +23,6 @@ const CharName = styled.h1<{ length: number }>`
     opacity: 0.75;
     transition: all 1s;
 `;
-
 
 const Portrait = styled.div<{ path: string }>`
     background-image: linear-gradient(to top, #252525, transparent), url(${ props => props.path });
@@ -62,7 +61,7 @@ function CharactersDetail() {
 
     const fetchSingleCharacter = async (id: string) => {
         const res = await fetch(
-            `${BASE_URL}${GET_ON_CHAR}/${id}?ts=1&apikey=${apikey}&hash=${hash}`);
+            `${BASE_URL}characters/${ id }?${KEY_STRING}`);
         
         return await res.json();
     };

@@ -1,9 +1,9 @@
 import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../../../api";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import { Blank, Btn, ComicsCard, Highlighted, Input, Loading } from "../../../styled";
 import { IComics } from "../../../types_store/ComicsType";
 
@@ -55,7 +55,7 @@ function CharacterComics({ id }: { id: string }) {
     const fetchComicsContainingCharacter = () => {
         if(!isLoading) channgeIsLoadingStatus();
         axios.get(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=${LIMIT}
+            `${BASE_URL}characters/${ id }/comics?${KEY_STRING}&limit=${LIMIT}
             &offset=${offsetCnt * LIMIT}`)
             .then(res => {
                 setComics(comics => {
@@ -168,8 +168,7 @@ function CharacterComics({ id }: { id: string }) {
         if(!isLoading) channgeIsLoadingStatus();
         
         axios.get<IComics>(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/comics?ts=1&apikey=${apikey}&hash=${hash
-            }&limit=12&dateRange=${dateFrom},${dateTo}`
+            `${BASE_URL}characters/${ id }/comics?${KEY_STRING}&limit=12&dateRange=${dateFrom},${dateTo}`
             )
             .then(res => {
                 setComics(res.data);

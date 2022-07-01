@@ -2,7 +2,7 @@ import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../../../api";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import { Highlighted, Loading, EventCard } from "../../../styled";
 import { IEvents } from "../../../types_store/EventsType";
 import { LeftArrow, RightArrow, Wrapper } from "./CharacterComics";
@@ -18,7 +18,7 @@ function CharacterEvents({ id }: { id: string }) {
     const fetchEventsContainingCharacter = () => {
         if(!isLoading) channgeIsLoadingStatus();
         axios.get(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/events?ts=1&apikey=${apikey}&hash=${hash}&limit=12
+            `${BASE_URL}characters/${ id }/events?${KEY_STRING}&limit=12
             &offset=${offsetCnt * 12}`
             )
             .then(res => {

@@ -4,8 +4,8 @@ import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_SERIES, hash } from "../../api";
 import { seriesPageAtom, seriesSearchedTitleAtom } from "../../atoms";
+import { BASE_URL, KEY_STRING } from "../../key";
 import { Blank, Btn, BtnInARow, CharName, Container, Highlighted, Input, Loading } from "../../styled";
 import { ISeries } from "../../types_store/SeriesType";
 
@@ -47,7 +47,7 @@ function Series() {
     const startYear: string = paramsSearcher.get('year') || '';
 
     const fetchSeries = async () => {
-        const res = await fetch(`${BASE_URL}${GET_SERIES}?ts=1&apikey=${apikey}&hash=${hash}&offset=${
+        const res = await fetch(`${BASE_URL}series?${KEY_STRING}&offset=${
             (+nowPage - 1) * LIMIT}&limit=${LIMIT}${
             titleStartsWith ? `&titleStartsWith=${titleStartsWith}` : ''}${
             startYear ? `&startYear=${startYear}` : ''

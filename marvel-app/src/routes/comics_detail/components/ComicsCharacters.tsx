@@ -2,7 +2,7 @@ import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../../../api";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import { CharTitle, CenterWord, Container, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName, Blank, Loading } from "../../../styled";
 import { ICharacterResult, ICharacter } from "../../../types_store/CharatersType";
 
@@ -15,7 +15,7 @@ function ComicsCharacters({ id }: { id: string }) {
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchCharactersInThisComic = () => {
-        axios.get<ICharacter>(`${BASE_URL}${GET_ON_COMICS}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash}`)
+        axios.get<ICharacter>(`${BASE_URL}comics/${ id }/characters?${KEY_STRING}`)
             .then(res => {
                 setChars(res.data);
                 setIsLoading(false);

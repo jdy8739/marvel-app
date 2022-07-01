@@ -2,10 +2,10 @@ import axios from "axios";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_SERIES, hash } from "../../../api";
 import { Blank, ComicsCard, Highlighted, Loading } from "../../../styled";
 import { IComics } from "../../../types_store/ComicsType";
 import { LeftArrow, RightArrow, Wrapper } from "../../../routes/character_detail/components/CharacterComics";
+import { BASE_URL, KEY_STRING } from "../../../key";
 
 interface ISeriesComics {
     id: string
@@ -27,7 +27,7 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
     const fetchComics = () => {
         if(!isLoading) changeIsLoadingStatus();
         axios.get<IComics>(
-            `${BASE_URL}${GET_SERIES}/${id}/comics?ts=1&apikey=${apikey}&hash=${hash}&limit=${LIMIT}
+            `${BASE_URL}series/${ id }/comics?${KEY_STRING}&limit=${LIMIT}
             &offset=${offsetCnt * 12}`)
             .then(res => {
                 setComics(comics => {

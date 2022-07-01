@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_ON_COMICS, hash } from "../../../api";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import { Blank, EventCard, Loading } from "../../../styled";
 import { IEvents } from "../../../types_store/EventsType";
 
@@ -12,7 +12,7 @@ function ComicsEvents({ id }: { id: string }) {
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchComicsEvents = () => {
-        axios.get<IEvents>(`${BASE_URL}${GET_ON_COMICS}/${id}/events?ts=1&apikey=${apikey}&hash=${hash}`)
+        axios.get<IEvents>(`${BASE_URL}comics/${ id }/events?${KEY_STRING}`)
             .then(res => {
                 setEvents(res.data);
                 setIsLoading(false);

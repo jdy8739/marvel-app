@@ -1,13 +1,12 @@
-import axios from "axios";
 import { AnimatePresence } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_COMICS, hash } from "../../api";
 import { comicsSearchedTitleAtom, comicsSearchedDateAtom, comicsPageAtom } from "../../atoms";
+import { BASE_URL, KEY_STRING } from "../../key";
 import { Blank, Btn, BtnInARow, CharName, ComicsFrameForm, Container, DateChooseModal, Highlighted, Input, Loading, ModalBackground } from "../../styled";
 import { IComics } from "../../types_store/ComicsType";
 
@@ -69,7 +68,7 @@ function Comics() {
     setPage(+nowPage);
 
     const fetchComics = async function() {
-        const res = await fetch(`${BASE_URL}${GET_COMICS}&apikey=${apikey}&hash=${hash}&offset=${
+        const res = await fetch(`${BASE_URL}comics?${KEY_STRING}&offset=${
             (+nowPage - 1)* LIMIT}&limit=${LIMIT}${
             latterDate ? `&dateRange=${formerDate},${latterDate}` : ''}${
             title ? `&title=${title}` : ''

@@ -4,8 +4,8 @@ import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_EVENTS, hash } from "../../api";
 import EventsElements from "../../components/commons/EventsElements";
+import { BASE_URL, KEY_STRING } from "../../key";
 import { Blank, Dot, EventSliderTextBox, EventTitle, FullPageSliderPic, Loading } from "../../styled";
 import { IEvents, IEventsResult } from "../../types_store/EventsType";
 
@@ -84,8 +84,7 @@ function Events() {
     };
 
     const fetchEvents = async () => {
-        const res = await fetch(`${BASE_URL}${GET_EVENTS}?ts=1&apikey=${apikey}&hash=${
-            hash}&offset=0&limit=${TOTAL}`);
+        const res = await fetch(`${BASE_URL}events?${KEY_STRING}&offset=0&limit=${TOTAL}`);
         return await res.json();
     };
 
@@ -139,8 +138,7 @@ function Events() {
         e.stopPropagation();
         const targetName = 
             e.currentTarget.textContent?.split(': ')[1];
-        const res = await fetch(`${BASE_URL}${GET_EVENTS}?ts=1&apikey=${apikey}&hash=${
-            hash}&name=${targetName}`);
+        const res = await fetch(`${BASE_URL}events?${KEY_STRING}&name=${targetName}`);
         const data: IEvents = await res.json();
         if(data) 
             nav('/events/detail/' + data.data.results[0].id);

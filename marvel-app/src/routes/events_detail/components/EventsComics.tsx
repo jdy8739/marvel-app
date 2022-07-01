@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apikey, BASE_URL, GET_EVENTS, hash } from "../../../api";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import { Blank, CharName, ComicsCard, ComicsFrameForm, Container, Loading } from "../../../styled";
 import { IComics } from "../../../types_store/ComicsType";
 import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
@@ -27,8 +27,7 @@ function EventComics({ id }: { id: string }) {
         if(!isLoading) setIsLoading(true);
 
         axios.get<IComics>(
-            `${BASE_URL}${GET_EVENTS}/${id}/comics?ts=1&apikey=${apikey}&hash=${hash
-            }&offset=${offsetCnt * LIMIT}`)
+            `${BASE_URL}events/${ id }/comics?${KEY_STRING}&offset=${offsetCnt * LIMIT}`)
             .then(res => {
                 setComics(comics => {
                     if(!comics) return res.data;

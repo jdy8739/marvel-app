@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { apikey, BASE_URL, GET_EVENTS, hash } from "../../../api";
 import { ICharacter, ICharacterResult } from "../../../types_store/CharatersType";
 import { AnimatePresence, motion } from "framer-motion";
 import { Blank, CenterWord, CharTitle, Container, Loading, ModalBackground, RoundModal, RoundPortrait, RoundPortraitName } from "../../../styled";
 import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL, KEY_STRING } from "../../../key";
 
 const LIMIT = 20;
 
@@ -28,8 +28,7 @@ function EventCharacters({ id }: { id: string }) {
         if(!isLoading) setIsLoading(true);
         
         axios.get<ICharacter>(
-            `${BASE_URL}${GET_EVENTS}/${id}/characters?ts=1&apikey=${apikey}&hash=${hash
-            }&offset=${offsetCnt * LIMIT}`)
+            `${BASE_URL}events/${ id }/characters?${KEY_STRING}&offset=${offsetCnt * LIMIT}`)
             .then(res => {
                 setChars(chars => {
                     if(!chars) return res.data;

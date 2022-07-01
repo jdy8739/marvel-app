@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { apikey, BASE_URL, GET_ON_CHAR, hash } from "../../../api";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import { Blank, Btn, Loading, Modal, ModalBackground, ModelImage, Title } from "../../../styled";
 import { ISeries, ISeriesResult } from "../../../types_store/SeriesType";
 
@@ -71,8 +71,6 @@ const LIMIT = 12;
 
 function CharacterSeries({ id }: { id: string }) {
 
-    const SUBJECT = 'series'
-
     let onAniComplete = false;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -122,12 +120,9 @@ function CharacterSeries({ id }: { id: string }) {
 
     const fetchSeriesContainingCharacter = () => {
         if(checkCntBiggerThanTotal()) return;
-
         if(!isLoading) changeIsLoadingStatus();
-
         axios.get<ISeries>(
-            `${BASE_URL}${GET_ON_CHAR}/${ id }/${SUBJECT}?ts=1&apikey=${apikey}&hash=${hash
-            }&offset=${offset * LIMIT}&limit=${LIMIT}`)
+            `${BASE_URL}characters/${ id }/series?${KEY_STRING}&offset=${offset * LIMIT}&limit=${LIMIT}`)
             .then(res => {
                 setSeries(series => {
                     if(!series) setSeries(res.data);
