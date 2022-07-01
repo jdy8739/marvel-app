@@ -170,7 +170,7 @@ function CharacterSeries({ id }: { id: string }) {
 
     return (
         <>
-            { isLoading ? <Loading src={require('../../../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'}/> : null }
 
             {
                 series?.data.results.length === 0 ? 

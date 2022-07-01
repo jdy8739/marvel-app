@@ -6,6 +6,7 @@ import { Blank, ComicsCard, Highlighted, Loading } from "../../../styled";
 import { IComics } from "../../../types_store/ComicsType";
 import { LeftArrow, RightArrow, Wrapper } from "../../../routes/character_detail/components/CharacterComics";
 import { BASE_URL, KEY_STRING } from "../../../key";
+import React from 'react';
 
 interface ISeriesComics {
     id: string
@@ -125,7 +126,7 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
 
     return (
         <>  
-            { isLoading ? <Loading src={require('../../../images/giphy.gif')} /> : null }
+            { isLoading ? <Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'} /> : null }
             <br></br>
             <p style={{
                 textAlign: 'center'
@@ -171,11 +172,11 @@ function SeriesComics({ id, chosenComicsName = "" }: ISeriesComics) {
                     </Highlighted>
                 </AnimatePresence>
                 <LeftArrow
-                src={require('../../../images/arrow.png')}
+                src={process.env.PUBLIC_URL + '/images/arrow.png'}
                 onClick={showPrev}
                 />
                 <RightArrow 
-                src={require('../../../images/arrow.png')}
+                src={process.env.PUBLIC_URL + '/images/arrow.png'}
                 onClick={showNext}
                 />
             </Wrapper>

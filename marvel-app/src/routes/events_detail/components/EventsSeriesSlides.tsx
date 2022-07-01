@@ -137,7 +137,7 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
                     right: '0', 
                     margin: 'auto'
                 }}
-                src={require('../../../images/arrow.png')}
+                src={process.env.PUBLIC_URL + '/images/arrow.png'}
                 onClick={showPrevious}
                 />
             </LeftArrowBox>
@@ -149,7 +149,7 @@ function EventsSeriesSlides({ slidesElements }: { slidesElements: ISeriesResult[
                     right: '0', 
                     margin: 'auto'
                 }}
-                src={require('../../../images/arrow.png')}
+                src={process.env.PUBLIC_URL + '/images/arrow.png'}
                 onClick={showNext}
                 />
             </RightArrowBox>

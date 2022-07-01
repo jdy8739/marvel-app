@@ -79,7 +79,7 @@ function EventsDetail() {
             <Helmet>
                 <title>{ event?.title }</title>
             </Helmet>
-            { isLoading ? <Loading src={require('../../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'}/> : null }
             {
                 isLoading ? <p>Loading. Please wait.</p> :
                 <>

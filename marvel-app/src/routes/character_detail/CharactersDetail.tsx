@@ -97,7 +97,7 @@ function CharactersDetail() {
                 <title>{ char?.data.results[0].name }</title>
             </Helmet>
             <Blank />
-            { isLoading ? <><Loading src={require('../../images/giphy.gif')}/><Blank /></> : null }
+            { isLoading ? <><Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'}/><Blank /></> : null }
             <Portrait 
             path={`${char?.data.results[0].thumbnail.path}/portrait_uncanny.jpg`}
             onClick={backToCharPage}

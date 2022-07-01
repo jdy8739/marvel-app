@@ -151,7 +151,7 @@ function Events() {
             <Helmet>
                 <title>Events</title>
             </Helmet>
-            { isLoading ? <Loading src={require('../../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'}/> : null }
             <Window height={windowHeight - 220}>
                 <AnimatePresence
                 onExitComplete={setSlidingCompleteDone}

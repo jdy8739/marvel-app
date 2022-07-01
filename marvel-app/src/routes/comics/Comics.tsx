@@ -194,12 +194,12 @@ function Comics() {
                 <title>Comics</title>
             </Helmet>
             <Blank />
-            { isLoading ? <><Loading src={require('../../images/giphy.gif')}/><Blank /></> : null }
+            { isLoading ? <><Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'}/><Blank /></> : null }
             {
                 !title ? null :
                 <h1 style={{
                     textAlign: 'center'
-                }}>Results for "<Highlighted>{ title }</Highlighted>"</h1>
+                }}>Results for &quot;<Highlighted>{ title }</Highlighted>&quot;</h1>
             }
             <Container>
                 <BtnInARow> 
@@ -239,7 +239,7 @@ function Comics() {
                                         length={comic.title.length}
                                         >{ comic.title.length > 20 ? comic.title.slice(0, 20) + '...' : comic.title }</CharName>
                                     </ComicsFrameForm>
-                                )
+                                );
                             })
                         }
                     </>
@@ -270,7 +270,7 @@ function Comics() {
                                     >{ +nowPage + idx }</Btn>
                                 }
                             </span>
-                        )
+                        );
                     })
                 }
                 <Btn
@@ -316,7 +316,7 @@ function Comics() {
             </AnimatePresence>
             <Blank />
         </>
-    )
-};
+    );
+}
 
 export default Comics;

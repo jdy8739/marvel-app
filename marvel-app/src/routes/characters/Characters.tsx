@@ -140,7 +140,7 @@ function Characters() {
                 <title>Marvel Characters</title>
             </Helmet>
             <Blank />
-            { isLoading ? <><Loading src={require('../../images/giphy.gif')}/><Blank /></> : null }
+            { isLoading ? <><Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'}/><Blank /></> : null }
             {
                 !startsWith && !name ? null :
                 <h1 style={{

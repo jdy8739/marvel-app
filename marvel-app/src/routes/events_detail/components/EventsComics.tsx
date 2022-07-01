@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL, KEY_STRING } from "../../../key";
-import { Blank, CharName, ComicsCard, ComicsFrameForm, Container, Loading } from "../../../styled";
+import { Blank, CharName, ComicsFrameForm, Container, Loading } from "../../../styled";
 import { IComics } from "../../../types_store/ComicsType";
 import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
 
@@ -52,9 +52,9 @@ function EventComics({ id }: { id: string }) {
 
     return (
         <>
-            { isLoading ? <Loading src={require('../../../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={process.env.PUBLIC_URL + 'images/giphy.gif'}/> : null }
             {
-                isLoading && !comics ? <Loading src={require('../../../images/giphy.gif')} /> :
+                isLoading && !comics ? <Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'} /> :
                 <Container>
                     {
                         comics?.data.results.map(comicsElem => {

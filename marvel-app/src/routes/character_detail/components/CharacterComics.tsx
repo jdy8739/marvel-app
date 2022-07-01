@@ -180,7 +180,7 @@ function CharacterComics({ id }: { id: string }) {
 
     return (
         <>  
-            { isLoading ? <Loading src={require('../../../images/giphy.gif')} /> : null }
+            { isLoading ? <Loading src={'/images/giphy.gif'} /> : null }
             {
                 comics?.data.results.length === 0 ? 
                 <p style={{ textAlign: 'center' }}>cannot find any data :(</p> : 
@@ -227,11 +227,11 @@ function CharacterComics({ id }: { id: string }) {
                             }
                         </AnimatePresence>
                         <LeftArrow
-                        src={require('../../../images/arrow.png')}
+                        src={process.env.PUBLIC_URL + '/images/arrow.png'}
                         onClick={showPrev} 
                         />
                         <RightArrow 
-                        src={require('../../../images/arrow.png')}
+                        src={process.env.PUBLIC_URL + '/images/arrow.png'}
                         onClick={showNext} 
                         />
                     </Wrapper>

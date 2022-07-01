@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router-dom";
@@ -60,7 +59,7 @@ function ComicsDetail() {
                 <title>{ comic?.data.results[0].title }</title>
             </Helmet>
             <Blank />
-            { isLoading ? <><Loading src={require('../../images/giphy.gif')}/><Blank /></> : null }
+            { isLoading ? <><Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'}/><Blank /></> : null }
             <ComicPortrait
             path={comic?.data.results[0].thumbnail.path + '/portrait_uncanny.jpg'}
             onClick={backToComicsPage}

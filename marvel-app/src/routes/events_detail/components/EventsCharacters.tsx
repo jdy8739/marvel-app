@@ -63,12 +63,12 @@ function EventCharacters({ id }: { id: string }) {
 
     return (
         <>  
-            { isLoading ? <Loading src={require('../../../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'}/> : null }
             <Container style={{
                 marginTop: '30px'
             }}>
                 {
-                    isLoading && !chars ? <Loading src={require('../../../images/giphy.gif')}/> :
+                    isLoading && !chars ? <Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'}/> :
                     <>
                         {
                             chars?.data.results.map(char => {

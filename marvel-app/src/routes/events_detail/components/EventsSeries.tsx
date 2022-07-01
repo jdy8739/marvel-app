@@ -62,9 +62,9 @@ function EventSeries({ id }: { id: string }) {
     
     return (
         <>  
-            { isLoading ? <Loading src={require('../../../images/giphy.gif')}/> : null }
+            { isLoading ? <Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'}/> : null }
             {
-                isLoading && !series ? <Loading src={require('../../../images/giphy.gif')} /> :
+                isLoading && !series ? <Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'} /> :
                 <>
                     {
                         series?.data.results.map((seriesElem, i) => {

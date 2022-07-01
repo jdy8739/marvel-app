@@ -78,7 +78,7 @@ function SeriesCharacters({ id }: { id: string }) {
 
     return (
         <>  
-            { isLoading ? <Loading src={require('../../../images/giphy.gif')} /> : null }
+            { isLoading ? <Loading src={process.env.PUBLIC_URL + '/images/giphy.gif'} /> : null }
             <br></br>
             {
                 chars?.data.results.length === 0 ?
