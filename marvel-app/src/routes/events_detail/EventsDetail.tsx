@@ -73,11 +73,10 @@ function EventsDetail() {
     ) => {
         e.stopPropagation();
         const targetName = e.currentTarget.textContent?.split(": ")[1];
-        const res = await fetch(
-            `${BASE_URL}events?${KEY_STRING}}&name=${targetName}`
-        );
-        const data: IEvents = await res.json();
-        if (data) nav("/events/detail/" + data.data.results[0].id);
+        const res = await (
+            await fetch(`${BASE_URL}events?${KEY_STRING}&name=${targetName}`)
+        ).json();
+        if (res) nav("/events/detail/" + res.data.results[0].id);
     };
 
     const showTabInfo = (e: React.MouseEvent<HTMLButtonElement>) =>

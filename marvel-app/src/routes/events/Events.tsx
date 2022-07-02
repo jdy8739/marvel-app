@@ -56,6 +56,8 @@ const TOTAL = 74;
 const SLICED_FULL_PAGE_INDEX = 7;
 
 function Events() {
+    const nav = useNavigate();
+
     const windowWidth = window.outerWidth;
 
     const [windowHeight, setWindowHeight] = useState(window.outerHeight);
@@ -65,8 +67,6 @@ function Events() {
     const [visible, setVisible] = useState(0);
 
     const [isSliderComplete, setIsSliderComplete] = useState(true);
-
-    const nav = useNavigate();
 
     const slidePicVarinat = {
         initial: {
@@ -128,11 +128,10 @@ function Events() {
     ) => {
         e.stopPropagation();
         const targetName = e.currentTarget.textContent?.split(": ")[1];
-        const res = await fetch(
-            `${BASE_URL}events?${KEY_STRING}&name=${targetName}`
-        );
-        const data: IEvents = await res.json();
-        if (data) nav("/events/detail/" + data.data.results[0].id);
+        const res = await (
+            await fetch(`${BASE_URL}events?${KEY_STRING}&name=${targetName}`)
+        ).json();
+        if (res) nav("/events/detail/" + res.data.results[0].id);
     };
 
     useEffect(() => {
@@ -182,9 +181,6 @@ function Events() {
                                             {visible === i && (
                                                 <FullPageSliderPic
                                                     variants={slidePicVarinat}
-                                                    onClick={
-                                                        increaseVisiblePicIndex
-                                                    }
                                                     initial="initial"
                                                     animate="animate"
                                                     exit="exit"
@@ -192,6 +188,9 @@ function Events() {
                                                     path={
                                                         event.thumbnail.path +
                                                         "/landscape_incredible.jpg"
+                                                    }
+                                                    onClick={
+                                                        increaseVisiblePicIndex
                                                     }
                                                 >
                                                     <EventSliderTextBox>
@@ -203,10 +202,13 @@ function Events() {
                                                         </h5>
                                                         {event.start && (
                                                             <h5>
-                                                                {
-																	event.start.split(" ")[0] + " - " +
-																	event.end.split(" ")[0]
-																}
+                                                                {event.start.split(
+                                                                    " "
+                                                                )[0] +
+                                                                    " - " +
+                                                                    event.end.split(
+                                                                        " "
+                                                                    )[0]}
                                                             </h5>
                                                         )}
                                                         {event.previous &&
@@ -217,7 +219,8 @@ function Events() {
                                                                         showDataofThisTitle
                                                                     }
                                                                 >
-                                                                    {"previous: " + event.previous.name.toUpperCase()}
+                                                                    {"previous: " +
+                                                                        event.previous.name.toUpperCase()}
                                                                 </SmallTitle>
                                                                 &emsp;
                                                                 <SmallTitle
@@ -225,13 +228,17 @@ function Events() {
                                                                         showDataofThisTitle
                                                                     }
                                                                 >
-                                                                    {"next: " + event.next.name.toUpperCase()}
+                                                                    {"next: " +
+                                                                        event.next.name.toUpperCase()}
                                                                 </SmallTitle>
                                                             </div>
                                                         ) : null}
                                                         <SeeMoreBtn
                                                             onClick={() =>
-                                                                nav("/events/detail/" + event.id)
+                                                                nav(
+                                                                    "/events/detail/" +
+                                                                        event.id
+                                                                )
                                                             }
                                                         >
                                                             see more

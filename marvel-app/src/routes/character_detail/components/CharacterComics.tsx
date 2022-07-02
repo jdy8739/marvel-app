@@ -54,6 +54,8 @@ let offsetCnt = 0;
 const LIMIT = 12;
 
 function CharacterComics({ id }: { id: string }) {
+    const nav = useNavigate();
+
     const [comics, setComics] = useState<IComics>();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -67,8 +69,6 @@ function CharacterComics({ id }: { id: string }) {
     const [dateTo, setDateTo] = useState("");
 
     const total = comics?.data.total || 0;
-
-    const nav = useNavigate();
 
     const SlideVariant = {
         start: (isBack: boolean) => ({
@@ -180,18 +180,18 @@ function CharacterComics({ id }: { id: string }) {
     };
 
     useEffect(() => {
+        fetchComicsContainingCharacter();
         return () => {
             offsetCnt = 0;
         };
     }, []);
 
-    useEffect(() => {
-        fetchComicsContainingCharacter();
-    }, []);
-
     return (
         <>
-            {isLoading && <Loading src={"/images/giphy.gif"} />}
+            {isLoading && (
+                // eslint-disable-next-line no-undef
+                <Loading src={process.env.PUBLIC_URL + "/images/giphy.gif"} />
+            )}
             {comics?.data.results.length === 0 ? (
                 <p style={{ textAlign: "center" }}>cannot find any data :(</p>
             ) : (

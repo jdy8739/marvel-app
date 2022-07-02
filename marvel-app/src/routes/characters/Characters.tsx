@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { charPageAtom, charStartsWithAtom, charNameAtom } from "../../atoms";
+import ButtonLine from "../../components/commons/ButtonsLine";
 import CharacterCard from "../../components/commons/CharacterCard";
 import { BASE_URL, KEY_STRING } from "../../key";
 import {
@@ -91,7 +92,7 @@ function Characters() {
         let page;
         switch (target) {
             case 1:
-                page = 0;
+                page = 1;
                 break;
             case 2:
                 page = +nowPage + 1;
@@ -127,19 +128,15 @@ function Characters() {
     const handleSearchNameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const searchedChar = nameSearchRef.current?.value || "";
-
         setCharName(searchedChar);
         setCharStartsWith("");
-
         nav(`/characters?name=${searchedChar}`);
     };
 
     const handleStartsWithClick = (e: React.MouseEvent<HTMLSpanElement>) => {
         const searchedCharName = e.currentTarget.textContent || "";
-
         setCharStartsWith(searchedCharName);
         setCharName("");
-
         nav(`/characters?nameStartsWith=${searchedCharName}`);
     };
 
@@ -160,7 +157,7 @@ function Characters() {
                     <Blank />
                 </>
             )}
-            {!startsWith && !name && (
+            {Boolean(startsWith || name) && (
                 <h1
                     style={{
                         textAlign: "center",
@@ -235,30 +232,18 @@ function Characters() {
                 >
                     prev
                 </Btn>
-                {[-3, -2, -1, 0, 1, 2, 3].map(idx => {
-                    return (
-                        <span key={idx}>
-                            {!TOTAL ? null : +nowPage + idx - 1 <
-                              0 ? null : +nowPage + idx >
-                              Math.floor(TOTAL / LIMIT) + 1 ? null : (
-                                <Btn
-                                    onClick={() =>
-                                        showCharsOfIndex(+nowPage + idx)
-                                    }
-                                    clicked={
-                                        +nowPage === Math.floor(+nowPage + idx)
-                                    }
-                                >
-                                    {+nowPage + idx}
-                                </Btn>
-                            )}
-                        </span>
-                    );
-                })}
+                <ButtonLine
+                    TOTAL={TOTAL}
+                    LIMIT={LIMIT}
+                    nowPage={+nowPage}
+                    moveFunction={showCharsOfIndex}
+                />
                 <Btn
                     onClick={() => showAnotherPage(2)}
                     disabled={
-                        TOTAL ? +nowPage === Math.floor(TOTAL / LIMIT) : false
+                        TOTAL
+                            ? +nowPage === Math.floor(TOTAL / LIMIT) + 1
+                            : false
                     }
                 >
                     next

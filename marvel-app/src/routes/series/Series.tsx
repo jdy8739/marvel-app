@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { seriesPageAtom, seriesSearchedTitleAtom } from "../../atoms";
+import ButtonLine from "../../components/commons/ButtonsLine";
 import { BASE_URL, KEY_STRING } from "../../key";
 import {
     Blank,
@@ -101,7 +102,7 @@ function Series() {
                 target = +nowPage - 1;
                 break;
             case 4:
-                target = Math.floor(TOTAL / LIMIT);
+                target = Math.floor(TOTAL / LIMIT) + 1;
                 break;
         }
         nav(
@@ -113,10 +114,9 @@ function Series() {
         );
     };
 
-    const showSeriesOfThisIndex = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const showSeriesOfThisIndex = (target: number) => {
         nav(
-            "/series?page=" +
-                e.currentTarget.innerText +
+            "/series?page=" + target +
                 `${titleStartsWith ? `&title=${titleStartsWith}` : ""}${
                     startYear ? `&year=${startYear}` : ""
                 }`
@@ -160,14 +160,14 @@ function Series() {
                     <Blank />
                 </>
             )}
-            {!titleStartsWith ? null : (
+            {titleStartsWith && (
                 <h1
                     style={{
                         textAlign: "center",
                     }}
                 >
                     Results for &quot;
-                    <Highlighted>{titleStartsWith}</Highlighted>&qout;
+                    <Highlighted>{titleStartsWith}</Highlighted>&quot;
                 </h1>
             )}
             <Container>
@@ -238,26 +238,15 @@ function Series() {
                 >
                     prev
                 </Btn>
-                {[-3, -2, -1, 0, 1, 2, 3].map(i => {
-                    return (
-                        <span key={i}>
-                            {i + +nowPage <= 0 ||
-                            i + +nowPage > Math.floor(TOTAL / LIMIT) ? null : (
-                                <Btn
-                                    onClick={showSeriesOfThisIndex}
-                                    clicked={
-                                        +nowPage === Math.floor(+nowPage + i)
-                                    }
-                                >
-                                    {+nowPage + i}
-                                </Btn>
-                            )}
-                        </span>
-                    );
-                })}
+                <ButtonLine
+                    TOTAL={TOTAL}
+                    LIMIT={LIMIT}
+                    nowPage={+nowPage}
+                    moveFunction={showSeriesOfThisIndex}
+                />
                 <Btn
                     onClick={() => showAnotherPage(2)}
-                    disabled={+nowPage >= TOTAL / LIMIT - 1}
+                    disabled={+nowPage >= TOTAL / LIMIT}
                 >
                     next
                 </Btn>

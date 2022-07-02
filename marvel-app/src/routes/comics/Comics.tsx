@@ -10,6 +10,7 @@ import {
     comicsSearchedDateAtom,
     comicsPageAtom,
 } from "../../atoms";
+import ButtonLine from "../../components/commons/ButtonsLine";
 import { BASE_URL, KEY_STRING } from "../../key";
 import {
     Blank,
@@ -127,7 +128,7 @@ function Comics() {
         let page;
         switch (target) {
             case 1:
-                page = 0;
+                page = 1;
                 break;
             case 2:
                 page = +nowPage + 1;
@@ -148,10 +149,9 @@ function Comics() {
         );
     };
 
-    const showCharsOfIndex = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const showCharsOfIndex = (target: number) => {
         nav(
-            "/comics?page=" +
-                e.currentTarget.innerText +
+            "/comics?page=" + target +
                 `${formerDate ? `&dateRange=${formerDate},${latterDate}` : ""}${
                     title ? `&title=${title}` : ""
                 }`
@@ -304,28 +304,16 @@ function Comics() {
                 <Btn onClick={() => showAnotherPage(1)}>first</Btn>
                 <Btn
                     onClick={() => showAnotherPage(3)}
-                    disabled={+nowPage === 0}
+                    disabled={+nowPage === 1}
                 >
                     prev
                 </Btn>
-                {[-3, -2, -1, 0, 1, 2, 3].map(idx => {
-                    return (
-                        <span key={idx}>
-                            {+nowPage + idx < 1 ||
-                            +nowPage + idx >
-                                Math.floor(TOTAL / LIMIT) + 1 ? null : (
-                                <Btn
-                                    onClick={showCharsOfIndex}
-                                    clicked={
-                                        +nowPage === Math.floor(+nowPage + idx)
-                                    }
-                                >
-                                    {+nowPage + idx}
-                                </Btn>
-                            )}
-                        </span>
-                    );
-                })}
+                <ButtonLine
+                    TOTAL={TOTAL}
+                    LIMIT={LIMIT}
+                    nowPage={+nowPage}
+                    moveFunction={showCharsOfIndex}
+                />
                 <Btn
                     onClick={() => showAnotherPage(2)}
                     disabled={+nowPage >= TOTAL / LIMIT}
