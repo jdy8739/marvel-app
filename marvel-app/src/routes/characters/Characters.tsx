@@ -1,273 +1,269 @@
-import React, { useRef } from 'react';
-import { Helmet } from 'react-helmet';
-import { useQuery } from 'react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import styled from 'styled-components';
-import { charPageAtom, charStartsWithAtom, charNameAtom } from '../../atoms';
-import CharacterCard from '../../components/commons/CharacterCard';
-import { BASE_URL, KEY_STRING } from '../../key';
+import React, { useRef } from "react";
+import { Helmet } from "react-helmet";
+import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import styled from "styled-components";
+import { charPageAtom, charStartsWithAtom, charNameAtom } from "../../atoms";
+import CharacterCard from "../../components/commons/CharacterCard";
+import { BASE_URL, KEY_STRING, paramsSearcher } from "../../key";
 import {
-	Highlighted,
-	Container,
-	Btn,
-	Input,
-	Blank,
-	BtnInARow,
-	Loading,
-} from '../../styled';
-import { ICharacter } from '../../types_store/CharatersType';
+    Highlighted,
+    Container,
+    Btn,
+    Input,
+    Blank,
+    BtnInARow,
+    Loading,
+} from "../../styled";
+import { ICharacter } from "../../types_store/CharatersType";
 
 const CharIcon = styled.span`
-	padding: 5px;
-	font-weight: bold;
-	cursor: pointer;
-	&:hover {
-		color: #f0131e;
-	}
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    &:hover {
+        color: #f0131e;
+    }
 `;
 
 const LIMIT = 30;
 
-const BASE_STR = '1';
+const BASE_STR = "1";
 
 const charArr: string[] = [];
 
 for (let i = 65; i < 91; i++) {
-	charArr.push(String.fromCharCode(i));
+    charArr.push(String.fromCharCode(i));
 }
 
 function Characters() {
-	const location = useLocation();
+    let startsWith = paramsSearcher.get("nameStartsWith");
 
-	const paramsSearcher = new URLSearchParams(location.search);
+    let nowPage = paramsSearcher.get("page") || BASE_STR;
 
-	let startsWith = paramsSearcher.get('nameStartsWith');
+    let name = paramsSearcher.get("name");
 
-	let nowPage = paramsSearcher.get('page') || BASE_STR;
+    let TOTAL = 0;
 
-	let name = paramsSearcher.get('name');
+    const setCharStartsWith = useSetRecoilState(charStartsWithAtom);
 
-	const setCharStartsWith = useSetRecoilState(charStartsWithAtom);
+    const [charName, setCharName] = useRecoilState(charNameAtom);
 
-	const [charName, setCharName] = useRecoilState(charNameAtom);
+    const setCharPage = useSetRecoilState(charPageAtom);
 
-	const setCharPage = useSetRecoilState(charPageAtom);
+    const nav = useNavigate();
 
-	setCharPage(+nowPage);
+    const nameSearchRef = useRef<HTMLInputElement>(null);
 
-	const fetchCharacters = async () => {
-		const res = await fetch(
-			`${BASE_URL}characters?${KEY_STRING}&offset=${
-				(+nowPage - 1) * LIMIT
-			}&limit=${LIMIT}${
-				startsWith ? `&nameStartsWith=${startsWith}` : ''
-			}${name ? `&name=${name}` : ''}`,
-		);
-		return await res.json();
-	};
+    const fetchCharacters = async () => {
+        const res = await fetch(
+            `${BASE_URL}characters?${KEY_STRING}&offset=${
+                (+nowPage - 1) * LIMIT
+            }&limit=${LIMIT}${
+                startsWith ? `&nameStartsWith=${startsWith}` : ""
+            }${name ? `&name=${name}` : ""}`
+        );
+        return await res.json();
+    };
 
-	const { data: chars, isLoading } = useQuery<ICharacter>(
-		['characters', nowPage, startsWith, name],
-		fetchCharacters,
-	);
+    const { data: chars, isLoading } = useQuery<ICharacter>(
+        ["characters", nowPage, startsWith, name],
+        fetchCharacters,
+        {
+            refetchOnWindowFocus: false,
+            refetchInterval: false,
+        }
+    );
 
-	let TOTAL = 0;
-	if (chars?.data) {
-		TOTAL = chars?.data.total;
-	}
+    const setPageAndTotalNum = () => {
+        setCharPage(+nowPage);
+        if (chars?.data) {
+            TOTAL = chars?.data.total;
+        }
+    };
 
-	const showNext = () => {
-		nav(
-			`/characters?page=${+nowPage + 1}${
-				startsWith ? `&nameStartsWith=${startsWith}` : ''
-			}${name ? `&name=${name}` : ''}`,
-		);
-	};
+    const showAnotherPage = (target: number) => {
+        let page;
+        switch (target) {
+            case 1:
+                page = 0;
+                break;
+            case 2:
+                page = +nowPage + 1;
+                break;
+            case 3:
+                page = +nowPage - 1;
+                break;
+            case 4:
+                page = Math.floor(TOTAL / LIMIT) + 1;
+                break;
+        }
+        nav(
+            `/characters?page=${page}${
+                startsWith ? `&nameStartsWith=${startsWith}` : ""
+            }${name ? `&name=${name}` : ""}`
+        );
+    };
 
-	const showPrevious = () => {
-		nav(
-			`/characters?page=${+nowPage - 1}${
-				startsWith ? `&nameStartsWith=${startsWith}` : ''
-			}${name ? `&name=${name}` : ''}`,
-		);
-	};
+    const showCharsOfIndex = (idx: number) => {
+        nav(
+            `/characters?page=${idx}${
+                startsWith ? `&nameStartsWith=${startsWith}` : ""
+            }${name ? `&name=${name}` : ""}`
+        );
+    };
 
-	const showFirst = () => {
-		nav(
-			`/characters?page=1${
-				startsWith ? `&nameStartsWith=${startsWith}` : ''
-			}${name ? `&name=${name}` : ''}`,
-		);
-	};
+    const resetSearch = () => nav("/characters");
 
-	const showLast = () => {
-		nav(
-			`/characters?page=${Math.floor(TOTAL / LIMIT) + 1}${
-				startsWith ? `&nameStartsWith=${startsWith}` : ''
-			}${name ? `&name=${name}` : ''}`,
-		);
-	};
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setCharName(e.currentTarget.value);
+    };
 
-	const showCharsOfIndex = (idx: number) => {
-		nav(
-			`/characters?page=${idx}${
-				startsWith ? `&nameStartsWith=${startsWith}` : ''
-			}${name ? `&name=${name}` : ''}`,
-		);
-	};
+    const handleSearchNameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const searchedChar = nameSearchRef.current?.value || "";
 
-	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setCharName(e.currentTarget.value);
-	};
+        setCharName(searchedChar);
+        setCharStartsWith("");
 
-	const handleSearchNameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const searchedChar = nameSearchRef.current?.value || '';
+        nav(`/characters?name=${searchedChar}`);
+    };
 
-		setCharName(searchedChar);
-		setCharStartsWith('');
+    const handleStartsWithClick = (e: React.MouseEvent<HTMLSpanElement>) => {
+        const searchedCharName = e.currentTarget.textContent || "";
 
-		nav(`/characters?name=${searchedChar}`);
-	};
+        setCharStartsWith(searchedCharName);
+        setCharName("");
 
-	const handleStartsWithClick = (e: React.MouseEvent<HTMLSpanElement>) => {
-		const searchedCharName = e.currentTarget.textContent || '';
+        nav(`/characters?nameStartsWith=${searchedCharName}`);
+    };
 
-		setCharStartsWith(searchedCharName);
-		setCharName('');
+    setPageAndTotalNum();
 
-		nav(`/characters?nameStartsWith=${searchedCharName}`);
-	};
-
-	const resetSearch = () => {
-		nav('/characters');
-	};
-
-	const nav = useNavigate();
-
-	const nameSearchRef = useRef<HTMLInputElement>(null);
-
-	return (
-		<>
-			<Helmet>
-				<title>Marvel Characters</title>
-			</Helmet>
-			<Blank />
-			{isLoading ? (
-				<>
-					<Loading
-						src={process.env.PUBLIC_URL + '/images/giphy.gif'}
-					/>
-					<Blank />
-				</>
-			) : null}
-			{!startsWith && !name ? null : (
-				<h1
-					style={{
-						textAlign: 'center',
-					}}
-				>
-					Results for &quot;
-					<Highlighted>{startsWith || name}</Highlighted>
-					&quot;
-				</h1>
-			)}
-			<Container>
-				<BtnInARow>
-					{charArr.map(char => (
-						<CharIcon onClick={handleStartsWithClick} key={char}>
-							{char}
-						</CharIcon>
-					))}
-				</BtnInARow>
-				<BtnInARow>
-					<form
-						style={{
-							display: 'inline-block',
-						}}
-						onSubmit={handleSearchNameSubmit}
-					>
-						<Input
-							onChange={handleSearchChange}
-							value={charName}
-							required
-							style={{
-								width: '170px',
-							}}
-							placeholder="search the character name."
-							ref={nameSearchRef}
-						/>
-						&ensp;
-						<Btn>search</Btn>
-					</form>
-				</BtnInARow>
-				<BtnInARow style={{ marginBottom: '28px' }}>
-					<Btn onClick={resetSearch}>reset</Btn>
-				</BtnInARow>
-				{chars?.data.results.length !== 0 ? (
-					<>
-						{chars?.data.results.map(char => {
-							return (
-								<span
-									key={char.id}
-									onClick={() =>
-										nav(`/characters/detail/${char.id}`)
-									}
-								>
-									<CharacterCard char={char} />
-								</span>
-							);
-						})}
-					</>
-				) : (
-					<p>cannot find any results. :(</p>
-				)}
-			</Container>
-			<br></br>
-			<br></br>
-			<div
-				style={{
-					textAlign: 'center',
-				}}
-			>
-				<Btn onClick={showFirst}>first</Btn>
-				<Btn onClick={showPrevious} disabled={+nowPage === 1}>
-					prev
-				</Btn>
-				{[-3, -2, -1, 0, 1, 2, 3].map(idx => {
-					return (
-						<span key={idx}>
-							{!TOTAL ? null : +nowPage + idx - 1 <
-							  0 ? null : +nowPage + idx >
-							  Math.floor(TOTAL / LIMIT) + 1 ? null : (
-								<Btn
-									onClick={() =>
-										showCharsOfIndex(+nowPage + idx)
-									}
-									clicked={
-										+nowPage === Math.floor(+nowPage + idx)
-									}
-								>
-									{+nowPage + idx}
-								</Btn>
-							)}
-						</span>
-					);
-				})}
-				<Btn
-					onClick={showNext}
-					disabled={
-						TOTAL ? +nowPage === Math.floor(TOTAL / LIMIT) : false
-					}
-				>
-					next
-				</Btn>
-				<Btn onClick={showLast}>last</Btn>
-			</div>
-			<Blank />
-		</>
-	);
+    return (
+        <>
+            <Helmet>
+                <title>Marvel Characters</title>
+            </Helmet>
+            <Blank />
+            {isLoading && (
+                <>
+                    <Loading
+                        // eslint-disable-next-line no-undef
+                        src={process.env.PUBLIC_URL + "/images/giphy.gif"}
+                    />
+                    <Blank />
+                </>
+            )}
+            {!startsWith && !name && (
+                <h1
+                    style={{
+                        textAlign: "center",
+                    }}
+                >
+                    Results for &quot;
+                    <Highlighted>{startsWith || name}</Highlighted>
+                    &quot;
+                </h1>
+            )}
+            <Container>
+                <BtnInARow>
+                    {charArr.map(char => (
+                        <CharIcon onClick={handleStartsWithClick} key={char}>
+                            {char}
+                        </CharIcon>
+                    ))}
+                </BtnInARow>
+                <BtnInARow>
+                    <form
+                        style={{
+                            display: "inline-block",
+                        }}
+                        onSubmit={handleSearchNameSubmit}
+                    >
+                        <Input
+                            onChange={handleSearchChange}
+                            value={charName}
+                            required
+                            style={{
+                                width: "170px",
+                            }}
+                            placeholder="search the character name."
+                            ref={nameSearchRef}
+                        />
+                        &ensp;
+                        <Btn>search</Btn>
+                    </form>
+                </BtnInARow>
+                <BtnInARow style={{ marginBottom: "28px" }}>
+                    <Btn onClick={resetSearch}>reset</Btn>
+                </BtnInARow>
+                {chars?.data.results.length !== 0 ? (
+                    <>
+                        {chars?.data.results.map(char => {
+                            return (
+                                <span
+                                    key={char.id}
+                                    onClick={() =>
+                                        nav(`/characters/detail/${char.id}`)
+                                    }
+                                >
+                                    <CharacterCard char={char} />
+                                </span>
+                            );
+                        })}
+                    </>
+                ) : (
+                    <p>cannot find any results. :(</p>
+                )}
+            </Container>
+            <br></br>
+            <div
+                style={{
+                    textAlign: "center",
+                }}
+            >
+                <Btn onClick={() => showAnotherPage(1)}>first</Btn>
+                <Btn
+                    onClick={() => showAnotherPage(3)}
+                    disabled={+nowPage === 1}
+                >
+                    prev
+                </Btn>
+                {[-3, -2, -1, 0, 1, 2, 3].map(idx => {
+                    return (
+                        <span key={idx}>
+                            {!TOTAL ? null : +nowPage + idx - 1 <
+                              0 ? null : +nowPage + idx >
+                              Math.floor(TOTAL / LIMIT) + 1 ? null : (
+                                <Btn
+                                    onClick={() =>
+                                        showCharsOfIndex(+nowPage + idx)
+                                    }
+                                    clicked={
+                                        +nowPage === Math.floor(+nowPage + idx)
+                                    }
+                                >
+                                    {+nowPage + idx}
+                                </Btn>
+                            )}
+                        </span>
+                    );
+                })}
+                <Btn
+                    onClick={() => showAnotherPage(2)}
+                    disabled={
+                        TOTAL ? +nowPage === Math.floor(TOTAL / LIMIT) : false
+                    }
+                >
+                    next
+                </Btn>
+                <Btn onClick={() => showAnotherPage(4)}>last</Btn>
+            </div>
+            <Blank />
+        </>
+    );
 }
 
 export default Characters;

@@ -52,7 +52,7 @@ function EventsElements({ events }: { events?: IEventsResult[] }) {
 
 	return (
 		<>
-			{!events ? null : (
+			{events && (
 				<div
 					style={{
 						display: 'flex',
