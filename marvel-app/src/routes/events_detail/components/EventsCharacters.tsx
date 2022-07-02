@@ -17,12 +17,15 @@ import {
     RoundPortraitName,
 } from "../../../styled";
 import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
-import { BASE_URL, KEY_STRING, nav } from "../../../key";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const LIMIT = 20;
 
 function EventCharacters({ id }: { id: string }) {
+    const nav = useNavigate();
+
     const [chars, setChars] = useState<ICharacter>();
 
     const [offsetCnt, setOffsetCnt] = useState(0);

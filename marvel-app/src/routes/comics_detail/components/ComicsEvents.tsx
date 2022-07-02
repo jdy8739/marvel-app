@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BASE_URL, KEY_STRING, nav } from "../../../key";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import { Blank, EventCard, Loading } from "../../../styled";
 import { IEvents } from "../../../types_store/EventsType";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function ComicsEvents({ id }: { id: string }) {
+    const nav = useNavigate();
+
     const [events, setEvents] = useState<IEvents>();
 
     const [isLoading, setIsLoading] = useState(true);

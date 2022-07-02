@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
-import { useMatch } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import {
@@ -19,7 +19,7 @@ import {
     Tabs,
 } from "../../styled";
 import { IComics } from "../../types_store/ComicsType";
-import { BASE_URL, KEY_STRING, nav } from "../../key";
+import { BASE_URL, KEY_STRING } from "../../key";
 import React from "react";
 
 const Container = styled.div`
@@ -29,6 +29,8 @@ const Container = styled.div`
 `;
 
 function ComicsDetail() {
+    const nav = useNavigate();
+
     const comicsMatch = useMatch("/comics/detail/:id");
 
     const comicsCharMatch = useMatch("/comics/detail/:id/characters");

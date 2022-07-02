@@ -2,7 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import React, { useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import {
@@ -10,7 +10,7 @@ import {
     comicsSearchedDateAtom,
     comicsPageAtom,
 } from "../../atoms";
-import { BASE_URL, KEY_STRING, paramsSearcher } from "../../key";
+import { BASE_URL, KEY_STRING } from "../../key";
 import {
     Blank,
     Btn,
@@ -61,6 +61,10 @@ const LIMIT = 12;
 const BASE_STR = "1";
 
 function Comics() {
+    const location = useLocation();
+
+    const paramsSearcher = new URLSearchParams(location.search);
+
     const [isDateModalShown, setIsDateModalShown] = useState(false);
 
     const showDateModal = () => setIsDateModalShown(true);
@@ -331,7 +335,7 @@ function Comics() {
                 <Btn onClick={() => showAnotherPage(4)}>last</Btn>
             </div>
             <AnimatePresence>
-                {!isDateModalShown && (
+                {isDateModalShown && (
                     <ModalBackground
                         onClick={hideDateModal}
                         variants={modalVariant}

@@ -10,7 +10,7 @@ import {
     Wrapper,
 } from "../../character_detail/components/CharacterComics";
 import { SeriesElem } from "../../character_detail/components/CharacterSeries";
-import { nav } from "../../../key";
+import { useNavigate } from "react-router-dom";
 
 const LeftArrowBox = styled.div`
     width: 55px;
@@ -45,6 +45,8 @@ function EventsSeriesSlides({
 }: {
     slidesElements: ISeriesResult[];
 }) {
+    const nav = useNavigate();
+
     const [count, setCount] = useState(0);
 
     const [clickedSeries, setClickedSeries] = useState<ISeriesResult | null>();

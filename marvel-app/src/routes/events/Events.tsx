@@ -2,9 +2,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import EventsElements from "../../components/commons/EventsElements";
-import { BASE_URL, KEY_STRING, nav } from "../../key";
+import { BASE_URL, KEY_STRING } from "../../key";
 import {
     Blank,
     Dot,
@@ -64,6 +65,8 @@ function Events() {
     const [visible, setVisible] = useState(0);
 
     const [isSliderComplete, setIsSliderComplete] = useState(true);
+
+    const nav = useNavigate();
 
     const slidePicVarinat = {
         initial: {

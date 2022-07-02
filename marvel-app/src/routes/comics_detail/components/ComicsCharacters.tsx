@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { BASE_URL, KEY_STRING, nav } from "../../../key";
+import { BASE_URL, KEY_STRING } from "../../../key";
 import {
     CharTitle,
     CenterWord,
@@ -18,10 +18,13 @@ import {
     ICharacter,
 } from "../../../types_store/CharatersType";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 type TypeCharResult = ICharacterResult | undefined;
 
 function ComicsCharacters({ id }: { id: string }) {
+    const nav = useNavigate();
+
     const [chars, setChars] = useState<ICharacter>();
 
     const [isLoading, setIsLoading] = useState(true);

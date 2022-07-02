@@ -1,12 +1,12 @@
 import React, { useRef } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { charPageAtom, charStartsWithAtom, charNameAtom } from "../../atoms";
 import CharacterCard from "../../components/commons/CharacterCard";
-import { BASE_URL, KEY_STRING, paramsSearcher } from "../../key";
+import { BASE_URL, KEY_STRING } from "../../key";
 import {
     Highlighted,
     Container,
@@ -38,6 +38,12 @@ for (let i = 65; i < 91; i++) {
 }
 
 function Characters() {
+    const location = useLocation();
+
+    const paramsSearcher = new URLSearchParams(location.search);
+
+    const nav = useNavigate();
+
     let startsWith = paramsSearcher.get("nameStartsWith");
 
     let nowPage = paramsSearcher.get("page") || BASE_STR;
@@ -46,13 +52,11 @@ function Characters() {
 
     let TOTAL = 0;
 
-    const setCharStartsWith = useSetRecoilState(charStartsWithAtom);
-
     const [charName, setCharName] = useRecoilState(charNameAtom);
 
-    const setCharPage = useSetRecoilState(charPageAtom);
+    const setCharStartsWith = useSetRecoilState(charStartsWithAtom);
 
-    const nav = useNavigate();
+    const setCharPage = useSetRecoilState(charPageAtom);
 
     const nameSearchRef = useRef<HTMLInputElement>(null);
 

@@ -1,13 +1,13 @@
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
-import { useMatch } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import EventCharacters from "./components/EventsCharacters";
 import EventComics from "./components/EventsComics";
 import EventSeries from "./components/EventsSeries";
 import { EventTitle, Loading, Tab, Tabs } from "../../styled";
 import { IEvents } from "../../types_store/EventsType";
-import { BASE_URL, KEY_STRING, nav } from "../../key";
+import { BASE_URL, KEY_STRING } from "../../key";
 import React from "react";
 
 const FullPagePic = styled.div<{ path: string }>`
@@ -39,6 +39,8 @@ const SmallTitle = styled.h5`
 `;
 
 function EventsDetail() {
+    const nav = useNavigate();
+
     const eventMatch = useMatch("/events/detail/:id");
 
     const eventCharMatch = useMatch("/events/detail/:id/characters");
@@ -78,6 +80,9 @@ function EventsDetail() {
         if (data) nav("/events/detail/" + data.data.results[0].id);
     };
 
+    const showTabInfo = (e: React.MouseEvent<HTMLButtonElement>) =>
+        nav(`/events/detail/${event?.id ?? ""}/${e.currentTarget.textContent}`);
+
     const event = data?.data.results[0];
 
     return (
@@ -98,15 +103,15 @@ function EventsDetail() {
                         <EventTitle>{event?.title}</EventTitle>
                         <h5 style={{ width: "70vw" }}>{event?.description}</h5>
                         <Desc>
-                            {event?.start ? (
+                            {event?.start && (
                                 <>
                                     {event?.start.split(" ")[0] +
                                         " - " +
                                         event?.end.split(" ")[0]}
                                 </>
-                            ) : null}
+                            )}
                         </Desc>
-                        {event?.previous && event.next ? (
+                        {event?.previous && event.next && (
                             <div>
                                 <SmallTitle onClick={showDataofThisTitle}>
                                     {"previous: " +
@@ -117,44 +122,26 @@ function EventsDetail() {
                                     {"next: " + event.next.name.toUpperCase()}
                                 </SmallTitle>
                             </div>
-                        ) : null}
+                        )}
                         <Tabs
                             style={{
                                 justifyContent: "left",
                             }}
                         >
                             <Tab
-                                onClick={() =>
-                                    nav(
-                                        `/events/detail/${
-                                            event?.id ?? ""
-                                        }/characters`
-                                    )
-                                }
+                                onClick={showTabInfo}
                                 clicked={Boolean(eventCharMatch)}
                             >
                                 characters
                             </Tab>
                             <Tab
-                                onClick={() =>
-                                    nav(
-                                        `/events/detail/${
-                                            event?.id ?? ""
-                                        }/comics`
-                                    )
-                                }
+                                onClick={showTabInfo}
                                 clicked={Boolean(eventComicsMatch)}
                             >
                                 comics
                             </Tab>
                             <Tab
-                                onClick={() =>
-                                    nav(
-                                        `/events/detail/${
-                                            event?.id ?? ""
-                                        }/series`
-                                    )
-                                }
+                                onClick={showTabInfo}
                                 clicked={Boolean(eventSeriesMatch)}
                             >
                                 series
