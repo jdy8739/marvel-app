@@ -40,6 +40,21 @@ const SeriesSlides = styled(motion.span)`
 
 const SLIDES_LIMIT = 6;
 
+const slideVariant = {
+    initial: {
+        x: -window.innerWidth,
+    },
+    animate: {
+        x: 0,
+        transition: {
+            duration: 1,
+        },
+    },
+    exit: {
+        x: window.innerWidth,
+    },
+};
+
 function EventsSeriesSlides({
     slidesElements,
 }: {
@@ -75,7 +90,9 @@ function EventsSeriesSlides({
 
     const hideModal = () => setClickedSeries(null);
 
-    const toSeriesDetailPage = (id: number) => nav("/comics/detail/" + id);
+    const toSeriesDetailPage = (id?: number) => {
+        nav("/comics/detail/" + id);
+    };
 
     return (
         <Wrapper
@@ -88,16 +105,18 @@ function EventsSeriesSlides({
             }}
         >
             <AnimatePresence>
-                {slidesElements
-                    //.slice(count * SLIDES_LIMIT, count * SLIDES_LIMIT + SLIDES_LIMIT)
-                    .map((slide, i) => {
-                        return (
-                            <SeriesSlides
-                                key={slide.id}
-                                layoutId={slide.id + ""}
-                            >
-                                {count * SLIDES_LIMIT <= i &&
-                                i < count * SLIDES_LIMIT + SLIDES_LIMIT ? (
+                {slidesElements.map((slide, i) => {
+                    return (
+                        <SeriesSlides
+                            key={slide.id}
+                            layoutId={slide.id + ""}
+                            variants={slideVariant}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                        >
+                            {count * SLIDES_LIMIT <= i &&
+                                i < count * SLIDES_LIMIT + SLIDES_LIMIT && (
                                     <SeriesElem
                                         path={
                                             slide.thumbnail.path +
@@ -105,42 +124,16 @@ function EventsSeriesSlides({
                                         }
                                         onClick={() => showModal(slide.id)}
                                     ></SeriesElem>
-                                ) : null}
-                            </SeriesSlides>
-                        );
-                    })}
+                                )}
+                        </SeriesSlides>
+                    );
+                })}
                 {clickedSeries && (
-                    <ModalBackground
-                        onClick={hideModal}
-                        variants={modalVariant}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                    >
-                        <Modal
-                            layoutId={clickedSeries.id + ""}
-                            onClick={() => toSeriesDetailPage(clickedSeries.id)}
-                        >
-                            <ModelImage
-                                path={
-                                    clickedSeries.thumbnail.path +
-                                    "/standard_fantastic.jpg"
-                                }
-                            >
-                                <Title>{clickedSeries.title}</Title>
-                            </ModelImage>
-                            <h5 style={{ textAlign: "center" }}>
-                                {clickedSeries.description
-                                    ? clickedSeries.description.length > 100
-                                        ? clickedSeries.description.slice(
-                                              0,
-                                              150
-                                          ) + "..."
-                                        : clickedSeries.description
-                                    : "No Descriptions"}
-                            </h5>
-                        </Modal>
-                    </ModalBackground>
+                    <ModalComponent
+                        clickedSeries={clickedSeries}
+                        hideModal={hideModal}
+                        toSeriesDetailPage={toSeriesDetailPage}
+                    />
                 )}
             </AnimatePresence>
             <LeftArrowBox>
@@ -170,6 +163,53 @@ function EventsSeriesSlides({
                 />
             </RightArrowBox>
         </Wrapper>
+    );
+}
+
+function ModalComponent({
+    clickedSeries,
+    hideModal,
+    toSeriesDetailPage,
+}: {
+    clickedSeries: ISeriesResult | null;
+    hideModal: () => void;
+    // eslint-disable-next-line no-unused-vars
+    toSeriesDetailPage: (num?: number) => void;
+}) {
+    return (
+        <>
+            <ModalBackground
+                onClick={hideModal}
+                variants={modalVariant}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+            >
+                <Modal
+                    layoutId={clickedSeries?.id + ""}
+                    onClick={() =>
+                        toSeriesDetailPage(clickedSeries?.id || undefined)
+                    }
+                >
+                    <ModelImage
+                        path={
+                            clickedSeries?.thumbnail.path +
+                            "/standard_fantastic.jpg"
+                        }
+                    >
+                        <Title>{clickedSeries?.title}</Title>
+                    </ModelImage>
+                    <h5 style={{ textAlign: "center" }}>
+                        {clickedSeries?.description
+                            ? clickedSeries.description.length > 100
+                                ? clickedSeries.description.slice(0, 150) +
+                                  "..."
+                                : clickedSeries.description
+                            : "No Descriptions"}
+                    </h5>
+                </Modal>
+            </ModalBackground>
+        </>
     );
 }
 
