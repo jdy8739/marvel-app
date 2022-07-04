@@ -17,11 +17,11 @@ recoil은 redux-toolkit보다 데이터의 정보량이 적은 여러개의 변�
 
 결과물은 githup pages에 배포하여 밑의 주소에서 확인하실 수 있습니다.
 
-https://jdy8739.github.io/marvel-app/
+#### https://jdy8739.github.io/marvel-app/
 
 아래는 marvel developer 주소입니다. 해당 사이트에서 제공하는 api를 활용했습니다.
 
-https://developer.marvel.com
+#### https://developer.marvel.com
 
 감사합니다.
 
