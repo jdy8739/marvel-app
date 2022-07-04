@@ -8,7 +8,21 @@
 
 
 
-주 사용 라이브러리로는 recoil, react-query, framer-motion, styled-components를 사용하였습니다.
+주 사용 라이브러리로는 이렇습니다.
+
+* axios
+
+* recoil
+
+* react-query
+
+* framer-motion
+
+* react-hemlet
+
+* styled-components
+
+위 라이브러리들을 활용해 프로젝트를 구성하였습니다.
 
 recoil은 redux-toolkit보다 데이터의 정보량이 적은 여러개의 변수를 쉽게 관리할 수 있다는 이점에서 상태관리 라이브러리로써 사용하였습니다.
 
