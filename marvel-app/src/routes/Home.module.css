@@ -1,0 +1,180 @@
+@import url(https://fonts.googleapis.com/css?family=Orbitron);
+
+@keyframes zoomOut {
+    0% {
+        transform: scale(1.7);
+        -webkit-transform: scale(1.7);
+    }
+    100% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
+}
+@-webkit-keyframes zoomOut {
+    0% {
+        transform: scale(1.7);
+        -webkit-transform: scale(1.7);
+    }
+    100% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
+}
+
+@font-face {
+    font-family: 'BentonSansExtraCompBlack';
+    src: url('http://sudocoda.com/fonts/bentonsansextracomp-black-webfont.eot?') format('eot'); 
+  src: url('http://sudocoda.com/fonts/bentonsansextracomp-black-webfont.woff') format('woff'), url('http://sudocoda.com/fonts/bentonsansextracomp-black-webfont.ttf') format('truetype');
+}
+
+@-webkit-keyframes fadeIn {
+	0% {opacity: 0;}	
+	100% {opacity: 1;}
+}
+
+@-moz-keyframes fadeIn {
+	0% {opacity: 0;}	
+	100% {opacity: 1;}
+}
+
+@-o-keyframes fadeIn {
+	0% {opacity: 0;}	
+	100% {opacity: 1;}
+}
+
+@keyframes fadeIn {
+	0% {opacity: 0;}	
+	100% {opacity: 1;}
+}
+
+.fadeIn {
+	-webkit-animation-name: fadeIn;
+	-moz-animation-name: fadeIn;
+	-o-animation-name: fadeIn;
+	animation-name: fadeIn;
+}
+
+@-webkit-keyframes fadeIn {
+	0% {opacity: 0;}	
+	100% {opacity: 1;}
+}
+
+@-moz-keyframes fadeIn {
+	0% {opacity: 0;}	
+	100% {opacity: 1;}
+}
+
+@-o-keyframes fadeIn {
+	0% {opacity: 0;}	
+	100% {opacity: 1;}
+}
+
+@keyframes fadeIn {
+	0% {opacity: 0;}	
+	100% {opacity: 1;}
+}
+
+.fadeIn {
+	-webkit-animation-name: fadeIn;
+	-moz-animation-name: fadeIn;
+	-o-animation-name: fadeIn;
+	animation-name: fadeIn;
+}
+
+@keyframes fadeOut {
+	0% {opacity: 1;}
+	100% {opacity: 0;}
+}
+
+@-moz-keyframes fadeOut {
+	0% {opacity: 1;}
+	100% {opacity: 0;}
+}
+
+@-webkit-keyframes fadeOut {
+	0% {opacity: 1;}
+	100% {opacity: 0;}
+}
+
+.fadeOut {
+	-webkit-animation-name: fadeOut;
+	-moz-animation-name: fadeOut;
+	-o-animation-name: fadeOut;
+	animation-name: fadeOut;}
+
+@-webkit-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-20px);
+    transform: translateY(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-20px);
+    -ms-transform: translateY(-20px);
+    transform: translateY(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+.fadeInDown {
+  -webkit-animation-name: fadeInDown;
+  animation-name: fadeInDown;
+}
+.gif { 
+  background: url('https://37.media.tumblr.com/tumblr_mbha9qWF401qcixnko4_500.gif');
+  width: 100vw;  
+  height: 100vh;
+  position: absolute; 
+  top: 0; left: 0;
+  -webkit-animation: fadeOut 9s infinite;
+  -moz-animation: fadeOut 9s infinite;
+  animation: fadeOut 9s infinite;
+}
+.wrapper { 
+  margin-top: 15%;
+}
+.marvel { 
+  animation: zoomOut 9s ease-in-out infinite;
+  -webkit-animation: zoomOut 9s ease-in-out infinite;
+  margin: auto auto;
+  text-align: center;
+  color: #fff; 
+  width: 570px; 
+  padding-right: 145px;
+  font-size: 11em; 
+  line-height: .80;
+  font-family: "BentonSansExtraCompBlack", sans-serif; 
+}
+.studios { 
+  font-family: "Orbitron", sans-serif;
+  animation: zoomOut 9s ease-in-out infinite;
+  -webkit-animation: zoomOut 9s ease-in-out infinite ;
+  font-weight: bolder;
+  color: #fff;
+  letter-spacing: 67px;
+  text-align: center;
+  position: relative;
+  margin: 85px 15px 7px 85px;
+}
+.sign {
+  text-align: center;
+  font-size: 12px;
+  padding-top: 15px;
+  font-family: "Orbitron", sans-serif;
+}

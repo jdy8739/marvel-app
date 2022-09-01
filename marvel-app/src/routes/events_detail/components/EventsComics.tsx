@@ -3,35 +3,25 @@ import { useEffect, useState } from "react";
 import { BASE_URL, KEY_STRING } from "../../../key";
 import {
     Blank,
-    CharName,
-    ComicsFrameForm,
     Container,
     Loading,
 } from "../../../styled";
 import { IComics } from "../../../types_store/ComicsType";
 import { ShowMoreBtn } from "../../character_detail/components/CharacterSeries";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import ComicsCard from "../../../components/commons/ComicsCard";
 
 const LIMIT = 20;
 
 function EventComics({ id }: { id: string }) {
-    const nav = useNavigate();
-
     const [comics, setComics] = useState<IComics>();
-
     const [offsetCnt, setOffsetCnt] = useState(0);
-
     const [isLoading, setIsLoading] = useState(true);
-
     const plusOffsetCnt = () => setOffsetCnt(cnt => cnt + 1);
-
     const isCntBeyondTotal = (): boolean => {
         const total = comics?.data.total || 999;
         if (total / LIMIT <= offsetCnt) return true;
         else return false;
     };
-
     useEffect(() => {
         if (isCntBeyondTotal()) {
             alert("No more to show!");
@@ -67,22 +57,8 @@ function EventComics({ id }: { id: string }) {
                 <Loading src={process.env.PUBLIC_URL + "/images/giphy.gif"} />
             )}
             <Container>
-                {comics?.data.results.map(comicsElem => {
-                    return (
-                        <ComicsFrameForm
-                            key={comicsElem.id}
-                            path={`${comicsElem.thumbnail.path}/portrait_incredible.jpg`}
-                            onClick={() =>
-                                nav("/comics/detail/" + comicsElem.id)
-                            }
-                        >
-                            <CharName length={comicsElem.title.length}>
-                                {comicsElem.title.length > 20
-                                    ? comicsElem.title.slice(0, 20) + "..."
-                                    : comicsElem.title}
-                            </CharName>
-                        </ComicsFrameForm>
-                    );
+                {comics?.data.results.map((comic, index) => {
+                    return (<ComicsCard comic={comic} index={index}/>);
                 })}
             </Container>
             <br></br>

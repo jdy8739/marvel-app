@@ -202,18 +202,15 @@ function Characters() {
                 </BtnInARow>
                 {chars?.data.results.length !== 0 ? (
                     <>
-                        {chars?.data.results.map(char => {
-                            return (
-                                <span
-                                    key={char.id}
-                                    onClick={() =>
-                                        nav(`/characters/detail/${char.id}`)
-                                    }
-                                >
-                                    <CharacterCard char={char} />
-                                </span>
-                            );
-                        })}
+                        {chars?.data.results.map((char, index) => 
+                            (<span
+                                key={char.id}
+                                onClick={() =>
+                                    nav(`/characters/detail/${char.id}`)}
+                            >
+                                <CharacterCard char={char} index={index} />
+                        </span>)
+                        )}
                     </>
                 ) : (
                     <p>cannot find any results. :(</p>

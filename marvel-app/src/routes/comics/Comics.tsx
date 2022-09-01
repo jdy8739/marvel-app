@@ -11,13 +11,12 @@ import {
     comicsPageAtom,
 } from "../../atoms";
 import ButtonLine from "../../components/commons/ButtonsLine";
+import ComicsCard from "../../components/commons/ComicsCard";
 import { BASE_URL, KEY_STRING } from "../../key";
 import {
     Blank,
     Btn,
     BtnInARow,
-    CharName,
-    ComicsFrameForm,
     Container,
     DateChooseModal,
     Highlighted,
@@ -158,8 +157,6 @@ function Comics() {
         );
     };
 
-    const toComicsDetailPage = (id: number) => nav(`/comics/detail/${id}`);
-
     const preventBubbling = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
     };
@@ -274,24 +271,8 @@ function Comics() {
                     <p>Sorry. No data. :(</p>
                 ) : (
                     <>
-                        {comics?.data.results.map(comic => {
-                            return (
-                                <ComicsFrameForm
-                                    key={comic.id}
-                                    path={
-                                        comic.thumbnail.path +
-                                        "/portrait_incredible.jpg"
-                                    }
-                                    onClick={() => toComicsDetailPage(comic.id)}
-                                >
-                                    <CharName length={comic.title.length}>
-                                        {comic.title.length > 20
-                                            ? comic.title.slice(0, 20) + "..."
-                                            : comic.title}
-                                    </CharName>
-                                </ComicsFrameForm>
-                            );
-                        })}
+                        {comics?.data.results.map((comic, index) => 
+                        <ComicsCard comic={comic} index={index}/>)}
                     </>
                 )}
             </Container>

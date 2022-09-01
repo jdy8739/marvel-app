@@ -197,9 +197,7 @@ function Events() {
                                                         <EventTitle>
                                                             {event.title}
                                                         </EventTitle>
-                                                        <h5>
-                                                            {event.description}
-                                                        </h5>
+                                                        <h5>{event.description}</h5>
                                                         {event.start && (
                                                             <h5>
                                                                 {event.start.split(

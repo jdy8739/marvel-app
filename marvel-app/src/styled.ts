@@ -23,7 +23,7 @@ export const CharName = styled.h1<{ length: number }>`
     font-size: ${ props => props.length > 12 ? '15px' : '18px' };
 `;
 
-export const CharacterCardForm = styled.div<{ path: string }>`
+export const CharacterCardForm = styled(motion.div)<{ path: string }>`
     width: 225px;
     height: 275px;
     border: 1px solid black;
@@ -169,7 +169,7 @@ export const Modal = styled(motion.div)`
     }
 `;
 
-export const ComicsFrameForm = styled.div<{ path: string }>`
+export const ComicsFrameForm = styled(motion.div)<{ path: string }>`
     background-image: linear-gradient(to top, black, transparent), url(${ props => props.path });
     background-position: center center;
     background-size: cover;
@@ -278,7 +278,7 @@ export const RoundPortrait = styled(motion.div)<{ path?: string }>`
     background-size: cover;
     border-radius: 50%;
     border: 4.5px solid transparent;
-    margin: 16px;
+    margin: 30px 16px;
     transition: all 0.3s;
     filter: grayscale(0.9);
     cursor: pointer;

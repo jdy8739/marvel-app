@@ -1,56 +1,21 @@
-import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import React from "react";
-
-const TitleBox = styled.div`
-    position: absolute;
-    h1,
-    h3 {
-        margin: 0;
-    }
-    h1 {
-        font-size: 60px;
-    }
-    h3 {
-        letter-spacing: 11.5px;
-    }
-    p {
-        font-size: 12px;
-    }
-    animation: show 3s;
-    @keyframes show {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-`;
+import styles from "./Home.module.css";
 
 function Home() {
     return (
-        <div
-            style={{
-                position: "relative",
-                width: "100vw",
-                height: "100vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-            }}
-        >
+        <div>
             <Helmet>
                 <title>Marvel Dictionary</title>
             </Helmet>
-            <TitleBox>
-                <h1>MARVEL</h1>
-                <h3>DICTIONARY</h3>
-                <br></br>
-                <br></br>
-                <p>made by Do Young Chung</p>
-            </TitleBox>
+            <img
+                src="https://37.media.tumblr.com/tumblr_mbha9qWF401qcixnko4_500.gif"
+                className={styles.gif}
+            />
+            <div className={styles.wrapper}>
+                <h1 className={styles.marvel}>MARVEL</h1>
+                <h3 className={styles.studios}>DICTIONARY</h3>
+            </div>
+            <p className={styles.sign}>made by Do Young Chung</p>
         </div>
     );
 }
