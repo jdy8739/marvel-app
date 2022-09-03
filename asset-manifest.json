@@ -1,9 +1,11 @@
 {
   "files": {
-    "main.js": "/marvel-app/static/js/main.41682a72.js",
+    "main.css": "/marvel-app/static/css/main.3d38a3a1.css",
+    "main.js": "/marvel-app/static/js/main.efb0222b.js",
     "index.html": "/marvel-app/index.html"
   },
   "entrypoints": [
-    "static/js/main.41682a72.js"
+    "static/css/main.3d38a3a1.css",
+    "static/js/main.efb0222b.js"
   ]
 }
