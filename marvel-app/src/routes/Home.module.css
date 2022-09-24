@@ -157,7 +157,7 @@
   color: #fff; 
   width: 570px; 
   padding-right: 145px;
-  font-size: 11em; 
+  font-size: 11em;
   line-height: .80;
   font-family: "BentonSansExtraCompBlack", sans-serif; 
 }
@@ -177,4 +177,10 @@
   font-size: 12px;
   padding-top: 15px;
   font-family: "Orbitron", sans-serif;
+}
+
+@media screen and (max-width: 1200px) {
+  .marvel {
+    margin-top: 210px;
+  }
 }

@@ -48,30 +48,21 @@ const Tab = styled.p<{ clicked?: boolean; istop: boolean }>`
 
 function Navigation() {
 	const { scrollY } = useViewportScroll();
-
+	const [isTop, setIsTop] = useState(true);
 	const gradient = useTransform(
 		scrollY,
 		[0, 100],
 		['rgba(0, 0, 0, 0.5)', '#F0131E'],
 	);
-
 	const homeMatch = useMatch('/');
-
 	const charMatch = useMatch('/characters/*');
-
 	const comicsMatch = useMatch('/comics/*');
-
 	const seriesMatch = useMatch('/series/*');
-
 	const eventsMatch = useMatch('/events/*');
-
 	useEffect(() => {
 		window.addEventListener('scroll', handleScroll);
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, []);
-
-	const [isTop, setIsTop] = useState(true);
-
 	const handleScroll = () => {
 		if (document.documentElement.scrollTop > 0 && isTop) {
 			setIsTop(false);
@@ -79,7 +70,6 @@ function Navigation() {
 			setIsTop(true);
 		}
 	};
-
 	return (
 		<>
 			<Navi style={{ backgroundColor: gradient }}>
@@ -110,9 +100,9 @@ function Navigation() {
 						</Tab>
 					</Link>
 					<p style={{ flexGrow: 1 }}></p>
-					<Link to={'/#'}>
+					<a href={'https://jdy8739.github.io/profile/'} target="_blank">
 						<Tab istop={isTop}>Portfolio</Tab>
-					</Link>
+					</a>
 				</InnerNav>
 			</Navi>
 		</>
